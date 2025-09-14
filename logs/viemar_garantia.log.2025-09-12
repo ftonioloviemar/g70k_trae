@@ -1,0 +1,892 @@
+2025-09-12 00:03:08 - app.auth - WARNING - Tentativa de login com senha incorreta: sergio@reis.com
+2025-09-12 00:04:27 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:04:27 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:04:27 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:04:27 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:04:42 - app.routes_veiculos - INFO - Novo veículo cadastrado: BNM5678 (ID: 16) pelo usuário 104
+2025-09-12 00:04:42 - app.routes_veiculos - INFO - Novo veículo cadastrado: BNM5678 (ID: 16) pelo usuário 104
+2025-09-12 00:06:21 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:06:21 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:06:21 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:06:21 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:06:21 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:06:21 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:06:21 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:06:21 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:06:21 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:06:21 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:06:21 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:06:21 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:06:21 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:06:21 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:06:21 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:06:21 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:06:21 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:06:21 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:06:21 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:06:21 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:06:21 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:06:21 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:06:21 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:06:21 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:06:21 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:06:21 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:06:21 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:06:21 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:06:21 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:06:21 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:06:21 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:06:21 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:06:21 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:06:30 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:06:30 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:06:30 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:06:30 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:06:30 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:06:30 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:06:30 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:06:30 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:06:30 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:06:30 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:06:30 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:06:31 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:06:31 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:06:31 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:06:31 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:06:31 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:06:31 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:06:31 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:06:31 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:06:31 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:06:31 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:06:31 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:06:31 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:06:31 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:06:31 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:06:31 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:06:31 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:06:31 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:06:31 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:06:31 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:06:31 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:06:31 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:06:31 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:06:39 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:06:39 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:06:39 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:06:39 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:06:39 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:06:39 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:06:39 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:06:39 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:06:39 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:06:39 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:06:39 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:06:39 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:06:39 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:06:39 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:06:39 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:06:39 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:06:39 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:06:39 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:06:39 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:06:39 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:06:39 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:06:39 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:06:39 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:06:39 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:06:39 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:06:39 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:06:39 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:06:39 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:06:39 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:06:39 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:06:39 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:06:39 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:06:39 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:11:33 - app.auth - WARNING - Tentativa de login com senha incorreta: sergio@reis.com
+2025-09-12 00:11:33 - app.auth - WARNING - Tentativa de login com senha incorreta: sergio@reis.com
+2025-09-12 00:11:41 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:11:41 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:11:41 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:11:41 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:11:47 - app.routes_veiculos - INFO - Veículo 16 atualizado pelo usuário 104
+2025-09-12 00:11:47 - app.routes_veiculos - INFO - Veículo 16 atualizado pelo usuário 104
+2025-09-12 00:12:03 - app.routes_garantias - INFO - Garantia 4 desativada pelo usuário 104
+2025-09-12 00:12:03 - app.routes_garantias - INFO - Garantia 4 desativada pelo usuário 104
+2025-09-12 00:12:04 - app.routes_garantias - INFO - Garantia 4 ativada pelo usuário 104
+2025-09-12 00:12:04 - app.routes_garantias - INFO - Garantia 4 ativada pelo usuário 104
+2025-09-12 00:16:43 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:16:43 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:16:43 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:16:43 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:16:43 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:16:43 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:16:43 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:16:43 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:16:43 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:16:43 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:16:43 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:16:43 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:16:43 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:16:43 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:16:43 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:16:43 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:16:43 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:16:43 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:16:43 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:16:43 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:16:43 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:16:43 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:16:43 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:16:43 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:16:43 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:16:43 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:16:43 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:16:43 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:16:43 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:16:43 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:16:43 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:16:43 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:16:43 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:17:09 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:17:09 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:17:09 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:17:09 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:17:09 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:17:09 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:17:09 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:17:09 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:17:09 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:17:09 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:17:09 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:17:09 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:17:09 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:17:09 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:17:09 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:17:09 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:17:09 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:17:09 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:17:09 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:17:09 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:17:09 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:17:09 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:17:09 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:17:09 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:17:09 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:17:09 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:17:09 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:17:09 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:17:09 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:17:09 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:17:09 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:17:09 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:17:09 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:19:50 - app.auth - WARNING - Tentativa de login com senha incorreta: sergio@reis.com
+2025-09-12 00:19:50 - app.auth - WARNING - Tentativa de login com senha incorreta: sergio@reis.com
+2025-09-12 00:19:56 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:19:56 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:19:56 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:19:56 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:22:22 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:22:22 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:22:22 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:22:22 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:22:22 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:22:22 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:22:22 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:22:22 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:22:22 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:22:22 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:22:22 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:22:22 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:22:22 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:22:22 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:22:22 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:22:22 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:22:22 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:22:22 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:22:22 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:22:22 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:22:22 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:22:22 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:22:22 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:22:22 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:22:22 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:22:22 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:22:22 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:22:22 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:22:22 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:22:22 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:22:22 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:22:22 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:22:22 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:24:00 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:24:00 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:24:00 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:24:00 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:25:16 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:25:16 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:25:16 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:25:16 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:25:16 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:25:16 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:25:16 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:25:16 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:25:16 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:25:16 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:25:16 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:25:16 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:25:16 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:25:16 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:25:16 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:25:16 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:25:16 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:25:16 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:25:16 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:25:16 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:25:16 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:25:16 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:25:16 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:25:16 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:25:16 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:25:16 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:25:16 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:25:16 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:25:16 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:25:16 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:25:16 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:25:16 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:25:16 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:25:25 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:25:25 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:25:25 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:25:25 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:25:25 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:25:25 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:25:25 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:25:25 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:25:25 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:25:25 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:25:25 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:25:26 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:25:26 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:25:26 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:25:26 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:25:26 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:25:26 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:25:26 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:25:26 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:25:26 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:25:26 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:25:26 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:25:26 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:25:26 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:25:26 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:25:26 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:25:26 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:25:26 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:25:26 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:25:26 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:25:26 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:25:26 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:25:26 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:25:53 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:25:53 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:25:53 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:25:53 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:25:53 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:25:53 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:25:53 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:25:53 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:25:53 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:25:53 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:25:53 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:25:53 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:25:53 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:25:53 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:25:53 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:25:53 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:25:53 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:25:53 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:25:53 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:25:53 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:25:53 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:25:53 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:25:53 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:25:53 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:25:53 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:25:53 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:25:53 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:25:53 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:25:53 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:25:53 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:25:53 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:25:53 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:25:53 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:31:18 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:31:18 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:31:18 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:31:18 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:31:24 - app.routes_garantias - INFO - Buscando veículos para usuário ID: 104
+2025-09-12 00:31:24 - app.routes_garantias - INFO - Buscando veículos para usuário ID: 104
+2025-09-12 00:31:24 - app.routes_garantias - INFO - Veículos encontrados: 4 - [{'id': 16, 'marca': 'Honda', 'modelo': 'Civic', 'placa': 'BNM5678'}, {'id': 5, 'marca': 'Jeep', 'modelo': 'Commander', 'placa': 'ABC1235'}, {'id': 3, 'marca': 'Volkswagen', 'modelo': 'Gol', 'placa': 'ABC1234'}, {'id': 6, 'marca': 'toyota', 'modelo': 'hilux', 'placa': 'ABC1236'}]
+2025-09-12 00:31:24 - app.routes_garantias - INFO - Veículos encontrados: 4 - [{'id': 16, 'marca': 'Honda', 'modelo': 'Civic', 'placa': 'BNM5678'}, {'id': 5, 'marca': 'Jeep', 'modelo': 'Commander', 'placa': 'ABC1235'}, {'id': 3, 'marca': 'Volkswagen', 'modelo': 'Gol', 'placa': 'ABC1234'}, {'id': 6, 'marca': 'toyota', 'modelo': 'hilux', 'placa': 'ABC1236'}]
+2025-09-12 00:31:27 - app.auth - INFO - Sessão destruída para usuário sergio@reis.com
+2025-09-12 00:31:27 - app.auth - INFO - Sessão destruída para usuário sergio@reis.com
+2025-09-12 00:31:30 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:31:30 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:31:30 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:31:30 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:33:08 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:33:08 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:33:08 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:33:08 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:33:08 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:33:08 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:33:08 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:33:08 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:33:08 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:33:08 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:33:08 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:33:08 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:33:08 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:33:08 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:33:08 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:33:08 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:33:08 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:33:08 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:33:08 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:33:08 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:33:08 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:33:08 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:33:08 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:33:08 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:33:08 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:33:08 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:33:08 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:33:08 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:33:08 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:33:08 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:33:08 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:33:08 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:33:08 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:33:33 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:33:33 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 00:33:33 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:33:33 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 00:33:38 - app.routes_garantias - INFO - Buscando veículos para usuário ID: 104
+2025-09-12 00:33:38 - app.routes_garantias - INFO - Buscando veículos para usuário ID: 104
+2025-09-12 00:33:38 - app.routes_garantias - INFO - Veículos encontrados: 4 - [{'id': 16, 'marca': 'Honda', 'modelo': 'Civic', 'placa': 'BNM5678'}, {'id': 5, 'marca': 'Jeep', 'modelo': 'Commander', 'placa': 'ABC1235'}, {'id': 3, 'marca': 'Volkswagen', 'modelo': 'Gol', 'placa': 'ABC1234'}, {'id': 6, 'marca': 'toyota', 'modelo': 'hilux', 'placa': 'ABC1236'}]
+2025-09-12 00:33:38 - app.routes_garantias - INFO - Veículos encontrados: 4 - [{'id': 16, 'marca': 'Honda', 'modelo': 'Civic', 'placa': 'BNM5678'}, {'id': 5, 'marca': 'Jeep', 'modelo': 'Commander', 'placa': 'ABC1235'}, {'id': 3, 'marca': 'Volkswagen', 'modelo': 'Gol', 'placa': 'ABC1234'}, {'id': 6, 'marca': 'toyota', 'modelo': 'hilux', 'placa': 'ABC1236'}]
+2025-09-12 00:38:40 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:38:40 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:38:40 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:38:40 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:38:40 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:38:40 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:38:40 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:38:40 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:38:40 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:38:40 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:38:40 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:38:40 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:38:40 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:38:40 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:38:40 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:38:40 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:38:40 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:38:40 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:38:40 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:38:40 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:38:40 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:38:40 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:38:40 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:38:40 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:38:40 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:38:40 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:38:40 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:38:40 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:38:40 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:38:40 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:38:40 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:38:40 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:38:40 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:39:02 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:39:02 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:39:02 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:39:02 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:39:02 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:39:02 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:39:02 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:39:02 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:39:02 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:39:02 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:39:02 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:39:02 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:39:02 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:39:02 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:39:02 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:39:02 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:39:02 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:39:02 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:39:02 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:39:02 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:39:02 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:39:02 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:39:02 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:39:02 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:39:02 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:39:02 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:39:02 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:39:02 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:39:02 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:39:02 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:39:02 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:39:02 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:39:02 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:39:20 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:39:20 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:39:20 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:39:20 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:39:20 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:39:20 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:39:20 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:39:20 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:39:20 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:39:20 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:39:20 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:39:20 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:39:20 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 00:39:20 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:39:20 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 00:39:20 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:39:20 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 00:39:20 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:39:20 - app.database - INFO - Usuário administrador já existe
+2025-09-12 00:39:20 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:39:20 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 00:39:20 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:39:20 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 00:39:20 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:39:20 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 00:39:20 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:39:20 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 00:39:20 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:39:20 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 00:39:20 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:39:20 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 00:39:20 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 00:39:20 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 02:03:35 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 02:03:35 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 02:03:35 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 02:03:35 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 02:03:48 - app.routes_garantias - INFO - Buscando veículos para usuário ID: 104
+2025-09-12 02:03:48 - app.routes_garantias - INFO - Buscando veículos para usuário ID: 104
+2025-09-12 02:03:48 - app.routes_garantias - INFO - Veículos encontrados: 4 - [{'id': 16, 'marca': 'Honda', 'modelo': 'Civic', 'placa': 'BNM5678'}, {'id': 5, 'marca': 'Jeep', 'modelo': 'Commander', 'placa': 'ABC1235'}, {'id': 3, 'marca': 'Volkswagen', 'modelo': 'Gol', 'placa': 'ABC1234'}, {'id': 6, 'marca': 'toyota', 'modelo': 'hilux', 'placa': 'ABC1236'}]
+2025-09-12 02:03:48 - app.routes_garantias - INFO - Veículos encontrados: 4 - [{'id': 16, 'marca': 'Honda', 'modelo': 'Civic', 'placa': 'BNM5678'}, {'id': 5, 'marca': 'Jeep', 'modelo': 'Commander', 'placa': 'ABC1235'}, {'id': 3, 'marca': 'Volkswagen', 'modelo': 'Gol', 'placa': 'ABC1234'}, {'id': 6, 'marca': 'toyota', 'modelo': 'hilux', 'placa': 'ABC1236'}]
+2025-09-12 02:05:03 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 02:05:03 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 02:05:03 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 02:05:03 - app.database - INFO - Usuário administrador já existe
+2025-09-12 02:05:03 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 02:05:03 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 02:05:03 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 02:05:03 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 02:05:03 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 02:05:03 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 02:05:03 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 02:05:03 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 02:05:03 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 02:05:03 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 02:05:03 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 02:05:03 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 02:05:03 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 02:05:03 - app.database - INFO - Usuário administrador já existe
+2025-09-12 02:05:03 - app.database - INFO - Usuário administrador já existe
+2025-09-12 02:05:03 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 02:05:03 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 02:05:03 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 02:05:03 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 02:05:03 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 02:05:03 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 02:05:03 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 02:05:03 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 02:05:03 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 02:05:03 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 02:05:03 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 02:05:03 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 02:05:03 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 02:05:03 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 02:05:13 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 02:05:13 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 02:05:13 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 02:05:13 - app.database - INFO - Usuário administrador já existe
+2025-09-12 02:05:13 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 02:05:13 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 02:05:13 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 02:05:13 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 02:05:13 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 02:05:13 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 02:05:13 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 02:05:13 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 02:05:13 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 02:05:13 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 02:05:13 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 02:05:13 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 02:05:13 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 02:05:13 - app.database - INFO - Usuário administrador já existe
+2025-09-12 02:05:13 - app.database - INFO - Usuário administrador já existe
+2025-09-12 02:05:13 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 02:05:13 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 02:05:13 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 02:05:13 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 02:05:13 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 02:05:13 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 02:05:13 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 02:05:13 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 02:05:13 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 02:05:13 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 02:05:13 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 02:05:13 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 02:05:13 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 02:05:13 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 02:05:21 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 02:05:21 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 02:05:21 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 02:05:21 - app.database - INFO - Usuário administrador já existe
+2025-09-12 02:05:21 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 02:05:21 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 02:05:21 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 02:05:21 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 02:05:21 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 02:05:21 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 02:05:21 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 02:05:21 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 02:05:21 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 02:05:21 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 02:05:21 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 02:05:21 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 02:05:21 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 02:05:21 - app.database - INFO - Usuário administrador já existe
+2025-09-12 02:05:21 - app.database - INFO - Usuário administrador já existe
+2025-09-12 02:05:21 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 02:05:21 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 02:05:21 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 02:05:21 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 02:05:21 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 02:05:21 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 02:05:21 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 02:05:21 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 02:05:21 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 02:05:21 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 02:05:21 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 02:05:21 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 02:05:21 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 02:05:21 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:07:36 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 08:07:36 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 08:07:36 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 08:07:36 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 08:07:53 - app.routes_garantias - INFO - Buscando veículos para usuário ID: 104
+2025-09-12 08:07:53 - app.routes_garantias - INFO - Buscando veículos para usuário ID: 104
+2025-09-12 08:07:53 - app.routes_garantias - INFO - Veículos encontrados: 4 - [{'id': 16, 'marca': 'Honda', 'modelo': 'Civic', 'placa': 'BNM5678'}, {'id': 5, 'marca': 'Jeep', 'modelo': 'Commander', 'placa': 'ABC1235'}, {'id': 3, 'marca': 'Volkswagen', 'modelo': 'Gol', 'placa': 'ABC1234'}, {'id': 6, 'marca': 'toyota', 'modelo': 'hilux', 'placa': 'ABC1236'}]
+2025-09-12 08:07:53 - app.routes_garantias - INFO - Veículos encontrados: 4 - [{'id': 16, 'marca': 'Honda', 'modelo': 'Civic', 'placa': 'BNM5678'}, {'id': 5, 'marca': 'Jeep', 'modelo': 'Commander', 'placa': 'ABC1235'}, {'id': 3, 'marca': 'Volkswagen', 'modelo': 'Gol', 'placa': 'ABC1234'}, {'id': 6, 'marca': 'toyota', 'modelo': 'hilux', 'placa': 'ABC1236'}]
+2025-09-12 08:09:44 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:09:44 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:09:44 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:09:44 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:09:44 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:09:44 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:09:44 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:09:44 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:09:44 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:09:44 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:09:44 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:09:44 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:09:44 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:09:44 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:09:44 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:09:44 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:09:44 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:09:44 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:09:44 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:09:44 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:09:44 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:09:44 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:09:44 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:09:44 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:09:44 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:09:44 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:09:44 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:09:44 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:09:44 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:09:44 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:09:44 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:09:44 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:09:44 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:09:53 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:09:53 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:09:53 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:09:53 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:09:53 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:09:53 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:09:53 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:09:53 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:09:53 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:09:53 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:09:53 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:09:53 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:09:53 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:09:53 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:09:53 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:09:53 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:09:53 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:09:53 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:09:53 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:09:53 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:09:53 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:09:53 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:09:53 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:09:53 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:09:53 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:09:53 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:09:53 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:09:53 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:09:53 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:09:53 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:09:53 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:09:53 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:09:53 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:10:24 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 08:10:24 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 08:10:24 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 08:10:24 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 08:12:02 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:12:02 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:12:02 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:12:02 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:12:02 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:12:02 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:12:02 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:12:02 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:12:02 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:12:02 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:12:02 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:12:02 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:12:02 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:12:02 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:12:02 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:12:02 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:12:02 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:12:02 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:12:02 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:12:02 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:12:02 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:12:02 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:12:02 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:12:02 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:12:02 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:12:02 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:12:02 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:12:02 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:12:02 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:12:02 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:12:02 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:12:02 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:12:02 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:15:48 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 08:15:48 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 08:15:48 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 08:15:48 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 08:18:43 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:18:43 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:18:43 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:18:43 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:18:43 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:18:43 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:18:43 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:18:43 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:18:43 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:18:43 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:18:43 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:18:43 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:18:43 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:18:43 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:18:43 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:18:43 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:18:43 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:18:43 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:18:43 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:18:43 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:18:43 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:18:43 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:18:43 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:18:43 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:18:43 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:18:43 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:18:43 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:18:43 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:18:43 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:18:43 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:18:43 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:18:43 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:18:43 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:18:54 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:18:54 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:18:54 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:18:54 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:18:54 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:18:54 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:18:54 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:18:54 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:18:54 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:18:54 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:18:54 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:18:54 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:18:54 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:18:54 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:18:54 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:18:54 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:18:54 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:18:54 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:18:54 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:18:54 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:18:54 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:18:54 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:18:54 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:18:54 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:18:54 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:18:54 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:18:54 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:18:54 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:18:54 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:18:54 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:18:54 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:18:54 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:18:54 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:19:50 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:19:50 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:19:50 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:19:50 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:19:50 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:19:50 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:19:50 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:19:50 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:19:50 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:19:50 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:19:50 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:19:50 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:19:50 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:19:50 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:19:50 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:19:50 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:19:50 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:19:50 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:19:50 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:19:50 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:19:50 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:19:50 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:19:50 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:19:50 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:19:50 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:19:50 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:19:50 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:19:50 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:19:50 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:19:50 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:19:50 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:19:50 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:19:50 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:20:09 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:20:09 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:20:09 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:20:09 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:20:09 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:20:09 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:20:09 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:20:09 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:20:09 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:20:09 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:20:09 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:20:09 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:20:09 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 08:20:09 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:20:09 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 08:20:09 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:20:09 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 08:20:09 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:20:09 - app.database - INFO - Usuário administrador já existe
+2025-09-12 08:20:09 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:20:09 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 08:20:09 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:20:09 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 08:20:09 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:20:09 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 08:20:09 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:20:09 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 08:20:09 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:20:09 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 08:20:09 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:20:09 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 08:20:09 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 08:20:09 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 13:53:20 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 13:53:20 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 13:53:20 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 13:53:20 - app.database - INFO - Usuário administrador já existe
+2025-09-12 13:53:20 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 13:53:20 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 13:53:20 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 13:53:20 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 13:53:20 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 13:53:20 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 13:53:20 - __main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 13:53:20 - __main__ - INFO - Iniciando aplicação Viemar Garantia
+2025-09-12 13:53:20 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 13:53:20 - app.database - INFO - Usuário administrador já existe
+2025-09-12 13:53:20 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 13:53:20 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 13:53:20 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 13:53:20 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 13:53:20 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 13:53:20 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 13:53:20 - __main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 13:53:21 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 13:53:21 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 13:53:21 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 13:53:21 - app.database - INFO - Usuário administrador já existe
+2025-09-12 13:53:21 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 13:53:21 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 13:53:21 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 13:53:21 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 13:53:21 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 13:53:21 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 13:53:21 - __mp_main__ - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 13:53:21 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 13:53:21 - app.logger - INFO - Sistema de logging configurado com sucesso
+2025-09-12 13:53:21 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 13:53:21 - app.logger - INFO - Logs salvos em: C:\python\g70k_trae\logs\viemar_garantia.log
+2025-09-12 13:53:21 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 13:53:21 - app.database - INFO - Inicializando banco de dados...
+2025-09-12 13:53:21 - app.database - INFO - Usuário administrador já existe
+2025-09-12 13:53:21 - app.database - INFO - Usuário administrador já existe
+2025-09-12 13:53:21 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 13:53:21 - app.database - INFO - Banco de dados inicializado com sucesso
+2025-09-12 13:53:21 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 13:53:21 - app.auth - INFO - Sistema de autenticação inicializado
+2025-09-12 13:53:21 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 13:53:21 - app.routes - INFO - Rotas configuradas com sucesso
+2025-09-12 13:53:21 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 13:53:21 - app.routes_veiculos - INFO - Rotas de veículos configuradas com sucesso
+2025-09-12 13:53:21 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 13:53:21 - app.routes_garantias - INFO - Rotas de garantias configuradas com sucesso
+2025-09-12 13:53:21 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 13:53:21 - app.routes_admin - INFO - Rotas administrativas configuradas com sucesso
+2025-09-12 13:53:21 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 13:53:21 - main - INFO - Aplicação FastHTML configurada com sucesso
+2025-09-12 13:54:16 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 13:54:16 - app.auth - INFO - Login bem-sucedido: sergio@reis.com (cliente)
+2025-09-12 13:54:16 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)
+2025-09-12 13:54:16 - app.auth - INFO - Sessão criada para usuário sergio@reis.com (ID: 104)

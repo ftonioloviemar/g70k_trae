@@ -1,0 +1,98 @@
+crie uma aplicação web completa em python para a Gestão da Garantia de 70 mil Km ou 2 anos da empresa Viemar.
+já tenho uma aplicação antiga que roda na plataforma caspio na nuvem.
+quero migrar para uma nova aplicação on-premises.
+
+o banco deve ser sqlite.
+
+considere as melhores práticas de segurança, performance e estabilidade.
+
+funcionamento da aplicação:
+os clientes usam para ativar a garantia estendida dos produtos elegíveis.
+envolve telas crud para cadastro de produtos, clientes, veículos dos clientes e garantias de produtos instalados nos veiculos.
+teremos 2 tipos de usuários: administrador e cliente.
+
+uma credencial fixa de administrador deve existir previamente (email e senha):
+ftoniolo@viemar.com.br
+abc123
+
+o cadastro de usuário tem os campos (obrigatórios com *):
+	email*
+	hash da senha* (uso interno, não mostra na tela)
+	nome do usuário*
+	tipo de usuário* (administrador, cliente)
+	confirmado* (sim, não) - a credencial fixa já vem pré-confirmada
+
+o administrador autenticado pode:
+cadastrar usuários do tipo administrador ou cliente.
+cadastrar os produtos válidos para garantia.
+consultar as informações de todos os clientes, veiculos e garantias.
+
+o administrador autenticado pode cadastrar produtos.
+produtos tem os campos:
+	SKU*
+	Descrição
+a aplicação 
+
+o cliente pode se cadastrar para o primeiro acesso fornecendo email e senha.
+o cliente tem os campos:
+	Nome*	
+	E-mail*	
+	Confirme o e-mail*	
+	CEP	
+	Endereço	
+	Bairro	
+	Cidade	
+	Estado (UF)	
+	AC
+	Telefone	
+	CPF/CNPJ	
+	Data de nascimento	
+	Calendar
+	Senha*	
+	Confirme a senha*	
+o sistema deve enviar link de confirmação para o e-mail do cliente.
+se o cliente já tiver cadastro, ele pode fazer login diretamente.
+o formulário de login deve permitir opção "esqueci a minha senha" e o sistema envia e-mail para o cliente com link para criar uma nova senha.
+veja o exemplo da aplicação antiga em context\cadastre-se.png
+e no link https://www.viemar.com.br/garantia70mil/cadastro2.html
+
+o cliente autenticado pode cadastrar veiculos.
+o veiculo tem os campos:
+	marca*
+	modelo*
+	ano/modelo*
+	placa*
+ver tela da aplicação antiga em context\cadastro de veiculos.png
+
+o cliente autenticado pode ativar garantias de 70 mil km ou 2 anos dos produtos elegíveis aos seus veículos.
+a garantia tem os campos:
+	produto* (relacionamento - o cliente seleciona um produto existente pelo código SKU)
+	lote de fabricação* (5 ou mais caracteres)
+	data*
+	nota fiscal*
+	nome do estabelecimento*
+	quilometragem*
+	data de cadastro* (preenchida automaticamente ao inserir o registro, o cliente só lê)
+	veiculo (relacionamento - o cliente seleciona um veículo que ele tenha cadastrado previamente)
+na aplicação antiga, essa tela se chama Produtos e na nova aplicação passa a se chamar Garantias.
+veja printa da tela em context\cadastro de garantias.png
+
+ao registrar uma garantia, o cliente recebe um e-mail de confirmação com as informações da garantia ativada.
+veja print da tela em context\email de registro de garantia ativada.png
+
+a aplicação antiga completa foi exportada da plataforma caspio e está disponível em context\caspio_viemar.
+entenda a estrutura de tabelas para tomar com o base para a nova aplicação.
+algumas alterações precisarão ser feitas.
+na antiga temos a tabela cliente que na nova passa a se chamar usuario, tendo 2 tipos (administrador ou cliente).
+na antiga temos a tabela marca_modelo que por enquanto pode ser desconsiderada.
+na antiga temos a tabela produto_valido que na nova passa a ser produto.
+na antiga temos a tabela veiculo que continua igual na nova.
+na antiga temos a tabela produto_aplicado que na nova passa a se chamar garantia.
+importe os dados para a nova aplicação.
+se for possivel reaproveitar os hashes das senhas do clientes será excelente para não obrigar a troca de senha no próximo acesso do cliente.
+deixe a aplicação nova preparada para que eu possa reimportar os dados atualizados da aplicação antiga quando a aplicação nova for entrar em produção.
+
+crie a aplicação completa.
+faça testes completos com pytest usando melhores práticas.
+garanta que tudo esteja 85% testado.
+se encontrar erros, corrija até ficar correto.

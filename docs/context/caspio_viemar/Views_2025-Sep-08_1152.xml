@@ -1,0 +1,1 @@
+﻿<?xml version="1.0" encoding="utf-8" ?><xml><View Name="PRODUTO_VALIDO_VIEW"><Table Name="PRODUTO_VALIDO" Alias="PRODUTO_VALIDO"><Field Name="REFERENCIA" Alias="PRODUTO_VALIDO_REFERENCIA" DisplayOrder="1" /></Table><CriteriaRoot><CriteriaGroup Type="AND" /></CriteriaRoot></View></xml>

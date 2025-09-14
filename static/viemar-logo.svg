@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <linearGradient id="viemarOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff8c42;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6b1a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Triângulo laranja oficial -->
+  <path d="M5 45 L25 10 L45 45 Z" fill="url(#viemarOrange)"/>
+  
+  <!-- V branco dentro do triângulo -->
+  <path d="M15 35 L25 20 L35 35" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Texto viemar -->
+  <text x="55" y="32" font-family="'Arial', sans-serif" font-size="24" font-weight="bold" fill="#4a4a4a">viemar</text>
+  
+  <!-- Texto AUTOMOTIVE -->
+  <text x="55" y="45" font-family="'Arial', sans-serif" font-size="10" font-weight="normal" fill="#888888" letter-spacing="2px">AUTOMOTIVE</text>
+</svg>

@@ -1,0 +1,23 @@
+<PackageManifest>
+  <Item File="App Settings/AppSettings.xml">
+    <Sign>YqzyrmqprDmdhZuuOWhd+bPjIG9AKXbdIdBTSVodfufRIJOkgBpXtg==</Sign>
+  </Item>
+  <Item File="Authentications_2025-Sep-08_1152.xml">
+    <Sign>UYqabKU43d2q49stAmiJXqZfJAqRUYxH6Slr74tZRSNbRjqAqPATgQ==</Sign>
+  </Item>
+  <Item File="DataPages_2025-Sep-08_1152.xml">
+    <Sign>GMkwlel/YPLWZDwM/0zlKRyf2G0jGq4qWPoFyV6BEBJk5wLp4VIC+A==</Sign>
+  </Item>
+  <Item File="Localizations_2025-Sep-08_1152.xml">
+    <Sign>QBV+f80kQVs0mXpjle87F3rfPUiPAMW3APapv+KB6146YTIMlAInag==</Sign>
+  </Item>
+  <Item File="Styles_2025-Sep-08_1152.xml">
+    <Sign>n2QnZSbPzk2oKHIsxojop4bdBY8v8vhK1yhoZRFTmEu3to0t3EkD6A==</Sign>
+  </Item>
+  <Item File="Tables_2025-Sep-08_1152.xml">
+    <Sign>aSCiODESx/RGyZmpBsjp4ngLXJR87TeHzS+FppfCUzEVwNCzrGKRKg==</Sign>
+  </Item>
+  <Item File="Views_2025-Sep-08_1152.xml">
+    <Sign>bdPnfzYGze2SgvZwkrtmdnidAw5StILH3y1qDYC6CADtUXX6ACT3hQ==</Sign>
+  </Item>
+</PackageManifest>

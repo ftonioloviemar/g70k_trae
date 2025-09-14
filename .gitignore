@@ -52,18 +52,30 @@ playwright/.auth/
 uploads/*
 !uploads/.gitkeep
 
-# Database files (uncomment in production)
-# data/
+# Arquivos de banco de dados (dados reais não devem ser commitados)
+data/viemar_garantia.db*
+data/*.db*
+data/*.sqlite*
 
-# Environment variables
+# Environment variables e configurações sensíveis
 .env
 .env.local
 .env.*.local
+.env.production
+.env.staging
+config.local.py
+secrets.py
+credentials.json
 
 # Session keys and secrets
 .sesskey
 *.key
 *.pem
+*.p12
+*.pfx
+secret_key.txt
+passwords.txt
+credentials.txt
 
 # Build artifacts
 build/

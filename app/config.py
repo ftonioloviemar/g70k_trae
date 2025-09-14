@@ -27,7 +27,9 @@ class Config:
             self.DATABASE_PATH = self.BASE_DIR / 'data' / 'viemar_garantia.db'
         
         # Configurações de segurança
-        self.SECRET_KEY = os.getenv('SECRET_KEY', 'viemar-garantia-70k-secret-key-change-in-production')
+        self.SECRET_KEY = os.getenv('SECRET_KEY')
+        if not self.SECRET_KEY:
+            raise ValueError("SECRET_KEY deve ser definida como variável de ambiente")
         self.SESSION_TIMEOUT = int(os.getenv('SESSION_TIMEOUT', 3600))  # 1 hora
         
         # Configurações de email
@@ -46,8 +48,10 @@ class Config:
         self.LOG_BACKUP_COUNT = 5
         
         # Credenciais do administrador padrão
-        self.ADMIN_EMAIL = 'ftoniolo@viemar.com.br'
-        self.ADMIN_PASSWORD = 'abc123'
+        self.ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
+        self.ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
+        if not self.ADMIN_EMAIL or not self.ADMIN_PASSWORD:
+            raise ValueError("ADMIN_EMAIL e ADMIN_PASSWORD devem ser definidas como variáveis de ambiente")
         
         # Configurações de upload
         self.UPLOAD_DIR = self.BASE_DIR / 'uploads'

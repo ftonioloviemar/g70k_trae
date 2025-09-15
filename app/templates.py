@@ -1084,50 +1084,32 @@ def contato_page(user: Optional[Dict[str, Any]] = None):
                 Col(
                     Div(
                         A(
-                            I(cls="fab fa-instagram fa-2x text-primary me-2"),
+                            Img(src="/static/instagram-icon.svg", alt="Instagram", width="24", height="24", cls="me-2"),
                             "Instagram",
                             href="https://www.instagram.com/viemarautomotive/",
                             target="_blank",
-                            cls="btn btn-outline-primary me-3 mb-2"
+                            cls="btn btn-outline-primary me-3 mb-2 d-inline-flex align-items-center"
                         ),
                         A(
-                            I(cls="fab fa-facebook fa-2x text-primary me-2"),
+                            Img(src="/static/facebook-icon.svg", alt="Facebook", width="24", height="24", cls="me-2"),
                             "Facebook",
                             href="https://www.facebook.com/Viemarautomotive/?locale=pt_BR",
                             target="_blank",
-                            cls="btn btn-outline-primary me-3 mb-2"
+                            cls="btn btn-outline-primary me-3 mb-2 d-inline-flex align-items-center"
                         ),
                         A(
-                            I(cls="fab fa-youtube fa-2x text-primary me-2"),
+                            Img(src="/static/youtube-icon.svg", alt="YouTube", width="24", height="24", cls="me-2"),
                             "YouTube",
                             href="https://www.youtube.com/@ViemarAutomotive",
                             target="_blank",
-                            cls="btn btn-outline-primary mb-2"
+                            cls="btn btn-outline-primary mb-2 d-inline-flex align-items-center"
                         ),
                         cls="text-center"
                     ),
                     width=12
                 )
             ),
-                            
-                            Div(
-                                A(
-                                    I(cls="fab fa-facebook fa-2x me-3"),
-                                    href="#",
-                                    cls="text-primary"
-                                ),
-                                A(
-                                    I(cls="fab fa-instagram fa-2x me-3"),
-                                    href="#",
-                                    cls="text-primary"
-                                ),
-                                A(
-                                    I(cls="fab fa-linkedin fa-2x"),
-                                    href="#",
-                                    cls="text-primary"
-                                ),
-                                cls="text-center mt-4 mb-4"
-                            ),
+
                             
                             Div(
                                 A(

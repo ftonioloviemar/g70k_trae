@@ -1,0 +1,206 @@
+ <!doctype html>
+ <html>
+   <head>
+     <title>Meus Veículos</title>
+     <link rel="canonical" href="http://localhost:8000/cliente/veiculos">
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script><script src="https://cdn.jsdelivr.net/gh/answerdotai/fasthtml-js@1.0.12/fasthtml.js"></script><script src="https://cdn.jsdelivr.net/gh/answerdotai/surreal@main/surreal.js"></script><script src="https://cdn.jsdelivr.net/gh/gnat/css-scope-inline@main/script.js"></script>     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/css/core.min.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/js/core.iife.js"></script><script src="https://cdn.tailwindcss.com/3.4.16"></script><script>
+    tailwind.config = {
+        darkMode: 'selector',
+    }
+    </script><script>
+        const htmlElement = document.documentElement;
+        
+          
+          const __FRANKEN__ = JSON.parse(localStorage.getItem("__FRANKEN__") || "{}");
+    
+          if (
+            __FRANKEN__.mode === "dark" ||
+            (!__FRANKEN__.mode &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches)
+          ) {
+            htmlElement.classList.add("dark");
+          } else {
+            htmlElement.classList.remove("dark");
+          }
+        
+          htmlElement.classList.add(__FRANKEN__.theme || "uk-theme-blue");
+          htmlElement.classList.add(__FRANKEN__.radii || "uk-radii-sm");
+          htmlElement.classList.add(__FRANKEN__.shadows || "uk-shadows-sm");
+          htmlElement.classList.add(__FRANKEN__.font || "uk-font-sm");
+    </script>     <style>
+.monster-navbar.navbar-bold a {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.monster-navbar.navbar-bold a.uk-active {
+    transform: scale(1.15) ;
+    font-weight: bold;
+    text-shadow: 0 0 12px rgba(var(--p-rgb), 0.4);
+    letter-spacing: 0.02em;
+    color: hsl(var(--p) / 1);
+}
+.monster-navbar.navbar-underline a.uk-active { position: relative; }
+.monster-navbar.navbar-underline a.uk-active::after {
+    content: &#x27;&#x27;;
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    animation: slideIn 0.3s ease forwards;
+}
+@keyframes slideIn {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+</style>
+<script type="module" src="https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/js/icon.iife.js"></script>     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css">
+     <style>
+:root {
+  --b1: from hsl(var(--background)) l c h;
+  --bc: from hsl(var(--foreground)) l c h;
+  --m: from hsl(var(--muted)) l c h;
+  --mc: from hsl(var(--muted-foreground)) l c h;
+  --po: from hsl(var(--popover)) l c h;
+  --poc: from hsl(var(--popover-foreground)) l c h;
+  --b2: from hsl(var(--card)) l c h;
+  --b2c: from hsl(var(--card-foreground)) l c h;
+  --br: from hsl(var(--border)) l c h;
+  --in: from hsl(var(--input)) l c h;
+  --p: from hsl(var(--primary)) l c h;
+  --pc: from hsl(var(--primary-foreground)) l c h;
+  --s: from hsl(var(--secondary)) l c h;
+  --sc: from hsl(var(--secondary-foreground)) l c h;
+  --a: from hsl(var(--accent)) l c h;
+  --ac: from hsl(var(--accent-foreground)) l c h;
+  --er: from hsl(var(--destructive)) l c h;
+  --erc: from hsl(var(--destructive-foreground)) l c h;
+  --b3: from hsl(var(--ring)) l c h;
+  --ch1: from hsl(var(--chart-1)) l c h;
+  --ch2: from hsl(var(--chart-2)) l c h;
+  --ch3: from hsl(var(--chart-3)) l c h;
+  --ch4: from hsl(var(--chart-4)) l c h;
+  --ch5: from hsl(var(--chart-5)) l c h;
+  --rd: var(--radius);
+}
+</style>
+     <link rel="stylesheet" href="/static/style.css">
+<script>
+    (() => {
+        let attempts = 0;
+        const connect = () => {
+            const socket = new WebSocket(`ws://${window.location.host}/live-reload`);
+            socket.onopen = async() => {
+                const res = await fetch(window.location.href);
+                if (res.ok) { 
+                    attempts ? window.location.reload() : console.log('LiveReload connected'); 
+                }};
+            socket.onclose = () => {
+                !attempts++ ? connect() : setTimeout(() => { connect() }, 1);
+                if (attempts > 1000) window.location.reload();
+            }};
+        connect();
+    })();
+    </script>   </head>
+   <body reload-attempts="1" reload-interval="1000" class=" bg-background text-foreground">
+<main>       <div class="uk-container uk-container-xl">
+         <h1 class="uk-h1 ">Meus Veículos</h1>
+         <div>
+           <div class="sticky top-4 bg-base-100/80 backdrop-blur-sm z-50">
+             <div class="monster-navbar p-4 navbar-underline">
+               <div class="flex justify-between items-center w-full">
+                 <div class="flex items-center">
+<img src="/static/viemar-logo-light.png" alt="Viemar" class="h-8 w-auto mr-2"><span class="font-bold text-lg">Viemar Garantia</span>                 </div>
+<a class="md:hidden" data-uk-toggle="target: #_fES3opTrRguMxazawBJM3A; cls: hidden"><uk-icon icon="menu" height="30" width="30"></uk-icon></a>                 <div class="items-center space-x-4 hidden md:flex">
+<span class="text-sm text-gray-600">Olá, sergio@reis.com</span><a href="/cliente/perfil">Meus Dados</a><a href="/cliente/veiculos">Meus Veículos</a><a href="/cliente/garantias">Minhas Garantias</a><a href="/cliente/garantias/nova">Nova Garantia</a><a href="/regulamento">Regulamento</a><a href="/contato">Contato</a><a href="/logout" class="text-red-500">Sair</a>                 </div>
+               </div>
+             </div>
+             <div class="flex flex-col items-center justify-center space-y-4 p-4 navbar-underline hidden md:hidden monster-navbar" id="_fES3opTrRguMxazawBJM3A">
+<span class="text-sm text-gray-600">Olá, sergio@reis.com</span><a href="/cliente/perfil">Meus Dados</a><a href="/cliente/veiculos">Meus Veículos</a><a href="/cliente/garantias">Minhas Garantias</a><a href="/cliente/garantias/nova">Nova Garantia</a><a href="/regulamento">Regulamento</a><a href="/contato">Contato</a><a href="/logout" class="text-red-500">Sair</a>             </div>
+           </div>
+<main class="min-h-screen">             <div class="uk-container py-6">
+               <div class="uk-container mt-5 uk-container-xl">
+                 <div class="row">
+<col>                     <div class="d-flex justify-content-between align-items-center">
+                       <h2 class="uk-h2 mb-3">Meus Veículos</h2>
+<a href="/cliente/veiculos/novo" class="btn btn-success mb-3">Cadastrar Novo Veículo</a>                     </div>
+                 </div>
+                 <div class="row">
+<col width="12">                     <div class="uk-card p-6 mb-4">
+                       <div class="uk-card-body space-y-6">
+                         <h3 class="uk-h3 text-lg font-semibold mb-4">Veículos Cadastrados</h3>
+                         <div>
+                           <div class="table-responsive">
+                             <table class="uk-table table table-striped table-hover mb-0">
+                               <thead>
+                                 <tr>
+                                   <th>Veículo</th>
+                                   <th>Ano</th>
+                                   <th>Placa</th>
+                                   <th>Cor</th>
+                                   <th>Status</th>
+                                   <th>Ações</th>
+                                 </tr>
+                               </thead>
+                               <tbody>
+                                 <tr>
+                                   <td>Honda Civic</td>
+                                   <td>2019</td>
+                                   <td>DEF-5678</td>
+                                   <td>Azul</td>
+                                   <td><span class="badge bg-success">Ativo</span></td>
+                                   <td><div class="btn-group"><a href="/cliente/veiculos/2/editar" class="btn btn-sm btn-outline-primary me-1">Editar</a><a href="/cliente/veiculos/2/toggle" class="btn btn-sm btn-outline-danger">Desativar</a></div></td>
+                                 </tr>
+                                 <tr>
+                                   <td>Volkswagen Jetta</td>
+                                   <td>2021</td>
+                                   <td>GHI-9012</td>
+                                   <td>Branco</td>
+                                   <td><span class="badge bg-success">Ativo</span></td>
+                                   <td><div class="btn-group"><a href="/cliente/veiculos/3/editar" class="btn btn-sm btn-outline-primary me-1">Editar</a><a href="/cliente/veiculos/3/toggle" class="btn btn-sm btn-outline-danger">Desativar</a></div></td>
+                                 </tr>
+                                 <tr>
+                                   <td>Ford Focus</td>
+                                   <td>2018</td>
+                                   <td>JKL-3456</td>
+                                   <td>Vermelho</td>
+                                   <td><span class="badge bg-success">Ativo</span></td>
+                                   <td><div class="btn-group"><a href="/cliente/veiculos/4/editar" class="btn btn-sm btn-outline-primary me-1">Editar</a><a href="/cliente/veiculos/4/toggle" class="btn btn-sm btn-outline-danger">Desativar</a></div></td>
+                                 </tr>
+                                 <tr>
+                                   <td>Chevrolet Cruze</td>
+                                   <td>2022</td>
+                                   <td>MNO-7890</td>
+                                   <td>Preto</td>
+                                   <td><span class="badge bg-success">Ativo</span></td>
+                                   <td><div class="btn-group"><a href="/cliente/veiculos/5/editar" class="btn btn-sm btn-outline-primary me-1">Editar</a><a href="/cliente/veiculos/5/toggle" class="btn btn-sm btn-outline-danger">Desativar</a></div></td>
+                                 </tr>
+                                 <tr>
+                                   <td>Toyota Corolla</td>
+                                   <td>2020</td>
+                                   <td>ABC-1234</td>
+                                   <td>Prata</td>
+                                   <td><span class="badge bg-success">Ativo</span></td>
+                                   <td><div class="btn-group"><a href="/cliente/veiculos/1/editar" class="btn btn-sm btn-outline-primary me-1">Editar</a><a href="/cliente/veiculos/1/toggle" class="btn btn-sm btn-outline-danger">Desativar</a></div></td>
+                                 </tr>
+                               </tbody>
+                             </table>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                 </div>
+               </div>
+             </div>
+</main>           <footer class="bg-gray-50 border-t">
+             <div class="uk-container text-center py-4">
+               <p class="text-center text-gray-600 text-sm">© 2024 Viemar - Garantia 70mil Km ou 2 anos. Todos os direitos reservados.</p>
+             </div>
+           </footer>
+         </div>
+       </div>
+</main>   </body>
+ </html>

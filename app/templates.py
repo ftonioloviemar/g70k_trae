@@ -606,16 +606,30 @@ def garantia_form(produtos: List[Dict], veiculos: List[Dict], garantia: Dict[str
     garantia = garantia or {}
     errors = errors or {}
     
+    # Opções de produto com valor selecionado preservado
     produto_options = [Option("Selecione um produto...", value="")]
+    produto_selecionado = garantia.get('produto_id', '')
     for produto in produtos:
+        is_selected = str(produto['id']) == str(produto_selecionado)
         produto_options.append(
-            Option(f"{produto['sku']} - {produto['descricao']}", value=produto['id'])
+            Option(
+                f"{produto['sku']} - {produto['descricao']}", 
+                value=produto['id'],
+                selected=is_selected
+            )
         )
     
+    # Opções de veículo com valor selecionado preservado
     veiculo_options = [Option("Selecione um veículo...", value="")]
+    veiculo_selecionado = garantia.get('veiculo_id', '')
     for veiculo in veiculos:
+        is_selected = str(veiculo['id']) == str(veiculo_selecionado)
         veiculo_options.append(
-            Option(f"{veiculo['marca']} {veiculo['modelo']} - {veiculo['placa']}", value=veiculo['id'])
+            Option(
+                f"{veiculo['marca']} {veiculo['modelo']} - {veiculo['placa']}", 
+                value=veiculo['id'],
+                selected=is_selected
+            )
         )
     
     return Form(

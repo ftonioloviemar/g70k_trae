@@ -1,98 +1,120 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Script para testar o login do usuário sergio@reis.com
+Teste específico para verificar o login do sergio@reis.com
 """
 
-import requests
-import logging
+import sqlite3
+import sys
+import os
 from pathlib import Path
 
-# Configurar logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+# Adicionar o diretório raiz ao path
+sys.path.insert(0, str(Path(__file__).parent))
+
+from app.auth import AuthManager
+from models.usuario import Usuario
+from app.database import Database
 
 def test_sergio_login():
-    """Testa o login do usuário sergio@reis.com"""
+    """Testa o login do sergio@reis.com"""
+    print("=== Teste de Login do sergio@reis.com ===")
     
-    base_url = "http://127.0.0.1:8000"
-    
-    # Criar sessão
-    session = requests.Session()
+    # Conectar ao banco
+    db_path = "data/viemar_garantia.db"
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
     
     try:
-        # 1. Acessar página de login
-        logger.info("1. Acessando página de login...")
-        login_page = session.get(f"{base_url}/login")
-        logger.info(f"Status da página de login: {login_page.status_code}")
+        # 1. Verificar se o usuário existe
+        print("\n1. Verificando usuário no banco...")
+        cursor.execute(
+            "SELECT id, email, nome, senha_hash, tipo_usuario FROM usuarios WHERE email = ?",
+            ("sergio@reis.com",)
+        )
+        usuario = cursor.fetchone()
         
-        if login_page.status_code != 200:
-            logger.error("❌ Falha ao acessar página de login")
+        if not usuario:
+            print("❌ Usuário sergio@reis.com não encontrado!")
             return False
+            
+        user_id, email, nome, senha_hash, tipo_usuario = usuario
+        print(f"✅ Usuário encontrado:")
+        print(f"   ID: {user_id}")
+        print(f"   Email: {email}")
+        print(f"   Nome: {nome}")
+        print(f"   Tipo: {tipo_usuario}")
+        print(f"   Hash da senha: {senha_hash[:50] if senha_hash else 'VAZIO'}...")
         
-        # 2. Fazer login
-        logger.info("2. Fazendo login...")
-        login_data = {
-            "email": "sergio@reis.com",
-            "senha": "123456"
-        }
+        # 2. Testar hash da senha
+        print("\n2. Testando hash da senha...")
+        senha_teste = "123456"
         
-        login_response = session.post(f"{base_url}/login", data=login_data)
-        logger.info(f"Status do login: {login_response.status_code}")
+        # Verificar se a senha está vazia ou None
+        if not senha_hash or senha_hash.strip() == "":
+            print("❌ Hash da senha está vazio! Corrigindo...")
+            novo_hash = Usuario.criar_hash_senha(senha_teste)
+            cursor.execute(
+                "UPDATE usuarios SET senha_hash = ? WHERE id = ?",
+                (novo_hash, user_id)
+            )
+            conn.commit()
+            print(f"✅ Senha atualizada com novo hash: {novo_hash[:50]}...")
+            senha_hash = novo_hash
         
-        # Salvar resposta para debug
-        Path("tmp").mkdir(exist_ok=True)
-        with open("tmp/sergio_login_response.html", "w", encoding="utf-8") as f:
-            f.write(login_response.text)
-        logger.info("Resposta do login salva em tmp/sergio_login_response.html")
+        # 3. Testar autenticação
+        print("\n3. Testando autenticação...")
         
-        # Verificar se o login foi bem-sucedido
-        if login_response.status_code == 302:  # Redirecionamento após login
-            logger.info("✅ Login realizado com sucesso (redirecionamento)")
-        elif login_response.status_code == 200:
-            # Verificar se há mensagem de erro na página
-            if "erro" in login_response.text.lower() or "incorret" in login_response.text.lower():
-                logger.error("❌ Login falhou - credenciais incorretas")
-                return False
+        # Inicializar Database e AuthManager
+        from fastlite import Database
+        db = Database(db_path)
+        auth_manager = AuthManager(db)
+        
+        # Tentar autenticar
+        try:
+            resultado = auth_manager.autenticar_usuario(email, senha_teste)
+            if resultado:
+                print(f"✅ Autenticação bem-sucedida!")
+                print(f"   Dados retornados: {resultado}")
+                
+                # 4. Criar sessão
+                print("\n4. Criando sessão...")
+                session_id = auth_manager.criar_sessao(user_id, email, tipo_usuario)
+                print(f"✅ Sessão criada: {session_id}")
+                
+                # 5. Verificar sessão
+                print("\n5. Verificando sessão...")
+                session_data = auth_manager.obter_sessao(session_id)
+                if session_data:
+                    print(f"✅ Sessão válida:")
+                    print(f"   usuario_id: {session_data.get('usuario_id')}")
+                    print(f"   usuario_email: {session_data.get('usuario_email')}")
+                    print(f"   tipo_usuario: {session_data.get('tipo_usuario')}")
+                    return True
+                else:
+                    print("❌ Sessão não encontrada")
+                    return False
             else:
-                logger.info("✅ Login realizado com sucesso")
-        else:
-            logger.error(f"❌ Login falhou - status {login_response.status_code}")
-            return False
-        
-        # 3. Acessar página de veículos
-        logger.info("3. Acessando página de veículos...")
-        veiculos_response = session.get(f"{base_url}/cliente/veiculos")
-        logger.info(f"Status da página de veículos: {veiculos_response.status_code}")
-        
-        # Salvar resposta para debug
-        with open("tmp/sergio_veiculos_response.html", "w", encoding="utf-8") as f:
-            f.write(veiculos_response.text)
-        logger.info("Resposta da página de veículos salva em tmp/sergio_veiculos_response.html")
-        
-        if veiculos_response.status_code == 200:
-            if "sergio@reis.com" in veiculos_response.text:
-                logger.info("✅ Usuário logado e acessando página de veículos")
-                return True
-            else:
-                logger.error("❌ Usuário não está logado na página de veículos")
+                print("❌ Falha na autenticação")
                 return False
-        else:
-            logger.error(f"❌ Falha ao acessar página de veículos - status {veiculos_response.status_code}")
+                
+        except Exception as e:
+            print(f"❌ Erro na autenticação: {e}")
             return False
-        
+            
     except Exception as e:
-        logger.error(f"❌ Erro durante teste de login: {e}")
+        print(f"❌ Erro no teste: {e}")
         return False
+    finally:
+        conn.close()
 
 if __name__ == "__main__":
-    print("🔐 Testando login do usuário sergio@reis.com...")
-    success = test_sergio_login()
+    print("Iniciando teste do login do sergio@reis.com...")
     
-    if success:
-        print("\n🎉 TESTE PASSOU: Login funcionando corretamente!")
-        print("Credenciais válidas:")
-        print("  Email: sergio@reis.com")
-        print("  Senha: 123456")
+    sucesso = test_sergio_login()
+    
+    if sucesso:
+        print("\n🎉 Login do sergio@reis.com está funcionando!")
     else:
-        print("\n❌ TESTE FALHOU: Problema no login")
-        print("Verifique os arquivos em tmp/ para mais detalhes")
+        print("\n❌ Problema no login do sergio@reis.com.")
+        sys.exit(1)

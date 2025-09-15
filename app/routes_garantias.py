@@ -326,8 +326,13 @@ def setup_garantia_routes(app, db: Database):
         else:
             try:
                 data_instalacao_obj = datetime.strptime(data_instalacao, '%Y-%m-%d')
-                if data_instalacao_obj.date() > datetime.now().date():
+                data_hoje = datetime.now().date()
+                data_instalacao_date = data_instalacao_obj.date()
+                
+                if data_instalacao_date > data_hoje:
                     errors['data_instalacao'] = 'Data de instalação não pode ser futura'
+                elif (data_hoje - data_instalacao_date).days > 30:
+                    errors['data_instalacao'] = 'Data de instalação não pode ser superior a 30 dias'
             except ValueError:
                 errors['data_instalacao'] = 'Data de instalação inválida'
         

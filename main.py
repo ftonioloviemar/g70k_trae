@@ -4,9 +4,24 @@ Aplicação FastHTML para Sistema de Garantia Viemar
 """
 
 import logging
+import os
+from pathlib import Path
 from fasthtml.common import *
 from monsterui.all import *
 from fastlite import Database
+
+# Carregar variáveis de ambiente do arquivo .env
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).parent / '.env'
+    if env_path.exists():
+        load_dotenv(env_path)
+        print(f"Arquivo .env carregado: {env_path}")
+    else:
+        print(f"Arquivo .env não encontrado: {env_path}")
+except ImportError:
+    print("python-dotenv não instalado, usando apenas variáveis de ambiente do sistema")
+
 from app.config import Config
 from app.logger import setup_logging, get_logger
 from app.database import init_database

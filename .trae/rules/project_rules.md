@@ -1,5 +1,10 @@
 o banco deve ser sqlite.
 
+## Email Service
+O sistema usa vieutil.send_email para envio de emails em produção.
+O vieutil.send_email NÃO requer autenticação SMTP pois funciona como relay autorizado pelo servidor SMTP.
+Não é necessário configurar credenciais SMTP (username/password) quando usando vieutil.send_email.
+
 a aplicação deve ser com fasthtml (pacote python-fasthtml).
 entenda toda a documentação completa em https://www.fastht.ml/docs/ incluindo tutoriais e exemplos.
 adote as melhores práticas.

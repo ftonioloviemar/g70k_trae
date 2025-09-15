@@ -29,10 +29,36 @@ def setup_admin_routes(app, db: Database):
         """Lista todos os usuários"""
         user = request.state.usuario
         
+        # Verificar mensagens na query string
+        sucesso = request.query_params.get('sucesso')
+        erro = request.query_params.get('erro')
+        
+        alert_message = None
+        alert_type = None
+        
+        if sucesso == 'email_reenviado':
+            alert_message = "Email de confirmação reenviado com sucesso!"
+            alert_type = "success"
+        elif sucesso == 'cadastrado':
+            alert_message = "Usuário cadastrado com sucesso!"
+            alert_type = "success"
+        elif erro == 'usuario_nao_encontrado':
+            alert_message = "Usuário não encontrado."
+            alert_type = "danger"
+        elif erro == 'falha_envio':
+            alert_message = "Falha ao enviar email. Tente novamente mais tarde."
+            alert_type = "danger"
+        elif erro == 'interno':
+            alert_message = "Erro interno. Tente novamente mais tarde."
+            alert_type = "danger"
+        elif request.query_params.get('info') == 'ja_confirmado':
+            alert_message = "Este usuário já confirmou seu email."
+            alert_type = "info"
+        
         try:
             # Buscar usuários
             usuarios = db.execute("""
-                SELECT id, email, nome, tipo_usuario, confirmado, data_cadastro
+                SELECT id, email, nome, tipo_usuario, confirmado, email_enviado, data_cadastro
                 FROM usuarios 
                 ORDER BY data_cadastro DESC
             """).fetchall()
@@ -47,18 +73,47 @@ def setup_admin_routes(app, db: Database):
             status_confirmacao = "Confirmado" if u[4] else "Pendente"
             status_conf_class = "success" if u[4] else "warning"
             
-            acoes = Div(
-                A("Ver", href=f"/admin/usuarios/{u[0]}", cls="btn btn-sm btn-outline-info me-1"),
-                A("Editar", href=f"/admin/usuarios/{u[0]}/editar", cls="btn btn-sm btn-outline-primary me-1"),
-                cls="btn-group"
-            )
+            # Status do email
+            email_enviado = u[5] if len(u) > 5 else False
+            status_email = "Enviado" if email_enviado else "Não enviado"
+            status_email_class = "info" if email_enviado else "secondary"
+            
+            # Botões de ação baseados no tipo de usuário
+            acoes_list = [
+                A("Ver", href=f"/admin/usuarios/{u[0]}", cls="btn btn-sm btn-outline-info me-1")
+            ]
+            
+            # Só mostrar editar/excluir para clientes
+            if u[3] == 'cliente':  # tipo_usuario
+                acoes_list.extend([
+                    A("Editar", href=f"/admin/usuarios/{u[0]}/editar", cls="btn btn-sm btn-outline-primary me-1"),
+                    # Botão de reenvio de email (só se não confirmado)
+                    *([Form(
+                        Button("📧", type="submit", cls="btn btn-sm btn-outline-success me-1", title="Reenviar email"),
+                        method="post",
+                        action=f"/admin/usuarios/{u[0]}/reenviar-email",
+                        style="display: inline;"
+                    )] if not u[4] else []),  # não confirmado
+                    # Botão de exclusão
+                    Form(
+                        Button("🗑️", type="submit", cls="btn btn-sm btn-outline-danger", 
+                               title="Excluir usuário",
+                               onclick="return confirm('Tem certeza? Esta ação excluirá o usuário e todos os seus dados (veículos e garantias). Esta ação não pode ser desfeita!')"),
+                        method="post",
+                        action=f"/admin/usuarios/{u[0]}/excluir",
+                        style="display: inline;"
+                    )
+                ])
+            
+            acoes = Div(*acoes_list, cls="btn-group")
             
             dados_tabela.append([
                 u[2] or "N/A",  # Nome
                 u[1],  # Email
                 u[3].title(),  # Tipo
                 Span(status_confirmacao, cls=f"badge bg-{status_conf_class}"),
-                u[5] if isinstance(u[5], str) else (u[5].strftime('%d/%m/%Y') if u[5] else "N/A"),  # Data cadastro
+                Span(status_email, cls=f"badge bg-{status_email_class}"),
+                u[6] if isinstance(u[6], str) else (u[6].strftime('%d/%m/%Y') if u[6] else "N/A"),  # Data cadastro
                 acoes
             ])
         
@@ -76,16 +131,29 @@ def setup_admin_routes(app, db: Database):
                     )
                 )
             ),
+            # Mostrar alerta se houver mensagem
+            Row(
+                Col(
+                    Div(
+                        alert_message,
+                        cls=f"alert alert-{alert_type} alert-dismissible fade show",
+                        role="alert",
+                        **{
+                            "data-bs-dismiss": "alert",
+                            "aria-label": "Close"
+                        }
+                    ) if alert_message else None,
+                    width=12
+                )
+            ) if alert_message else None,
             Row(
                 Col(
                     card_component(
                         "Usuários Cadastrados",
-                        Div(
-                            table_component(
-                                ["Nome", "Email", "Tipo", "Confirmação", "Cadastro", "Ações"],
-                                dados_tabela
-                            ) if usuarios else P("Nenhum usuário cadastrado ainda.", cls="text-muted text-center py-4")
-                        )
+                        table_component(
+                            ["Nome", "Email", "Tipo", "Confirmação", "Email Enviado", "Cadastro", "Ações"],
+                            dados_tabela
+                        ) if usuarios else P("Nenhum usuário cadastrado ainda.", cls="text-muted text-center py-4")
                     ),
                     width=12
                 )
@@ -134,7 +202,7 @@ def setup_admin_routes(app, db: Database):
                 Col(
                     *([alert_component(error_message, "danger")] if error_message else []),
                     card_component(
-                        "Dados do Usuário",
+                        None,  # Remove título redundante
                         Form(
                             form_group(
                                 "Nome", "nome", "text", 
@@ -293,6 +361,30 @@ def setup_admin_routes(app, db: Database):
         user = request.state.usuario
         usuario_id = request.path_params['usuario_id']
         
+        # Verificar mensagens na query string
+        sucesso = request.query_params.get('sucesso')
+        erro = request.query_params.get('erro')
+        info = request.query_params.get('info')
+        
+        alert_message = None
+        alert_type = None
+        
+        if sucesso == 'email_reenviado':
+            alert_message = "Email de confirmação reenviado com sucesso!"
+            alert_type = "success"
+        elif erro == 'usuario_nao_encontrado':
+            alert_message = "Usuário não encontrado."
+            alert_type = "danger"
+        elif erro == 'falha_envio':
+            alert_message = "Falha ao enviar email. Tente novamente mais tarde."
+            alert_type = "danger"
+        elif erro == 'interno':
+            alert_message = "Erro interno. Tente novamente mais tarde."
+            alert_type = "danger"
+        elif info == 'ja_confirmado':
+            alert_message = "Este usuário já confirmou seu email."
+            alert_type = "info"
+        
         try:
             # Buscar usuário
             usuario = db.execute("""
@@ -333,6 +425,21 @@ def setup_admin_routes(app, db: Database):
                     )
                 )
             ),
+            # Mostrar alerta se houver mensagem
+            Row(
+                Col(
+                    Div(
+                        alert_message,
+                        cls=f"alert alert-{alert_type} alert-dismissible fade show",
+                        role="alert",
+                        **{
+                            "data-bs-dismiss": "alert",
+                            "aria-label": "Close"
+                        }
+                    ) if alert_message else None,
+                    width=12
+                )
+            ) if alert_message else None,
             Row(
                 Col(
                     card_component(
@@ -387,8 +494,14 @@ def setup_admin_routes(app, db: Database):
                             A(
                                 "Resetar Senha",
                                 href=f"/admin/usuarios/{usuario[0]}/reset-senha",
-                                cls="btn btn-warning mb-2"
-                            )
+                                cls="btn btn-warning me-2 mb-2"
+                            ),
+                            # Botão de reenvio de email apenas para usuários não confirmados
+                            A(
+                                "Reenviar Email",
+                                href=f"/admin/usuarios/{usuario[0]}/reenviar-email",
+                                cls="btn btn-info mb-2"
+                            ) if not usuario[4] else None  # usuario[4] é o campo 'confirmado'
                         )
                     ),
                     width=6
@@ -687,12 +800,10 @@ def setup_admin_routes(app, db: Database):
                 Col(
                     card_component(
                         "Produtos Cadastrados",
-                        Div(
-                            table_component(
-                                ["SKU", "Descrição", "Status", "Cadastro", "Ações"],
-                                dados_tabela
-                            ) if produtos else P("Nenhum produto cadastrado ainda.", cls="text-muted text-center py-4")
-                        )
+                        table_component(
+                            ["SKU", "Descrição", "Status", "Cadastro", "Ações"],
+                            dados_tabela
+                        ) if produtos else P("Nenhum produto cadastrado ainda.", cls="text-muted text-center py-4")
                     ),
                     width=12
                 )
@@ -914,7 +1025,7 @@ def setup_admin_routes(app, db: Database):
             Row(
                 Col(
                     card_component(
-                        "Dados do Produto",
+                        None,  # Remove título redundante
                         produto_form(
                             produto=produto_dict,
                             is_edit=True,
@@ -1105,12 +1216,10 @@ def setup_admin_routes(app, db: Database):
                 Col(
                     card_component(
                         "Garantias Cadastradas",
-                        Div(
-                            table_component(
-                                ["ID", "Cliente", "Produto", "Veículo", "Instalação", "Vencimento", "Status"],
-                                dados_tabela
-                            ) if garantias else P("Nenhuma garantia cadastrada ainda.", cls="text-muted text-center py-4")
-                        )
+                        table_component(
+                            ["ID", "Cliente", "Produto", "Veículo", "Instalação", "Vencimento", "Status"],
+                            dados_tabela
+                        ) if garantias else P("Nenhuma garantia cadastrada ainda.", cls="text-muted text-center py-4")
                     ),
                     width=12
                 )
@@ -1310,5 +1419,197 @@ def setup_admin_routes(app, db: Database):
         )
         
         return base_layout("Relatórios", content, user)
+    
+    # ===== REENVIO DE EMAIL DE CONFIRMAÇÃO =====
+    
+    @app.post("/admin/usuarios/{usuario_id}/reenviar-email")
+    @admin_required
+    async def reenviar_email_confirmacao(request):
+        """Reenvia email de confirmação para o usuário"""
+        user = request.state.usuario
+        usuario_id = request.path_params['usuario_id']
+        
+        try:
+            # Buscar usuário
+            usuario = db.execute(
+                "SELECT id, email, nome, confirmado, token_confirmacao FROM usuarios WHERE id = ?",
+                (usuario_id,)
+            ).fetchone()
+            
+            if not usuario:
+                logger.warning(f"Tentativa de reenviar email para usuário inexistente: {usuario_id}")
+                return RedirectResponse('/admin/usuarios?erro=usuario_nao_encontrado', status_code=302)
+            
+            # Verificar se usuário já está confirmado
+            if usuario[3]:  # confirmado
+                logger.info(f"Tentativa de reenviar email para usuário já confirmado: {usuario[1]}")
+                return RedirectResponse('/admin/usuarios?info=ja_confirmado', status_code=302)
+            
+            # Gerar novo token se necessário
+            token_confirmacao = usuario[4] or Usuario.gerar_token_confirmacao()
+            
+            if not usuario[4]:  # Se não tinha token, atualizar no banco
+                db.execute(
+                    "UPDATE usuarios SET token_confirmacao = ? WHERE id = ?",
+                    (token_confirmacao, usuario_id)
+                )
+            
+            # Importar e usar o serviço de email
+            from app.email_service import EmailService
+            email_service = EmailService()
+            
+            # Enviar email de confirmação
+            sucesso = email_service.send_confirmation_email(
+                usuario[1],  # email
+                usuario[2] or usuario[1],  # nome ou email como fallback
+                token_confirmacao
+            )
+            
+            if sucesso:
+                # Marcar email como enviado
+                db.execute(
+                    "UPDATE usuarios SET email_enviado = TRUE WHERE id = ?",
+                    (usuario_id,)
+                )
+                
+                logger.info(f"Email de confirmação reenviado para {usuario[1]} pelo admin {user['email']}")
+                return RedirectResponse('/admin/usuarios?sucesso=email_reenviado', status_code=302)
+            else:
+                logger.error(f"Falha ao reenviar email de confirmação para {usuario[1]}")
+                return RedirectResponse('/admin/usuarios?erro=falha_envio', status_code=302)
+                
+        except Exception as e:
+            logger.error(f"Erro ao reenviar email de confirmação para usuário {usuario_id}: {e}")
+            return RedirectResponse('/admin/usuarios?erro=interno', status_code=302)
+    
+    # ===== EXCLUSÃO DE USUÁRIO =====
+    
+    @app.post("/admin/usuarios/{usuario_id}/excluir")
+    @admin_required
+    async def excluir_usuario(request):
+        """Exclui usuário e todos os dados relacionados (cascata)"""
+        user = request.state.usuario
+        usuario_id = request.path_params['usuario_id']
+        
+        try:
+            # Verificar se o usuário existe
+            usuario = db.execute(
+                "SELECT id, email, nome, tipo_usuario FROM usuarios WHERE id = ?",
+                (usuario_id,)
+            ).fetchone()
+            
+            if not usuario:
+                logger.warning(f"Tentativa de excluir usuário inexistente: {usuario_id}")
+                return RedirectResponse('/admin/usuarios?erro=usuario_nao_encontrado', status_code=302)
+            
+            # Não permitir exclusão de administradores
+            if usuario[3] == 'administrador':
+                logger.warning(f"Tentativa de excluir administrador: {usuario[1]} por {user['email']}")
+                return RedirectResponse('/admin/usuarios?erro=nao_pode_excluir_admin', status_code=302)
+            
+            # Não permitir auto-exclusão
+            if int(usuario_id) == user['usuario_id']:
+                logger.warning(f"Tentativa de auto-exclusão: {user['email']}")
+                return RedirectResponse('/admin/usuarios?erro=nao_pode_excluir_proprio', status_code=302)
+            
+            # Iniciar transação para exclusão em cascata
+            db.execute("BEGIN TRANSACTION")
+            
+            try:
+                # 1. Excluir garantias do usuário
+                garantias_result = db.execute(
+                    "DELETE FROM garantias WHERE usuario_id = ?",
+                    (usuario_id,)
+                )
+                garantias_excluidas = garantias_result.rowcount if hasattr(garantias_result, 'rowcount') else 0
+                
+                # 2. Excluir veículos do usuário
+                veiculos_result = db.execute(
+                    "DELETE FROM veiculos WHERE usuario_id = ?",
+                    (usuario_id,)
+                )
+                veiculos_excluidos = veiculos_result.rowcount if hasattr(veiculos_result, 'rowcount') else 0
+                
+                # 3. Excluir o usuário
+                db.execute(
+                    "DELETE FROM usuarios WHERE id = ?",
+                    (usuario_id,)
+                )
+                
+                # Confirmar transação
+                db.execute("COMMIT")
+                
+                logger.info(
+                    f"Usuário excluído com sucesso: {usuario[1]} (ID: {usuario_id}) "
+                    f"por {user['email']}. Garantias: {garantias_excluidas}, "
+                    f"Veículos: {veiculos_excluidos}"
+                )
+                
+                return RedirectResponse('/admin/usuarios?sucesso=usuario_excluido', status_code=302)
+                
+            except Exception as e:
+                # Reverter transação em caso de erro
+                db.execute("ROLLBACK")
+                raise e
+                
+        except Exception as e:
+            logger.error(f"Erro ao excluir usuário {usuario_id}: {e}")
+            return RedirectResponse('/admin/usuarios?erro=erro_exclusao', status_code=302)
+    
+    # ===== REENVIO DE EMAIL =====
+    
+    @app.post("/admin/usuarios/{usuario_id}/reenviar-email")
+    @admin_required
+    async def reenviar_email_confirmacao(request):
+        """Reenvia email de confirmação para o usuário"""
+        user = request.state.usuario
+        usuario_id = request.path_params['usuario_id']
+        
+        try:
+            # Buscar usuário
+            usuario = db.execute(
+                "SELECT id, email, nome, confirmado, token_confirmacao FROM usuarios WHERE id = ?",
+                (usuario_id,)
+            ).fetchone()
+            
+            if not usuario:
+                return RedirectResponse('/admin/usuarios?erro=usuario_nao_encontrado', status_code=302)
+            
+            # Verificar se já está confirmado
+            if usuario[3]:  # confirmado
+                return RedirectResponse(f'/admin/usuarios/{usuario_id}?erro=ja_confirmado', status_code=302)
+            
+            # Importar serviço de email
+            from app.email_service import EmailService
+            email_service = EmailService()
+            
+            # Gerar novo token se necessário
+            token = usuario[4] if usuario[4] else Usuario.gerar_token_confirmacao()
+            
+            if not usuario[4]:  # Se não tinha token, atualizar no banco
+                db.execute(
+                    "UPDATE usuarios SET token_confirmacao = ? WHERE id = ?",
+                    (token, usuario_id)
+                )
+            
+            # Tentar enviar email
+            sucesso = email_service.send_confirmation_email(usuario[1], usuario[2], token)
+            
+            if sucesso:
+                # Marcar como email enviado
+                db.execute(
+                    "UPDATE usuarios SET email_enviado = TRUE WHERE id = ?",
+                    (usuario_id,)
+                )
+                
+                logger.info(f"Email de confirmação reenviado para {usuario[1]} por {user['email']}")
+                return RedirectResponse(f'/admin/usuarios/{usuario_id}?sucesso=email_reenviado', status_code=302)
+            else:
+                logger.warning(f"Falha ao reenviar email para {usuario[1]}")
+                return RedirectResponse(f'/admin/usuarios/{usuario_id}?erro=falha_envio', status_code=302)
+                
+        except Exception as e:
+            logger.error(f"Erro ao reenviar email para usuário {usuario_id}: {e}")
+            return RedirectResponse(f'/admin/usuarios/{usuario_id}?erro=erro_interno', status_code=302)
     
     logger.info("Rotas administrativas configuradas com sucesso")

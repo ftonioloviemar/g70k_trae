@@ -18,6 +18,7 @@ dependencies = [
     "python-dotenv>=1.1.1",
     "python-fasthtml>=0.12.25",
     "requests>=2.32.5",
+    "vieutil>=0.5",
     "werkzeug>=3.1.3",
 ]
 

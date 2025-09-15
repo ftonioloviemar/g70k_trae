@@ -3,92 +3,82 @@
 Serviço de envio de emails para o sistema de garantia Viemar
 """
 
-import smtplib
-import ssl
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from email.mime.base import MIMEBase
-from email import encoders
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Dict
 from pathlib import Path
 
 from app.config import Config
 from app.logger import get_logger
 
+# Importar vieutil para envio de emails em produção
+try:
+    from vieutil import send_email as vieutil_send_email
+    VIEUTIL_AVAILABLE = True
+except ImportError:
+    VIEUTIL_AVAILABLE = False
+    vieutil_send_email = None
+
 logger = get_logger(__name__)
+
+# Configuração será instanciada quando necessário
+config = None
+
+def get_config():
+    """Obtém instância da configuração, criando se necessário"""
+    global config
+    if config is None:
+        config = Config()
+    return config
 
 class EmailService:
     """Serviço para envio de emails"""
     
     def __init__(self):
-        self.smtp_server = Config.SMTP_SERVER
-        self.smtp_port = Config.SMTP_PORT
-        self.email_user = Config.EMAIL_USER
-        self.email_password = Config.EMAIL_PASSWORD
-        self.use_tls = Config.EMAIL_USE_TLS
+        """Inicializa o serviço de email"""
+        config = get_config()
         
-    def _create_connection(self):
-        """Cria conexão SMTP"""
-        try:
-            if self.use_tls:
-                context = ssl.create_default_context()
-                server = smtplib.SMTP(self.smtp_server, self.smtp_port)
-                server.starttls(context=context)
-            else:
-                server = smtplib.SMTP_SSL(self.smtp_server, self.smtp_port)
-            
-            server.login(self.email_user, self.email_password)
-            return server
-        except Exception as e:
-            logger.error(f"Erro ao conectar com servidor SMTP: {e}")
-            raise
+        # vieutil.send_email não requer autenticação SMTP (usa relay autorizado)
+        self.email_from = config.EMAIL_FROM
+        
+        # vieutil disponível (único método suportado)
+        self.vieutil_available = VIEUTIL_AVAILABLE
+        
+        if self.vieutil_available:
+            logger.info("EmailService inicializado com vieutil.send_email (relay autorizado)")
+        else:
+            logger.error("EmailService não pode ser inicializado - vieutil.send_email não disponível")
+        
+
     
     def send_email(
         self,
         to_email: str,
         subject: str,
         body: str,
-        html_body: Optional[str] = None,
         attachments: Optional[List[str]] = None
     ) -> bool:
-        """Envia email"""
+        """Envia email usando vieutil.send_email (relay autorizado - não requer autenticação SMTP)"""
+        
+        if not self.vieutil_available or not vieutil_send_email:
+            logger.error("vieutil.send_email não está disponível")
+            return False
+            
         try:
-            msg = MIMEMultipart('alternative')
-            msg['From'] = self.email_user
-            msg['To'] = to_email
-            msg['Subject'] = subject
+            logger.info(f"Enviando email via vieutil para: {to_email}")
             
-            # Adicionar corpo do email
-            msg.attach(MIMEText(body, 'plain', 'utf-8'))
+            # Usar apenas texto puro
+            # vieutil.send_email não requer autenticação - usa relay autorizado
+            result = vieutil_send_email(
+                to=to_email,
+                subject=subject,
+                text=body
+            )
             
-            if html_body:
-                msg.attach(MIMEText(html_body, 'html', 'utf-8'))
-            
-            # Adicionar anexos se houver
-            if attachments:
-                for file_path in attachments:
-                    if Path(file_path).exists():
-                        with open(file_path, 'rb') as attachment:
-                            part = MIMEBase('application', 'octet-stream')
-                            part.set_payload(attachment.read())
-                        
-                        encoders.encode_base64(part)
-                        part.add_header(
-                            'Content-Disposition',
-                            f'attachment; filename= {Path(file_path).name}'
-                        )
-                        msg.attach(part)
-            
-            # Enviar email
-            with self._create_connection() as server:
-                server.send_message(msg)
-            
-            logger.info(f"Email enviado com sucesso para {to_email}")
+            logger.info(f"Email enviado via vieutil com sucesso para {to_email}")
             return True
             
         except Exception as e:
-            logger.error(f"Erro ao enviar email para {to_email}: {e}")
+            logger.error(f"Erro ao enviar email via vieutil para {to_email}: {e}")
             return False
     
     def send_welcome_email(self, user_email: str, user_name: str) -> bool:
@@ -105,49 +95,37 @@ Seu cadastro foi realizado com sucesso. Agora você pode:
 - Ativar garantias dos produtos Viemar
 - Acompanhar o status das suas garantias
 
-Para acessar o sistema, visite: {Config.BASE_URL}
+Para acessar o sistema, visite: {get_config().BASE_URL}
 
 Atenciosamente,
 Equipe Viemar
 """
         
-        html_body = f"""
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Bem-vindo à Viemar</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2 style="color: #2c5aa0;">Bem-vindo ao Sistema de Garantia Viemar!</h2>
+        return self.send_email(user_email, subject, body)
+    
+    def send_confirmation_email(self, user_email: str, user_name: str, confirmation_token: str) -> bool:
+        """Envia email de confirmação de cadastro"""
+        subject = "Confirme seu email - Sistema de Garantia Viemar"
         
-        <p>Olá <strong>{user_name}</strong>,</p>
+        confirmation_url = f"{get_config().BASE_URL}/confirmar-email?token={confirmation_token}"
         
-        <p>Seu cadastro foi realizado com sucesso. Agora você pode:</p>
-        
-        <ul>
-            <li>Cadastrar seus veículos</li>
-            <li>Ativar garantias dos produtos Viemar</li>
-            <li>Acompanhar o status das suas garantias</li>
-        </ul>
-        
-        <p>
-            <a href="{Config.BASE_URL}" 
-               style="background-color: #2c5aa0; color: white; padding: 10px 20px; 
-                      text-decoration: none; border-radius: 5px; display: inline-block;">
-                Acessar Sistema
-            </a>
-        </p>
-        
-        <p>Atenciosamente,<br>
-        <strong>Equipe Viemar</strong></p>
-    </div>
-</body>
-</html>
+        body = f"""
+Olá {user_name},
+
+Obrigado por se cadastrar no Sistema de Garantia Viemar!
+
+Para ativar sua conta, clique no link abaixo:
+{confirmation_url}
+
+Se você não se cadastrou em nosso sistema, ignore este email.
+
+Este link expira em 24 horas.
+
+Atenciosamente,
+Equipe Viemar
 """
         
-        return self.send_email(user_email, subject, body, html_body)
+        return self.send_email(user_email, subject, body)
     
     def send_warranty_activation_email(
         self, 
@@ -172,54 +150,13 @@ Detalhes da Garantia:
 
 Guarde este email como comprovante da ativação da sua garantia.
 
-Para consultar suas garantias, acesse: {Config.BASE_URL}/garantias
+Para consultar suas garantias, acesse: {get_config().BASE_URL}/garantias
 
 Atenciosamente,
 Equipe Viemar
 """
         
-        html_body = f"""
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Garantia Ativada - Viemar</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2 style="color: #28a745;">Garantia Ativada com Sucesso!</h2>
-        
-        <p>Olá <strong>{user_name}</strong>,</p>
-        
-        <p>Sua garantia foi ativada com sucesso!</p>
-        
-        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
-            <h3 style="margin-top: 0; color: #2c5aa0;">Detalhes da Garantia</h3>
-            <p><strong>Produto:</strong> {produto_nome}</p>
-            <p><strong>Veículo:</strong> {veiculo_info}</p>
-            <p><strong>Data de Vencimento:</strong> {data_vencimento}</p>
-        </div>
-        
-        <p style="background-color: #fff3cd; padding: 10px; border-radius: 5px; border-left: 4px solid #ffc107;">
-            <strong>Importante:</strong> Guarde este email como comprovante da ativação da sua garantia.
-        </p>
-        
-        <p>
-            <a href="{Config.BASE_URL}/garantias" 
-               style="background-color: #28a745; color: white; padding: 10px 20px; 
-                      text-decoration: none; border-radius: 5px; display: inline-block;">
-                Ver Minhas Garantias
-            </a>
-        </p>
-        
-        <p>Atenciosamente,<br>
-        <strong>Equipe Viemar</strong></p>
-    </div>
-</body>
-</html>
-"""
-        
-        return self.send_email(user_email, subject, body, html_body)
+        return self.send_email(user_email, subject, body)
     
     def send_warranty_expiry_notification(
         self, 
@@ -244,52 +181,13 @@ Detalhes:
 
 Caso precise utilizar a garantia, entre em contato conosco o quanto antes.
 
-Para mais informações, acesse: {Config.BASE_URL}/garantias
+Para mais informações, acesse: {get_config().BASE_URL}/garantias
 
 Atenciosamente,
 Equipe Viemar
 """
         
-        html_body = f"""
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Garantia Vencendo - Viemar</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2 style="color: #dc3545;">Garantia Vencendo em {days_until_expiry} Dias</h2>
-        
-        <p>Olá <strong>{user_name}</strong>,</p>
-        
-        <p>Sua garantia está próxima do vencimento!</p>
-        
-        <div style="background-color: #f8d7da; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #dc3545;">
-            <h3 style="margin-top: 0; color: #721c24;">Detalhes da Garantia</h3>
-            <p><strong>Produto:</strong> {produto_nome}</p>
-            <p><strong>Veículo:</strong> {veiculo_info}</p>
-            <p><strong>Vence em:</strong> {days_until_expiry} dias</p>
-        </div>
-        
-        <p>Caso precise utilizar a garantia, entre em contato conosco o quanto antes.</p>
-        
-        <p>
-            <a href="{Config.BASE_URL}/garantias" 
-               style="background-color: #dc3545; color: white; padding: 10px 20px; 
-                      text-decoration: none; border-radius: 5px; display: inline-block;">
-                Ver Minhas Garantias
-            </a>
-        </p>
-        
-        <p>Atenciosamente,<br>
-        <strong>Equipe Viemar</strong></p>
-    </div>
-</body>
-</html>
-"""
-        
-        return self.send_email(user_email, subject, body, html_body)
+        return self.send_email(user_email, subject, body)
     
     def send_admin_notification(
         self, 
@@ -298,7 +196,7 @@ Equipe Viemar
         user_info: Optional[dict] = None
     ) -> bool:
         """Envia notificação para administradores"""
-        admin_email = Config.ADMIN_EMAIL
+        admin_email = get_config().ADMIN_EMAIL
         if not admin_email:
             logger.warning("Email de administrador não configurado")
             return False
@@ -320,12 +218,71 @@ Informações do Usuário:
         
         return self.send_email(admin_email, subject, body)
 
-# Instância global do serviço de email
-email_service = EmailService()
+def send_email_with_vieutil(
+    to: str,
+    subject: str,
+    text: str,
+    files: List[str] = None,
+    attachments: List[Dict] = None,
+    port: int = None,
+    server: str = None,
+    username: str = None,
+    password: str = None,
+    use_tls: bool = None
+) -> bool:
+    """
+    Compose and send email with provided info and attachments using vieutil.
+    
+    Note: vieutil.send_email does not require SMTP authentication as it uses
+    a pre-authorized relay server. The server, port, username, password and
+    use_tls parameters are ignored when using vieutil.
+    
+    Args:
+        to (str): recipient email address
+        subject (str): email subject
+        text (str): email body text
+        files (list[str]): list of file paths to be attached to email
+        attachments (list[dict]): alternative attachment format (not used with vieutil)
+        port (int): ignored - vieutil uses pre-configured relay
+        server (str): ignored - vieutil uses pre-configured relay
+        username (str): ignored - vieutil uses pre-authorized relay
+        password (str): ignored - vieutil uses pre-authorized relay
+        use_tls (bool): ignored - vieutil uses pre-configured security
+    
+    Returns:
+        bool: True if email sent successfully, False otherwise
+    """
+    try:
+        send_from = "littleeagle.com.br"
+        send_from_str = f"from_name <{send_from}>"
+        
+        # Send email using vieutil (no authentication required - uses pre-authorized relay)
+        if VIEUTIL_AVAILABLE:
+            return vieutil_send_email(
+                send_from_str,
+                to,
+                subject,
+                text,
+                files or []
+            )
+        else:
+            logger.error("vieutil não está disponível")
+            return False
+        
+    except Exception as e:
+        logger.error(f"Erro ao enviar email com vieutil: {e}")
+        return False
 
+# Instância global do serviço de email
 def send_welcome_email(user_email: str, user_name: str) -> bool:
-    """Função helper para enviar email de boas-vindas"""
+    """Função de conveniência para enviar email de boas-vindas"""
+    email_service = EmailService()
     return email_service.send_welcome_email(user_email, user_name)
+
+def send_confirmation_email(user_email: str, user_name: str, confirmation_token: str) -> bool:
+    """Função de conveniência para enviar email de confirmação"""
+    email_service = EmailService()
+    return email_service.send_confirmation_email(user_email, user_name, confirmation_token)
 
 def send_warranty_activation_email(
     user_email: str, 
@@ -334,7 +291,8 @@ def send_warranty_activation_email(
     veiculo_info: str,
     data_vencimento: str
 ) -> bool:
-    """Função helper para enviar email de ativação de garantia"""
+    """Função de conveniência para enviar email de ativação de garantia"""
+    email_service = EmailService()
     return email_service.send_warranty_activation_email(
         user_email, user_name, produto_nome, veiculo_info, data_vencimento
     )
@@ -346,7 +304,8 @@ def send_warranty_expiry_notification(
     veiculo_info: str,
     days_until_expiry: int
 ) -> bool:
-    """Função helper para enviar notificação de vencimento"""
+    """Função de conveniência para enviar notificação de vencimento"""
+    email_service = EmailService()
     return email_service.send_warranty_expiry_notification(
         user_email, user_name, produto_nome, veiculo_info, days_until_expiry
     )
@@ -356,5 +315,6 @@ def send_admin_notification(
     message: str, 
     user_info: Optional[dict] = None
 ) -> bool:
-    """Função helper para enviar notificação para admin"""
+    """Função de conveniência para enviar notificação para administradores"""
+    email_service = EmailService()
     return email_service.send_admin_notification(subject, message, user_info)

@@ -386,7 +386,22 @@ def setup_routes(app, db: Database):
             
             logger.info(f"Novo usuário cadastrado: {email} (ID: {usuario_id})")
             
-            # TODO: Enviar email de confirmação
+            # Enviar email de confirmação
+            try:
+                from app.email_service import send_confirmation_email
+                email_enviado = send_confirmation_email(
+                    user_email=usuario.email,
+                    user_name=usuario.nome,
+                    confirmation_token=usuario.token_confirmacao
+                )
+                
+                if email_enviado:
+                    logger.info(f"Email de confirmação enviado com sucesso para: {usuario.email}")
+                else:
+                    logger.warning(f"Falha ao enviar email de confirmação para: {usuario.email}")
+                    
+            except Exception as e:
+                logger.error(f"Erro ao enviar email de confirmação para {usuario.email}: {e}")
             
             # Redirecionar para página de sucesso
             return RedirectResponse('/cadastro/sucesso', status_code=302)
@@ -522,19 +537,17 @@ def setup_routes(app, db: Database):
                 Col(
                     card_component(
                         "Últimas Garantias Ativadas",
-                        Div(
-                            table_component(
-                                ["Produto", "Veículo", "Data de Ativação", "Vencimento"],
+                        table_component(
+                            ["Produto", "Veículo", "Data de Ativação", "Vencimento"],
+                            [
                                 [
-                                    [
-                                        f"{g[1]} - {g[2]}",
-                                        f"{g[3]} {g[4]} ({g[5]})",
-                                        datetime.fromisoformat(g[6]).strftime('%d/%m/%Y') if g[6] else 'N/A',
-                                        datetime.fromisoformat(g[7]).strftime('%d/%m/%Y') if g[7] else 'N/A'
-                                    ] for g in ultimas_garantias
-                                ]
-                            ) if ultimas_garantias else P("Nenhuma garantia ativada ainda.", cls="text-muted")
-                        ),
+                                    f"{g[1]} - {g[2]}",
+                                    f"{g[3]} {g[4]} ({g[5]})",
+                                    datetime.fromisoformat(g[6]).strftime('%d/%m/%Y') if g[6] else 'N/A',
+                                    datetime.fromisoformat(g[7]).strftime('%d/%m/%Y') if g[7] else 'N/A'
+                                ] for g in ultimas_garantias
+                            ]
+                        ) if ultimas_garantias else P("Nenhuma garantia ativada ainda.", cls="text-muted"),
                         A("Ativar nova garantia", href="/cliente/garantias/nova", cls="btn btn-success")
                     ),
                     width=12
@@ -635,19 +648,17 @@ def setup_routes(app, db: Database):
                 Col(
                     card_component(
                         "Últimas Ativações de Garantia",
-                        Div(
-                            table_component(
-                                ["Cliente", "Email", "Produto", "Data de Ativação"],
+                        table_component(
+                            ["Cliente", "Email", "Produto", "Data de Ativação"],
+                            [
                                 [
-                                    [
-                                        a[0],
-                                        a[1],
-                                        f"{a[2]} - {a[3]}",
-                                        datetime.fromisoformat(a[4]).strftime('%d/%m/%Y %H:%M') if a[4] else 'N/A'
-                                    ] for a in ultimas_ativacoes
-                                ]
-                            ) if ultimas_ativacoes else P("Nenhuma ativação recente.", cls="text-muted")
-                        )
+                                    a[0],
+                                    a[1],
+                                    f"{a[2]} - {a[3]}",
+                                    datetime.fromisoformat(a[4]).strftime('%d/%m/%Y %H:%M') if a[4] else 'N/A'
+                                ] for a in ultimas_ativacoes
+                            ]
+                        ) if ultimas_ativacoes else P("Nenhuma ativação recente.", cls="text-muted")
                     ),
                     width=12
                 )
@@ -773,7 +784,7 @@ def setup_routes(app, db: Database):
             Row(
                 Col(
                     card_component(
-                        "Informações Pessoais",
+                        None,  # Remove título redundante
                         Form(
                             Div(
                                 Label("Nome", for_="nome", cls="form-label"),
@@ -867,5 +878,116 @@ def setup_routes(app, db: Database):
     # Aplicar decorador e registrar rota na ordem correta
     cliente_perfil_update = login_required(cliente_perfil_update)
     app.post("/cliente/perfil")(cliente_perfil_update)
+    
+    # Rota para confirmação de email
+    @app.get("/confirmar-email")
+    async def confirmar_email_route(request):
+        """Confirma o email do usuário através do token"""
+        token = request.query_params.get('token')
+        
+        if not token:
+            content = Container(
+                Row(
+                    Col(
+                        alert_component(
+                            "Token de confirmação não fornecido.",
+                            "danger"
+                        ),
+                        A("Voltar ao início", href="/", cls="btn btn-primary"),
+                        width=6,
+                        offset=3
+                    )
+                ),
+                cls="py-5"
+            )
+            return base_layout("Erro na Confirmação", content, show_nav=False)
+        
+        try:
+            # Buscar usuário pelo token
+            result = db.execute(
+                "SELECT id, nome, email FROM usuarios WHERE token_confirmacao = ? AND confirmado = FALSE",
+                (token,)
+            ).fetchone()
+            
+            if not result:
+                content = Container(
+                    Row(
+                        Col(
+                            alert_component(
+                                "Token inválido ou já utilizado. O link pode ter expirado.",
+                                "warning"
+                            ),
+                            A("Fazer login", href="/login", cls="btn btn-primary me-2"),
+                            A("Voltar ao início", href="/", cls="btn btn-secondary"),
+                            width=6,
+                            offset=3
+                        )
+                    ),
+                    cls="py-5"
+                )
+                return base_layout("Token Inválido", content, show_nav=False)
+            
+            usuario_id, nome, email = result
+            
+            # Confirmar o email
+            from app.auth import confirmar_email
+            if confirmar_email(usuario_id, token):
+                logger.info(f"Email confirmado com sucesso para usuário: {email}")
+                
+                content = Container(
+                    Row(
+                        Col(
+                            alert_component(
+                                "Email confirmado com sucesso! Agora você pode fazer login.",
+                                "success"
+                            ),
+                            H3(f"Bem-vindo, {nome}!", cls="text-center mb-4"),
+                            P("Sua conta foi ativada com sucesso. Agora você pode acessar todas as funcionalidades do sistema.", cls="text-center mb-4"),
+                            Div(
+                                A("Fazer Login", href="/login", cls="btn btn-primary btn-lg me-2"),
+                                A("Voltar ao início", href="/", cls="btn btn-secondary btn-lg"),
+                                cls="text-center"
+                            ),
+                            width=8,
+                            offset=2
+                        )
+                    ),
+                    cls="py-5"
+                )
+                return base_layout("Email Confirmado", content, show_nav=False)
+            else:
+                content = Container(
+                    Row(
+                        Col(
+                            alert_component(
+                                "Erro interno ao confirmar email. Tente novamente mais tarde.",
+                                "danger"
+                            ),
+                            A("Voltar ao início", href="/", cls="btn btn-primary"),
+                            width=6,
+                            offset=3
+                        )
+                    ),
+                    cls="py-5"
+                )
+                return base_layout("Erro na Confirmação", content, show_nav=False)
+                
+        except Exception as e:
+            logger.error(f"Erro ao confirmar email com token {token}: {e}")
+            content = Container(
+                Row(
+                    Col(
+                        alert_component(
+                            "Erro interno. Tente novamente mais tarde.",
+                            "danger"
+                        ),
+                        A("Voltar ao início", href="/", cls="btn btn-primary"),
+                        width=6,
+                        offset=3
+                    )
+                ),
+                cls="py-5"
+            )
+            return base_layout("Erro na Confirmação", content, show_nav=False)
     
     logger.info("Rotas configuradas com sucesso")

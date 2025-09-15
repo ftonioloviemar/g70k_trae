@@ -19,6 +19,9 @@ class Config:
         self.DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
         self.LIVE_RELOAD = self.DEBUG
         
+        # URL base da aplicação
+        self.BASE_URL = os.getenv('BASE_URL', f'http://localhost:{self.PORT}')
+        
         # Configurações do banco de dados
         database_path_env = os.getenv('DATABASE_PATH')
         if database_path_env:

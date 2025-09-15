@@ -11,7 +11,7 @@ def main():
     """Criar usuário de teste"""
     
     # Conectar ao banco de dados
-    db_path = os.path.join(os.path.dirname(__file__), 'data', 'viemar_garantia.db')
+    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'viemar_garantia.db')
     db = Database(db_path)
     
     # Dados do usuário de teste

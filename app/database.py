@@ -27,6 +27,7 @@ def init_database(db: Database):
             nome TEXT NOT NULL,
             tipo_usuario TEXT NOT NULL DEFAULT 'cliente',
             confirmado BOOLEAN DEFAULT FALSE,
+            email_enviado BOOLEAN DEFAULT FALSE,
             cep TEXT,
             endereco TEXT,
             bairro TEXT,
@@ -41,6 +42,14 @@ def init_database(db: Database):
             CONSTRAINT chk_tipo_usuario CHECK (tipo_usuario IN ('cliente', 'administrador'))
         )
     """)
+    
+    # Adicionar coluna email_enviado se não existir (para bancos existentes)
+    try:
+        db.execute("ALTER TABLE usuarios ADD COLUMN email_enviado BOOLEAN DEFAULT FALSE")
+        logger.info("Coluna email_enviado adicionada à tabela usuarios")
+    except Exception:
+        # Coluna já existe, ignorar erro
+        pass
     
     # Criar tabela de produtos
     db.execute("""

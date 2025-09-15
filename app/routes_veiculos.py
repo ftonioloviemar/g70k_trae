@@ -81,13 +81,11 @@ def setup_veiculo_routes(app, db: Database):
             Row(
                 Col(
                     card_component(
-                        "Veículos Cadastrados",
-                        Div(
-                            table_component(
-                                ["Veículo", "Ano", "Placa", "Cor", "Status", "Ações"],
-                                dados_tabela
-                            ) if veiculos else P("Nenhum veículo cadastrado ainda.", cls="text-muted text-center py-4")
-                        )
+                        None,  # Remove título redundante
+                        table_component(
+                            ["Veículo", "Ano", "Placa", "Cor", "Status", "Ações"],
+                            dados_tabela
+                        ) if veiculos else P("Nenhum veículo cadastrado ainda.", cls="text-muted text-center py-4")
                     ),
                     width=12
                 )

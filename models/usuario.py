@@ -20,6 +20,7 @@ class Usuario:
     nome: str = ''
     tipo_usuario: str = 'cliente'  # 'cliente' ou 'administrador'
     confirmado: bool = False
+    email_enviado: bool = False  # Controla se o email de confirmação foi enviado
     cep: str = ''
     endereco: str = ''
     bairro: str = ''
@@ -86,6 +87,7 @@ class Usuario:
             'nome': self.nome,
             'tipo_usuario': self.tipo_usuario,
             'confirmado': self.confirmado,
+            'email_enviado': self.email_enviado,
             'cep': self.cep,
             'endereco': self.endereco,
             'bairro': self.bairro,

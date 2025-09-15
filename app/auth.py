@@ -285,10 +285,20 @@ def admin_required(f):
         return wrapper
 
 def get_current_user(request) -> Optional[Dict[str, Any]]:
-    """Obtém o usuário atual da sessão"""
+    """Obtém o usuário atual da sessão com dados completos"""
     session_id = request.cookies.get(SESSION_COOKIE_NAME)
     if session_id:
-        return get_auth_manager().obter_sessao(session_id)
+        session_data = get_auth_manager().obter_sessao(session_id)
+        if session_data:
+            # Buscar dados completos do usuário no banco
+            usuario_completo = get_auth_manager().obter_usuario_por_id(session_data['usuario_id'])
+            if usuario_completo:
+                # Combinar dados da sessão com dados do banco
+                return {
+                    **session_data,  # dados da sessão (usuario_id, usuario_email, tipo_usuario, etc.)
+                    **usuario_completo  # dados do banco (nome, confirmado, etc.)
+                }
+            return session_data  # fallback para dados da sessão apenas
     return None
 
 def is_authenticated(request) -> bool:

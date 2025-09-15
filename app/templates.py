@@ -42,7 +42,10 @@ def base_layout(title: str, content, user: Optional[Dict[str, Any]] = None, show
                 A("Sair", href="/logout", cls="text-red-500")
             ]
         
-        user_info = Span(f"Olá, {user.get('nome', user.get('usuario_email', 'Usuário'))}", cls="text-sm text-gray-600")
+        # Extrair apenas o primeiro nome do campo nome da tabela usuarios
+        nome_completo = user.get('nome', '')
+        primeiro_nome = nome_completo.split()[0] if nome_completo and nome_completo.strip() else ''
+        user_info = Span(f"Olá, {primeiro_nome}", cls="text-sm text-gray-600") if primeiro_nome else None
     
     # Criar navbar usando MonsterUI
     navbar = None
@@ -66,7 +69,7 @@ def base_layout(title: str, content, user: Optional[Dict[str, Any]] = None, show
             Main(
                 Container(
                     content,
-                    cls="py-6"
+                    cls="main-container"
                 ),
                 cls="min-h-screen"
             ),
@@ -105,22 +108,22 @@ def alert_component(message: str, alert_type: str = "info"):
     )
 
 def card_component(title: str, content, actions=None):
-    """Componente de card usando MonsterUI"""
+    """Componente de card usando MonsterUI com padding otimizado"""
     card_content = []
     
     if title:
-        card_content.append(H3(title, cls="text-lg font-semibold mb-4"))
+        card_content.append(H3(title, cls="text-lg font-semibold mb-3"))
     
     card_content.append(content)
     
     if actions:
         card_content.append(
-            Div(actions, cls="mt-4 flex gap-2")
+            Div(actions, cls="mt-3 flex gap-2")
         )
     
     return Card(
         *card_content,
-        cls="p-6 mb-4"
+        cls="p-3 mb-3 card-optimized"
     )
 
 def form_group(label: str, input_field, help_text: str = None, required: bool = False, error: str = None):

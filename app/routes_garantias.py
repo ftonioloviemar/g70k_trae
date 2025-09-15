@@ -145,13 +145,11 @@ def setup_garantia_routes(app, db: Database):
             Row(
                 Col(
                     card_component(
-                        "Garantias Ativadas",
-                        Div(
-                            table_component(
-                                ["Produto", "Veículo", "Lote", "Instalação", "Vencimento", "Status", "Ações"],
-                                dados_tabela
-                            ) if garantias else P("Nenhuma garantia ativada ainda.", cls="text-muted text-center py-4")
-                        )
+                        None,  # Remove título redundante
+                        table_component(
+                            ["Produto", "Veículo", "Lote", "Instalação", "Vencimento", "Status", "Ações"],
+                            dados_tabela
+                        ) if garantias else P("Nenhuma garantia ativada ainda.", cls="text-muted text-center py-4")
                     ),
                     width=12
                 )

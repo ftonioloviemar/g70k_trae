@@ -965,7 +965,7 @@ def regulamento_page(user: Optional[Dict[str, Any]] = None):
                             
                             Alert(
                                 Strong("Atenção: "),
-                                "Se você não se cadastrar no site, mas mesmo assim tiver a Nota Fiscal do produto, não poderá solicitar a garantia 70 mil Km ou 2 anos depois de passado o prazo legal de 90 dias. A garantia 70 mil Km ou 2 anos é só para quem fez o registro no site.",
+                                "Se você não se cadastrar no site, mas mesmo assim tiver a Nota Fiscal do produto, não poderá solicitar a garantia 70 mil Km ou 2 anos depois de passado o prazo legal de 30 dias. A garantia 70 mil Km ou 2 anos é só para quem fez o registro no site.",
                                 cls="alert-danger"
                             ),
                             

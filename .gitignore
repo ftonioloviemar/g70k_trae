@@ -29,7 +29,9 @@ ehthumbs.db
 Thumbs.db
 
 # Logs and temporary files
+logs/
 logs/*.log
+*.log
 tmp/
 *.tmp
 *.temp

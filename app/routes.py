@@ -117,6 +117,7 @@ def setup_routes(app, db: Database):
                 return RedirectResponse('/cliente', status_code=302)
         
         error = request.query_params.get('erro')
+        email_value = request.query_params.get('email', '')
         error_message = None
         
         if error == 'credenciais_invalidas':
@@ -131,7 +132,7 @@ def setup_routes(app, db: Database):
                 Col(
                     card_component(
                         "Entrar na sua conta",
-                        login_form(error_message)
+                        login_form(error_message, email_value)
                     ),
                     width=6,
                     offset=3
@@ -150,14 +151,18 @@ def setup_routes(app, db: Database):
         senha = form_data.get('senha', '')
         
         if not email or not senha:
-            return RedirectResponse('/login?erro=credenciais_invalidas', status_code=302)
+            # Preservar email no redirecionamento
+            from urllib.parse import quote
+            return RedirectResponse(f'/login?erro=credenciais_invalidas&email={quote(email)}', status_code=302)
         
         # Autenticar usuário
         auth_manager = get_auth_manager()
         usuario = auth_manager.autenticar_usuario(email, senha)
         
         if not usuario:
-            return RedirectResponse('/login?erro=credenciais_invalidas', status_code=302)
+            # Preservar email no redirecionamento
+            from urllib.parse import quote
+            return RedirectResponse(f'/login?erro=credenciais_invalidas&email={quote(email)}', status_code=302)
         
         # Criar sessão
         session_id = auth_manager.criar_sessao(
@@ -313,7 +318,22 @@ def setup_routes(app, db: Database):
                 errors['email'] = 'Este email já está cadastrado'
         
         if errors:
-            # Retornar formulário com erros
+            # Preparar dados do formulário para preservar valores preenchidos
+            form_values = {
+                'nome': nome,
+                'email': email,
+                'confirmar_email': confirmar_email,
+                'cep': cep,
+                'endereco': endereco,
+                'bairro': bairro,
+                'cidade': cidade,
+                'uf': uf,
+                'telefone': telefone,
+                'cpf_cnpj': cpf_cnpj,
+                'data_nascimento': data_nascimento_str
+            }
+            
+            # Retornar formulário com erros e valores preservados
             content = Container(
                 Row(
                     Col(
@@ -323,7 +343,7 @@ def setup_routes(app, db: Database):
                         ),
                         card_component(
                             "Criar nova conta",
-                            cadastro_form(errors)
+                            cadastro_form(errors, form_values)
                         ),
                         width=10,
                         offset=1

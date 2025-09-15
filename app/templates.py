@@ -182,8 +182,13 @@ def form_group(label: str, input_field, help_text: str = None, required: bool = 
     
     return Div(*components, cls=container_cls)
 
-def login_form(error_message: str = None):
-    """Formulário de login"""
+def login_form(error_message: str = None, email_value: str = None):
+    """Formulário de login
+    
+    Args:
+        error_message: Mensagem de erro a ser exibida
+        email_value: Valor do email para preservar após erro
+    """
     form_content = [
         form_group(
             "E-mail",
@@ -192,6 +197,7 @@ def login_form(error_message: str = None):
                 name="email",
                 cls="form-control",
                 placeholder="seu@email.com",
+                value=email_value or '',
                 required=True
             ),
             required=True
@@ -232,9 +238,15 @@ def login_form(error_message: str = None):
         action="/login"
     )
 
-def cadastro_form(errors: Dict[str, str] = None):
-    """Formulário de cadastro de cliente"""
+def cadastro_form(errors: Dict[str, str] = None, form_data: Dict[str, str] = None):
+    """Formulário de cadastro de cliente
+    
+    Args:
+        errors: Dicionário com erros de validação
+        form_data: Dados previamente preenchidos do formulário
+    """
     errors = errors or {}
+    form_data = form_data or {}
     
     return Form(
         Row(
@@ -246,6 +258,7 @@ def cadastro_form(errors: Dict[str, str] = None):
                         name="nome",
                         cls="form-control",
                         placeholder="Seu nome completo",
+                        value=form_data.get('nome', ''),
                         required=True
                     ),
                     required=True,
@@ -263,6 +276,7 @@ def cadastro_form(errors: Dict[str, str] = None):
                         name="email",
                         cls="form-control",
                         placeholder="seu@email.com",
+                        value=form_data.get('email', ''),
                         required=True
                     ),
                     required=True,
@@ -278,6 +292,7 @@ def cadastro_form(errors: Dict[str, str] = None):
                         name="confirmar_email",
                         cls="form-control",
                         placeholder="seu@email.com",
+                        value=form_data.get('confirmar_email', ''),
                         required=True
                     ),
                     required=True,
@@ -295,6 +310,7 @@ def cadastro_form(errors: Dict[str, str] = None):
                         name="cep",
                         cls="form-control",
                         placeholder="00000-000",
+                        value=form_data.get('cep', ''),
                         maxlength="9"
                     ),
                     error=errors.get('cep')
@@ -308,7 +324,8 @@ def cadastro_form(errors: Dict[str, str] = None):
                         type="text",
                         name="endereco",
                         cls="form-control",
-                        placeholder="Rua, número"
+                        placeholder="Rua, número",
+                        value=form_data.get('endereco', '')
                     ),
                     error=errors.get('endereco')
                 ),
@@ -321,7 +338,8 @@ def cadastro_form(errors: Dict[str, str] = None):
                         type="text",
                         name="bairro",
                         cls="form-control",
-                        placeholder="Bairro"
+                        placeholder="Bairro",
+                        value=form_data.get('bairro', '')
                     ),
                     error=errors.get('bairro')
                 ),
@@ -336,7 +354,8 @@ def cadastro_form(errors: Dict[str, str] = None):
                         type="text",
                         name="cidade",
                         cls="form-control",
-                        placeholder="Cidade"
+                        placeholder="Cidade",
+                        value=form_data.get('cidade', '')
                     ),
                     error=errors.get('cidade')
                 ),
@@ -348,32 +367,32 @@ def cadastro_form(errors: Dict[str, str] = None):
                     Select(
                         Option("Selecione...", value=""),
                         Option("AC", value="AC"),
-                        Option("AL", value="AL"),
-                        Option("AP", value="AP"),
-                        Option("AM", value="AM"),
-                        Option("BA", value="BA"),
-                        Option("CE", value="CE"),
-                        Option("DF", value="DF"),
-                        Option("ES", value="ES"),
-                        Option("GO", value="GO"),
-                        Option("MA", value="MA"),
-                        Option("MT", value="MT"),
-                        Option("MS", value="MS"),
-                        Option("MG", value="MG"),
-                        Option("PA", value="PA"),
-                        Option("PB", value="PB"),
-                        Option("PR", value="PR"),
-                        Option("PE", value="PE"),
-                        Option("PI", value="PI"),
-                        Option("RJ", value="RJ"),
-                        Option("RN", value="RN"),
-                        Option("RS", value="RS"),
-                        Option("RO", value="RO"),
-                        Option("RR", value="RR"),
-                        Option("SC", value="SC"),
-                        Option("SP", value="SP"),
-                        Option("SE", value="SE"),
-                        Option("TO", value="TO"),
+                        Option("AL", value="AL", selected=(form_data.get('uf') == 'AL')),
+                        Option("AP", value="AP", selected=(form_data.get('uf') == 'AP')),
+                        Option("AM", value="AM", selected=(form_data.get('uf') == 'AM')),
+                        Option("BA", value="BA", selected=(form_data.get('uf') == 'BA')),
+                        Option("CE", value="CE", selected=(form_data.get('uf') == 'CE')),
+                        Option("DF", value="DF", selected=(form_data.get('uf') == 'DF')),
+                        Option("ES", value="ES", selected=(form_data.get('uf') == 'ES')),
+                        Option("GO", value="GO", selected=(form_data.get('uf') == 'GO')),
+                        Option("MA", value="MA", selected=(form_data.get('uf') == 'MA')),
+                        Option("MT", value="MT", selected=(form_data.get('uf') == 'MT')),
+                        Option("MS", value="MS", selected=(form_data.get('uf') == 'MS')),
+                        Option("MG", value="MG", selected=(form_data.get('uf') == 'MG')),
+                        Option("PA", value="PA", selected=(form_data.get('uf') == 'PA')),
+                        Option("PB", value="PB", selected=(form_data.get('uf') == 'PB')),
+                        Option("PR", value="PR", selected=(form_data.get('uf') == 'PR')),
+                        Option("PE", value="PE", selected=(form_data.get('uf') == 'PE')),
+                        Option("PI", value="PI", selected=(form_data.get('uf') == 'PI')),
+                        Option("RJ", value="RJ", selected=(form_data.get('uf') == 'RJ')),
+                        Option("RN", value="RN", selected=(form_data.get('uf') == 'RN')),
+                        Option("RS", value="RS", selected=(form_data.get('uf') == 'RS')),
+                        Option("RO", value="RO", selected=(form_data.get('uf') == 'RO')),
+                        Option("RR", value="RR", selected=(form_data.get('uf') == 'RR')),
+                        Option("SC", value="SC", selected=(form_data.get('uf') == 'SC')),
+                        Option("SP", value="SP", selected=(form_data.get('uf') == 'SP')),
+                        Option("SE", value="SE", selected=(form_data.get('uf') == 'SE')),
+                        Option("TO", value="TO", selected=(form_data.get('uf') == 'TO')),
                         name="uf",
                         cls="form-select"
                     ),
@@ -388,7 +407,8 @@ def cadastro_form(errors: Dict[str, str] = None):
                         type="tel",
                         name="telefone",
                         cls="form-control",
-                        placeholder="(00) 00000-0000"
+                        placeholder="(00) 00000-0000",
+                        value=form_data.get('telefone', '')
                     ),
                     error=errors.get('telefone')
                 ),
@@ -403,7 +423,8 @@ def cadastro_form(errors: Dict[str, str] = None):
                         type="text",
                         name="cpf_cnpj",
                         cls="form-control",
-                        placeholder="000.000.000-00"
+                        placeholder="000.000.000-00",
+                        value=form_data.get('cpf_cnpj', '')
                     ),
                     error=errors.get('cpf_cnpj')
                 ),
@@ -415,7 +436,8 @@ def cadastro_form(errors: Dict[str, str] = None):
                     Input(
                         type="date",
                         name="data_nascimento",
-                        cls="form-control"
+                        cls="form-control",
+                        value=form_data.get('data_nascimento', '')
                     ),
                     error=errors.get('data_nascimento')
                 ),

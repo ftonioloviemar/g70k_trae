@@ -71,7 +71,8 @@ class EmailService:
             result = vieutil_send_email(
                 to=to_email,
                 subject=subject,
-                text=body
+                text=body,
+                send_from="garantia70mil@viemar.com.br",
             )
             
             logger.info(f"Email enviado via vieutil com sucesso para {to_email}")

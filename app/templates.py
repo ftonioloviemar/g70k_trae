@@ -972,7 +972,11 @@ def regulamento_page(user: Optional[Dict[str, Any]] = None):
                             Div(
                                 A(
                                     "Cadastrar Garantia",
-                                    href="/cliente/garantias/nova" if user else "/cadastro",
+                                    href="/cliente/garantias/nova",
+                                    cls="btn btn-primary btn-lg me-3"
+                                ) if user else A(
+                                    "Voltar ao Início",
+                                    href="/",
                                     cls="btn btn-primary btn-lg me-3"
                                 ),
                                 A(
@@ -1013,7 +1017,7 @@ def contato_page(user: Optional[Dict[str, Any]] = None):
                                             Div(
                                                 I(cls="fas fa-phone fa-2x text-primary mb-3"),
                                                 H4("Telefone", cls="h5 mb-2"),
-                                                P("SAC: 0800 608 0188", cls="mb-1"),
+                                                P("SAC: ", A("0800 608 0188", href="tel:08006080188", cls="text-decoration-none"), cls="mb-1"),
                                 P("Horário: Segunda a Sexta, 8h às 17h", cls="text-muted small")
                                             ),
                                             cls="text-center"
@@ -1028,7 +1032,7 @@ def contato_page(user: Optional[Dict[str, Any]] = None):
                                             Div(
                                                 I(cls="fas fa-envelope fa-2x text-primary mb-3"),
                                                 H4("E-mail", cls="h5 mb-2"),
-                                                P("sac@viemar.com", cls="mb-1"),
+                                                P(A("sac@viemar.com", href="mailto:sac@viemar.com", cls="text-decoration-none"), cls="mb-1"),
                                                 P("Resposta em até 24 horas", cls="text-muted small")
                                             ),
                                             cls="text-center"
@@ -1046,10 +1050,10 @@ def contato_page(user: Optional[Dict[str, Any]] = None):
                                             Div(
                                                 I(cls="fas fa-map-marker-alt fa-2x text-primary mb-3"),
                                                 H4("Endereço", cls="h5 mb-2"),
-                                                P("Viemar Automotive", cls="mb-1"),
-                                P("Rodovia RS-118, 9393, Km 30", cls="mb-1"),
-                                P("Viamão/RS", cls="mb-1"),
-                                P("CEP: 94420-400", cls="text-muted small")
+                                                P(A("Viemar Automotive", href="#", onclick="openMap()", cls="text-decoration-none map-link"), cls="mb-1"),
+                                P(A("Rodovia RS-118, 9393, Km 30", href="#", onclick="openMap()", cls="text-decoration-none map-link"), cls="mb-1"),
+                                P(A("Viamão/RS", href="#", onclick="openMap()", cls="text-decoration-none map-link"), cls="mb-1"),
+                                P("CEP: ", A("94420-400", href="#", onclick="openMap()", cls="text-decoration-none map-link"), cls="text-muted small")
                                             ),
                                             cls="text-center"
                                         )
@@ -1076,7 +1080,7 @@ def contato_page(user: Optional[Dict[str, Any]] = None):
                             
                             Alert(
                 Strong("Redes Sociais: "),
-                "Siga a Viemar nas redes sociais para ficar por dentro das novidades e promoções.",
+                "Siga a Viemar nas redes sociais para ficar por dentro das novidades.",
                 cls="alert-info mt-4"
             ),
             
@@ -1119,7 +1123,11 @@ def contato_page(user: Optional[Dict[str, Any]] = None):
                                 ),
                                 A(
                                     "Cadastrar Garantia",
-                                    href="/cliente/garantias/nova" if user else "/cadastro",
+                                    href="/cliente/garantias/nova",
+                                    cls="btn btn-primary btn-lg"
+                                ) if user else A(
+                                    "Voltar ao Início",
+                                    href="/",
                                     cls="btn btn-primary btn-lg"
                                 ),
                                 cls="text-center mt-5"
@@ -1133,9 +1141,20 @@ def contato_page(user: Optional[Dict[str, Any]] = None):
         )
     )
     
-    return base_layout("Contato", content, user)
+    # JavaScript para detecção de dispositivo e abertura de mapas
+    script = Script("""
+        function openMap() {
+            const address = 'Rodovia RS-118, 9393, Km 30, Viamão, RS, 94420-400';
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Para dispositivos móveis, usa geo: para permitir escolha de apps
+                window.open('geo:0,0?q=' + encodeURIComponent(address), '_blank');
+            } else {
+                // Para desktop, abre diretamente no Google Maps
+                window.open('https://maps.google.com/?q=' + encodeURIComponent(address), '_blank');
+            }
+        }
+    """)
     
-    return Form(
-        *form_content,
-        **form_attrs
-    )
+    return base_layout("Contato", Div(content, script), user)

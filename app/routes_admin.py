@@ -125,7 +125,7 @@ def setup_admin_routes(app, db: Database):
                         A(
                             "Novo Usuário",
                             href="/admin/usuarios/novo",
-                            cls="btn btn-success mb-3"
+                            cls="btn btn-primary mb-3"
                         ),
                         cls="d-flex justify-content-between align-items-center"
                     )
@@ -258,7 +258,7 @@ def setup_admin_routes(app, db: Database):
                                 Button(
                                     "Cadastrar Usuário",
                                     type="submit",
-                                    cls="btn btn-success me-2"
+                                    cls="btn btn-primary me-2"
                                 ),
                                 A(
                                     "Cancelar",
@@ -340,7 +340,7 @@ def setup_admin_routes(app, db: Database):
             """, (
                 usuario.email, usuario.senha_hash, usuario.nome, usuario.tipo_usuario,
                 usuario.confirmado, usuario.cpf_cnpj, usuario.telefone,
-                usuario.data_cadastro.isoformat(), usuario.token_confirmacao
+                usuario.data_cadastro.strftime('%Y-%m-%d %H:%M:%S'), usuario.token_confirmacao
             ))
             
             # Obter o ID do usuário inserido
@@ -698,7 +698,7 @@ def setup_admin_routes(app, db: Database):
                                 Button(
                                     "Salvar Alterações",
                                     type="submit",
-                                    cls="btn btn-success me-2"
+                                    cls="btn btn-primary me-2"
                                 ),
                                 A(
                                     "Cancelar",
@@ -837,7 +837,7 @@ def setup_admin_routes(app, db: Database):
                         A(
                             "Novo Produto",
                             href="/admin/produtos/novo",
-                            cls="btn btn-success mb-3"
+                            cls="btn btn-primary mb-3"
                         ),
                         cls="d-flex justify-content-between align-items-center"
                     )
@@ -979,7 +979,7 @@ def setup_admin_routes(app, db: Database):
                 INSERT INTO produtos (sku, descricao, ativo, data_cadastro)
                 VALUES (?, ?, ?, ?)
             """, (
-                produto.sku, produto.descricao, produto.ativo, produto.data_cadastro.isoformat()
+                produto.sku, produto.descricao, produto.ativo, produto.data_cadastro.strftime('%Y-%m-%d %H:%M:%S')
             ))
             
             # Obter o ID do produto inserido

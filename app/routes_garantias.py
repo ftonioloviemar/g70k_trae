@@ -137,7 +137,7 @@ def setup_garantia_routes(app, db: Database):
                         A(
                             "Ativar Nova Garantia",
                             href="/cliente/garantias/nova",
-                            cls="btn btn-success mb-3"
+                            cls="btn btn-primary mb-3"
                         ),
                         cls="d-flex justify-content-between align-items-center"
                     )
@@ -165,6 +165,9 @@ def setup_garantia_routes(app, db: Database):
         
         if user['tipo_usuario'] != 'cliente':
             return RedirectResponse('/admin', status_code=302)
+        
+        # Capturar veiculo_id da query string se fornecido
+        veiculo_id_selecionado = request.query_params.get('veiculo_id')
         
         try:
             # Buscar produtos ativos
@@ -234,6 +237,11 @@ def setup_garantia_routes(app, db: Database):
             )
             return base_layout("Nova Garantia", content, user)
         
+        # Preparar dados iniciais do formulário se veiculo_id foi fornecido
+        form_data = {}
+        if veiculo_id_selecionado:
+            form_data['veiculo_id'] = veiculo_id_selecionado
+        
         content = Container(
             Row(
                 Col(
@@ -251,7 +259,7 @@ def setup_garantia_routes(app, db: Database):
                 Col(
                     card_component(
                         "Dados da Garantia",
-                        garantia_form(produtos=produtos, veiculos=veiculos)
+                        garantia_form(produtos=produtos, veiculos=veiculos, garantia=form_data)
                     ),
                     width=10,
                     offset=1
@@ -458,9 +466,9 @@ def setup_garantia_routes(app, db: Database):
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 garantia.usuario_id, garantia.produto_id, garantia.veiculo_id,
-                garantia.lote_fabricacao, garantia.data_instalacao.isoformat(),
+                garantia.lote_fabricacao, garantia.data_instalacao.strftime('%Y-%m-%d'),
                 garantia.nota_fiscal, garantia.nome_estabelecimento, garantia.quilometragem,
-                garantia.data_cadastro.isoformat(), garantia.data_vencimento.isoformat(),
+                garantia.data_cadastro.strftime('%Y-%m-%d %H:%M:%S'), garantia.data_vencimento.strftime('%Y-%m-%d'),
                 garantia.ativo, garantia.observacoes
             ))
             

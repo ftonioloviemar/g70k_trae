@@ -7,7 +7,9 @@ from app.auth import AuthManager
 def debug_auth():
     """Debug da função de autenticação"""
     # Conectar ao banco
-    db = Database('g70k.db')
+    from app.config import Config
+config = Config()
+db = Database(config.DATABASE_PATH)
     auth_manager = AuthManager(db)
     
     email = 'naoconfirmado@teste.com'

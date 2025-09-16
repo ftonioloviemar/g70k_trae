@@ -36,7 +36,6 @@ def base_layout(title: str, content, user: Optional[Dict[str, Any]] = None, show
                 A("Meus Dados", href="/cliente/perfil"),
                 A("Meus Veículos", href="/cliente/veiculos"),
                 A("Minhas Garantias", href="/cliente/garantias"),
-                A("Nova Garantia", href="/cliente/garantias/nova"),
                 A("Regulamento", href="/regulamento"),
                 A("Contato", href="/contato"),
                 A("Sair", href="/logout", cls="text-red-500")
@@ -796,7 +795,7 @@ def garantia_form(produtos: List[Dict], veiculos: List[Dict], garantia: Dict[str
             Button(
                 "Ativar garantia",
                 type="submit",
-                cls="btn btn-success btn-lg"
+                cls="btn btn-primary btn-lg"
             ),
             A(
                 "Cancelar",
@@ -903,7 +902,7 @@ def produto_form(produto: Dict[str, Any] = None, is_edit: bool = False, errors: 
             Button(
                 "Salvar Alterações" if is_edit else "Cadastrar Produto",
                 type="submit",
-                cls="btn btn-success" if not is_edit else "btn btn-primary"
+                cls="btn btn-primary"
             ),
             A(
                 "Cancelar",

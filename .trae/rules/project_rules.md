@@ -4,6 +4,12 @@
 - Os arquivos temporários de testes devem ficar na pasta `/tmp`
 - Não criar arquivos soltos na raiz sem permissão explícita
 
+## Formatação de Datas
+- Para exibição nas telas: usar formato brasileiro dd/MM/yyyy
+- Para data e hora nas telas: usar formato brasileiro dd/MM/yyyy HH:mm
+- Para logs: manter formato atual yyyy-MM-dd HH:mm:ss
+- Sempre usar timezone local do Brasil
+
 ## Email Service
 O sistema usa vieutil.send_email para envio de emails em produção.
 O vieutil.send_email NÃO requer autenticação SMTP pois funciona como relay autorizado pelo servidor SMTP.

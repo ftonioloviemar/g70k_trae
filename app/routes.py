@@ -403,8 +403,8 @@ def setup_routes(app, db: Database):
                 usuario.email, usuario.senha_hash, usuario.nome, usuario.tipo_usuario,
                 usuario.confirmado, usuario.cep, usuario.endereco, usuario.bairro,
                 usuario.cidade, usuario.uf, usuario.telefone, usuario.cpf_cnpj,
-                usuario.data_nascimento.isoformat() if usuario.data_nascimento else None,
-                usuario.data_cadastro.isoformat(), usuario.token_confirmacao
+                usuario.data_nascimento.strftime('%Y-%m-%d') if usuario.data_nascimento else None,
+                usuario.data_cadastro.strftime('%Y-%m-%d %H:%M:%S'), usuario.token_confirmacao
             ))
             
             # Obter o ID do usuário inserido
@@ -550,7 +550,7 @@ def setup_routes(app, db: Database):
                             H3(str(garantias_count), cls="display-6 text-success"),
                             P("garantias ativas")
                         ),
-                        A("Ver garantias", href="/cliente/garantias", cls="btn btn-success")
+                        A("Ver garantias", href="/cliente/garantias", cls="btn btn-primary")
                     ),
                     width=6
                 )
@@ -570,7 +570,7 @@ def setup_routes(app, db: Database):
                                 ] for g in ultimas_garantias
                             ]
                         ) if ultimas_garantias else P("Nenhuma garantia ativada ainda.", cls="text-muted"),
-                        A("Ativar nova garantia", href="/cliente/garantias/nova", cls="btn btn-success")
+                        A("Ativar nova garantia", href="/cliente/garantias/nova", cls="btn btn-primary")
                     ),
                     width=12
                 )
@@ -661,7 +661,7 @@ def setup_routes(app, db: Database):
                             H3(str(stats['garantias']), cls="display-6 text-success"),
                             P("garantias ativas")
                         ),
-                        A("Ver garantias", href="/admin/garantias", cls="btn btn-success")
+                        A("Ver garantias", href="/admin/garantias", cls="btn btn-primary")
                     ),
                     width=3
                 )

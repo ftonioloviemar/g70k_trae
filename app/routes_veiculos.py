@@ -49,9 +49,10 @@ def setup_veiculo_routes(app, db: Database):
             
             acoes = Div(
                 A("Editar", href=f"/cliente/veiculos/{v[0]}/editar", cls="btn btn-sm btn-outline-primary me-1"),
+                A("Nova Garantia", href=f"/cliente/garantias/nova?veiculo_id={v[0]}", cls="btn btn-sm btn-outline-primary me-1"),
                 A("Desativar" if v[8] else "Ativar", 
                   href=f"/cliente/veiculos/{v[0]}/toggle", 
-                  cls=f"btn btn-sm btn-outline-{'danger' if v[8] else 'success'}"),
+                  cls=f"btn btn-sm btn-outline-{'danger' if v[8] else 'primary'}"),
                 cls="btn-group"
             )
             
@@ -72,7 +73,7 @@ def setup_veiculo_routes(app, db: Database):
                         A(
                             "Cadastrar Novo Veículo",
                             href="/cliente/veiculos/novo",
-                            cls="btn btn-success mb-3"
+                            cls="btn btn-primary mb-3"
                         ),
                         cls="d-flex justify-content-between align-items-center"
                     )
@@ -271,7 +272,7 @@ def setup_veiculo_routes(app, db: Database):
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 veiculo.usuario_id, veiculo.marca, veiculo.modelo, veiculo.ano_modelo,
-                veiculo.placa, veiculo.cor, veiculo.chassi, veiculo.data_cadastro.isoformat(), veiculo.ativo
+                veiculo.placa, veiculo.cor, veiculo.chassi, veiculo.data_cadastro.strftime('%Y-%m-%d %H:%M:%S'), veiculo.ativo
             ))
             
             # Obter o ID do veículo inserido

@@ -41,11 +41,11 @@ def create_app():
     # Instanciar configuração
     config = Config()
     
-    # Configurar aplicação com MonsterUI
+    # Configurar aplicação com MonsterUI - forçar apenas tema claro
     app, rt = fast_app(
         debug=config.DEBUG,
         live=config.LIVE_RELOAD,
-        hdrs=Theme.blue.headers() + [
+        hdrs=Theme.blue.headers(mode="light") + [
             Link(rel="stylesheet", href="/static/style.css")
         ]
     )
@@ -70,17 +70,24 @@ def create_app():
 # Criar instância da aplicação para o Uvicorn
 app, _ = create_app()
 
+# Exportar app para uso com uvicorn
+__all__ = ['app']
+
 def main():
-    """Função principal"""
+    """Função principal da aplicação"""
     logger.info("Iniciando aplicação Viemar Garantia")
     
-    app, config = create_app()
+    import uvicorn
     
-    # Iniciar servidor
-    serve(
-        host=config.HOST,
-        port=config.PORT,
-        reload=config.LIVE_RELOAD
+    # Servidor Uvicorn com configurações de produção
+    # Usando string de importação para permitir reload
+    uvicorn.run(
+        "main:app", 
+        host="0.0.0.0", 
+        port=8000, 
+        reload=True,  # Para desenvolvimento
+        log_level="info",
+        access_log=True
     )
 
 if __name__ == "__main__":

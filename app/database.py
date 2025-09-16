@@ -149,7 +149,7 @@ def criar_admin_padrao(db: Database):
             admin.nome,
             admin.tipo_usuario,
             admin.confirmado,
-            admin.data_cadastro.isoformat() if admin.data_cadastro else None
+            admin.data_cadastro.strftime('%Y-%m-%d %H:%M:%S') if admin.data_cadastro else None
         ))
         
         logger.info(f"Usuário administrador criado: {admin_email}")

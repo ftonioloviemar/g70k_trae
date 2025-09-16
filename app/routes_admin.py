@@ -205,20 +205,38 @@ def setup_admin_routes(app, db: Database):
                         None,  # Remove título redundante
                         Form(
                             form_group(
-                                "Nome", "nome", "text", 
-                                placeholder="Nome completo", 
+                                "Nome",
+                                Input(
+                                    type="text",
+                                    name="nome",
+                                    cls="form-control",
+                                    placeholder="Nome completo",
+                                    required=True
+                                ),
                                 required=True,
                                 error=error if error == 'campos_obrigatorios' else None
                             ),
                             form_group(
-                                "Email", "email", "email", 
-                                placeholder="email@exemplo.com", 
+                                "Email",
+                                Input(
+                                    type="email",
+                                    name="email",
+                                    cls="form-control",
+                                    placeholder="email@exemplo.com",
+                                    required=True
+                                ),
                                 required=True,
                                 error=error if error in ['campos_obrigatorios', 'email_existente'] else None
                             ),
                             form_group(
-                                "Senha", "senha", "password", 
-                                placeholder="Mínimo 6 caracteres", 
+                                "Senha",
+                                Input(
+                                    type="password",
+                                    name="senha",
+                                    cls="form-control",
+                                    placeholder="Mínimo 6 caracteres",
+                                    required=True
+                                ),
                                 required=True,
                                 error=error if error in ['campos_obrigatorios', 'senha_fraca'] else None
                             ),
@@ -234,12 +252,22 @@ def setup_admin_routes(app, db: Database):
                                 cls="mb-3"
                             ),
                             form_group(
-                                "CPF/CNPJ", "cpf_cnpj", "text", 
-                                placeholder="CPF ou CNPJ (opcional)"
+                                "CPF/CNPJ",
+                                Input(
+                                    type="text",
+                                    name="cpf_cnpj",
+                                    cls="form-control",
+                                    placeholder="CPF ou CNPJ (opcional)"
+                                )
                             ),
                             form_group(
-                                "Telefone", "telefone", "tel", 
-                                placeholder="(11) 99999-9999 (opcional)"
+                                "Telefone",
+                                Input(
+                                    type="tel",
+                                    name="telefone",
+                                    cls="form-control",
+                                    placeholder="(11) 99999-9999 (opcional)"
+                                )
                             ),
                             Div(
                                 Div(

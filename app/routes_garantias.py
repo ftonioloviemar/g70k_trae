@@ -133,7 +133,6 @@ def setup_garantia_routes(app, db: Database):
             Row(
                 Col(
                     Div(
-                        H2("Minhas Garantias", cls="mb-3"),
                         A(
                             "Ativar Nova Garantia",
                             href="/cliente/garantias/nova",

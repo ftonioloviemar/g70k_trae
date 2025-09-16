@@ -35,7 +35,7 @@ def base_layout(title: str, content, user: Optional[Dict[str, Any]] = None, show
             nav_links = [
                 A("Meus Dados", href="/cliente/perfil"),
                 A("Meus Veículos", href="/cliente/veiculos"),
-                A("Minhas Garantias", href="/cliente/garantias"),
+                A("Garantias", href="/cliente/garantias"),
                 A("Regulamento", href="/regulamento"),
                 A("Contato", href="/contato"),
                 A("Sair", href="/logout", cls="text-red-500")
@@ -51,8 +51,7 @@ def base_layout(title: str, content, user: Optional[Dict[str, Any]] = None, show
     if show_nav and user:
         # Brand com logo
         brand = Div(
-            Img(src="/static/viemar-logo-light.png", alt="Viemar", cls="h-8 w-auto mr-2"),
-            Span("Viemar Garantia", cls="font-bold text-lg"),
+            Img(src="/static/g70k.png", alt="G70K", cls="h-16 w-auto mr-2"),
             cls="flex items-center"
         )
         
@@ -916,6 +915,11 @@ def produto_form(produto: Dict[str, Any] = None, is_edit: bool = False, errors: 
     form_attrs = {"method": "post"}
     if action:
         form_attrs["action"] = action
+    
+    return Form(
+        *form_content,
+        **form_attrs
+    )
 
 def regulamento_page(user: Optional[Dict[str, Any]] = None):
     """Página de Regulamento da Garantia 70mil Km"""

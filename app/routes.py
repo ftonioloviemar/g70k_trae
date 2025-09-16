@@ -545,7 +545,7 @@ def setup_routes(app, db: Database):
                 ),
                 Col(
                     card_component(
-                        "Minhas Garantias",
+                        "Garantias",
                         Div(
                             H3(str(garantias_count), cls="display-6 text-success"),
                             P("garantias ativas")

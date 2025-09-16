@@ -69,13 +69,12 @@ def setup_veiculo_routes(app, db: Database):
             Row(
                 Col(
                     Div(
-                        H2("Meus Veículos", cls="mb-3"),
                         A(
                             "Cadastrar Novo Veículo",
                             href="/cliente/veiculos/novo",
                             cls="btn btn-primary mb-3"
                         ),
-                        cls="d-flex justify-content-between align-items-center"
+                        cls="d-flex justify-content-end align-items-center"
                     )
                 )
             ),
@@ -93,7 +92,7 @@ def setup_veiculo_routes(app, db: Database):
             )
         )
         
-        return base_layout("Meus Veículos", content, user)
+        return base_layout("Veículos", content, user)
     
     def novo_veiculo_form(request):
         """Formulário para novo veículo"""

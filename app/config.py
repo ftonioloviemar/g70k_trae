@@ -20,7 +20,8 @@ class Config:
         self.LIVE_RELOAD = self.DEBUG
         
         # URL base da aplicação
-        self.BASE_URL = os.getenv('BASE_URL', f'http://localhost:{self.PORT}')
+        self.HOSTNAME = os.getenv('HOSTNAME', 'garantia70mil.viemar.com.br')
+        self.BASE_URL = os.getenv('BASE_URL', f'http://{self.HOSTNAME}')
         
         # Configurações do banco de dados
         database_path_env = os.getenv('DATABASE_PATH')

@@ -412,22 +412,18 @@ def setup_routes(app, db: Database):
             
             logger.info(f"Novo usuário cadastrado: {email} (ID: {usuario_id})")
             
-            # Enviar email de confirmação
+            # Enviar email de confirmação de forma assíncrona
             try:
-                from app.email_service import send_confirmation_email
-                email_enviado = send_confirmation_email(
+                from app.async_tasks import send_confirmation_email_async
+                send_confirmation_email_async(
                     user_email=usuario.email,
                     user_name=usuario.nome,
                     confirmation_token=usuario.token_confirmacao
                 )
-                
-                if email_enviado:
-                    logger.info(f"Email de confirmação enviado com sucesso para: {usuario.email}")
-                else:
-                    logger.warning(f"Falha ao enviar email de confirmação para: {usuario.email}")
+                logger.info(f"Email de confirmação agendado para envio assíncrono: {usuario.email}")
                     
             except Exception as e:
-                logger.error(f"Erro ao enviar email de confirmação para {usuario.email}: {e}")
+                logger.error(f"Erro ao agendar envio de email de confirmação para {usuario.email}: {e}")
             
             # Redirecionar para página de sucesso
             return RedirectResponse('/cadastro/sucesso', status_code=302)

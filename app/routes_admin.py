@@ -1501,28 +1501,26 @@ def setup_admin_routes(app, db: Database):
                     (token_confirmacao, usuario_id)
                 )
             
-            # Importar e usar o serviço de email
-            from app.email_service import EmailService
-            email_service = EmailService()
-            
-            # Enviar email de confirmação
-            sucesso = email_service.send_confirmation_email(
-                usuario[1],  # email
-                usuario[2] or usuario[1],  # nome ou email como fallback
-                token_confirmacao
-            )
-            
-            if sucesso:
-                # Marcar email como enviado
+            # Enviar email de confirmação de forma assíncrona
+            try:
+                from app.async_tasks import send_confirmation_email_async
+                send_confirmation_email_async(
+                    user_email=usuario[1],  # email
+                    user_name=usuario[2] or usuario[1],  # nome ou email como fallback
+                    confirmation_token=token_confirmacao
+                )
+                
+                # Marcar email como enviado (agendado)
                 db.execute(
                     "UPDATE usuarios SET email_enviado = TRUE WHERE id = ?",
                     (usuario_id,)
                 )
                 
-                logger.info(f"Email de confirmação reenviado para {usuario[1]} pelo admin {user['email']}")
+                logger.info(f"Email de confirmação agendado para reenvio assíncrono: {usuario[1]} pelo admin {user['email']}")
                 return RedirectResponse('/admin/usuarios?sucesso=email_reenviado', status_code=302)
-            else:
-                logger.error(f"Falha ao reenviar email de confirmação para {usuario[1]}")
+                
+            except Exception as e:
+                logger.error(f"Erro ao agendar reenvio de email de confirmação para {usuario[1]}: {e}")
                 return RedirectResponse('/admin/usuarios?erro=falha_envio', status_code=302)
                 
         except Exception as e:
@@ -1639,20 +1637,26 @@ def setup_admin_routes(app, db: Database):
                     (token, usuario_id)
                 )
             
-            # Tentar enviar email
-            sucesso = email_service.send_confirmation_email(usuario[1], usuario[2], token)
-            
-            if sucesso:
-                # Marcar como email enviado
+            # Enviar email de forma assíncrona
+            try:
+                from app.async_tasks import send_confirmation_email_async
+                send_confirmation_email_async(
+                    user_email=usuario[1],
+                    user_name=usuario[2],
+                    confirmation_token=token
+                )
+                
+                # Marcar como email enviado (agendado)
                 db.execute(
                     "UPDATE usuarios SET email_enviado = TRUE WHERE id = ?",
                     (usuario_id,)
                 )
                 
-                logger.info(f"Email de confirmação reenviado para {usuario[1]} por {user['email']}")
+                logger.info(f"Email de confirmação agendado para reenvio assíncrono: {usuario[1]} por {user['email']}")
                 return RedirectResponse(f'/admin/usuarios/{usuario_id}?sucesso=email_reenviado', status_code=302)
-            else:
-                logger.warning(f"Falha ao reenviar email para {usuario[1]}")
+                
+            except Exception as e:
+                logger.error(f"Erro ao agendar reenvio de email para {usuario[1]}: {e}")
                 return RedirectResponse(f'/admin/usuarios/{usuario_id}?erro=falha_envio', status_code=302)
                 
         except Exception as e:

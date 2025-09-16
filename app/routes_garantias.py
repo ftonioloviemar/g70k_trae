@@ -469,7 +469,7 @@ def setup_garantia_routes(app, db: Database):
             
             logger.info(f"Nova garantia ativada: ID {garantia_id} pelo usuário {user['usuario_id']}")
             
-            # Enviar email de confirmação de garantia ativada
+            # Enviar email de confirmação de garantia ativada de forma assíncrona
             try:
                 # Buscar dados para o email
                 dados_email = db.execute("""
@@ -490,8 +490,9 @@ def setup_garantia_routes(app, db: Database):
                     # Formatar data de vencimento
                     data_vencimento_formatada = _format_date(data_vencimento)
                     
-                    # Enviar email
-                    email_enviado = send_warranty_activation_email(
+                    # Enviar email de forma assíncrona
+                    from app.async_tasks import send_warranty_activation_email_async
+                    send_warranty_activation_email_async(
                         user_email=email,
                         user_name=nome,
                         produto_nome=produto_nome,
@@ -499,15 +500,12 @@ def setup_garantia_routes(app, db: Database):
                         data_vencimento=data_vencimento_formatada
                     )
                     
-                    if email_enviado:
-                        logger.info(f"Email de garantia ativada enviado para {email}")
-                    else:
-                        logger.error(f"Falha ao enviar email de garantia ativada para {email}")
+                    logger.info(f"Email de garantia ativada agendado para envio assíncrono: {email}")
                 else:
                     logger.error(f"Não foi possível buscar dados para envio de email da garantia {garantia_id}")
                     
             except Exception as e:
-                logger.error(f"Erro ao enviar email de garantia ativada: {e}")
+                logger.error(f"Erro ao agendar envio de email de garantia ativada: {e}")
             
             return RedirectResponse('/cliente/garantias?sucesso=ativada', status_code=302)
             

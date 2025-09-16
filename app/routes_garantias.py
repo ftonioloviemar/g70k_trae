@@ -10,6 +10,7 @@ from monsterui.all import *
 from fastlite import Database
 from app.auth import login_required, get_current_user
 from app.templates import *
+from app.email_service import send_warranty_activation_email
 from models.garantia import Garantia
 
 # Definir Row como um Div com classe Bootstrap
@@ -468,7 +469,45 @@ def setup_garantia_routes(app, db: Database):
             
             logger.info(f"Nova garantia ativada: ID {garantia_id} pelo usuário {user['usuario_id']}")
             
-            # TODO: Enviar email de confirmação
+            # Enviar email de confirmação de garantia ativada
+            try:
+                # Buscar dados para o email
+                dados_email = db.execute("""
+                    SELECT u.nome, u.email, p.descricao as produto_nome,
+                           (v.marca || ' ' || v.modelo || ' (' || v.placa || ')') as veiculo_info,
+                           g.data_vencimento
+                    FROM garantias g
+                    JOIN usuarios u ON g.usuario_id = u.id
+                    JOIN produtos p ON g.produto_id = p.id
+                    JOIN veiculos v ON g.veiculo_id = v.id
+                    WHERE g.id = ?
+                """, (garantia_id,)).fetchone()
+                
+                if dados_email:
+                    # Extrair dados da tupla
+                    nome, email, produto_nome, veiculo_info, data_vencimento = dados_email
+                    
+                    # Formatar data de vencimento
+                    data_vencimento_formatada = _format_date(data_vencimento)
+                    
+                    # Enviar email
+                    email_enviado = send_warranty_activation_email(
+                        user_email=email,
+                        user_name=nome,
+                        produto_nome=produto_nome,
+                        veiculo_info=veiculo_info,
+                        data_vencimento=data_vencimento_formatada
+                    )
+                    
+                    if email_enviado:
+                        logger.info(f"Email de garantia ativada enviado para {email}")
+                    else:
+                        logger.error(f"Falha ao enviar email de garantia ativada para {email}")
+                else:
+                    logger.error(f"Não foi possível buscar dados para envio de email da garantia {garantia_id}")
+                    
+            except Exception as e:
+                logger.error(f"Erro ao enviar email de garantia ativada: {e}")
             
             return RedirectResponse('/cliente/garantias?sucesso=ativada', status_code=302)
             

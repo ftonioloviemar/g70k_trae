@@ -565,16 +565,28 @@ def setup_admin_routes(app, db: Database):
                         "Dados do Usuário",
                         Form(
                             form_group(
-                                "Nome", "nome", "text", 
-                                value=usuario[2] or "",
-                                placeholder="Nome completo", 
+                                "Nome", 
+                                Input(
+                                    name="nome", 
+                                    type="text",
+                                    value=usuario[2] or "",
+                                    placeholder="Nome completo", 
+                                    cls="form-control",
+                                    required=True
+                                ),
                                 required=True,
                                 error=error if error == 'campos_obrigatorios' else None
                             ),
                             form_group(
-                                "Email", "email", "email", 
-                                value=usuario[1],
-                                placeholder="email@exemplo.com", 
+                                "Email", 
+                                Input(
+                                    name="email", 
+                                    type="email",
+                                    value=usuario[1],
+                                    placeholder="email@exemplo.com", 
+                                    cls="form-control",
+                                    required=True
+                                ),
                                 required=True,
                                 error=error if error in ['campos_obrigatorios', 'email_existente'] else None
                             ),
@@ -590,45 +602,80 @@ def setup_admin_routes(app, db: Database):
                                 cls="mb-3"
                             ),
                             form_group(
-                                "CPF/CNPJ", "cpf_cnpj", "text", 
-                                value=usuario[11] or "",
-                                placeholder="CPF ou CNPJ (opcional)"
+                                "CPF/CNPJ", 
+                                Input(
+                                    name="cpf_cnpj", 
+                                    type="text",
+                                    value=usuario[11] or "",
+                                    placeholder="CPF ou CNPJ (opcional)",
+                                    cls="form-control"
+                                )
                             ),
                             form_group(
-                                "Telefone", "telefone", "tel", 
-                                value=usuario[10] or "",
-                                placeholder="(11) 99999-9999 (opcional)"
+                                "Telefone", 
+                                Input(
+                                    name="telefone", 
+                                    type="tel",
+                                    value=usuario[10] or "",
+                                    placeholder="(11) 99999-9999 (opcional)",
+                                    cls="form-control"
+                                )
                             ),
                             form_group(
-                                "CEP", "cep", "text", 
-                                value=usuario[5] or "",
-                                placeholder="00000-000 (opcional)"
+                                "CEP", 
+                                Input(
+                                    name="cep", 
+                                    type="text",
+                                    value=usuario[5] or "",
+                                    placeholder="00000-000 (opcional)",
+                                    cls="form-control"
+                                )
                             ),
                             form_group(
-                                "Endereço", "endereco", "text", 
-                                value=usuario[6] or "",
-                                placeholder="Rua, número (opcional)"
+                                "Endereço", 
+                                Input(
+                                    name="endereco", 
+                                    type="text",
+                                    value=usuario[6] or "",
+                                    placeholder="Rua, número (opcional)",
+                                    cls="form-control"
+                                )
                             ),
                             form_group(
-                                "Bairro", "bairro", "text", 
-                                value=usuario[7] or "",
-                                placeholder="Bairro (opcional)"
+                                "Bairro", 
+                                Input(
+                                    name="bairro", 
+                                    type="text",
+                                    value=usuario[7] or "",
+                                    placeholder="Bairro (opcional)",
+                                    cls="form-control"
+                                )
                             ),
                             Row(
                                 Col(
                                     form_group(
-                                        "Cidade", "cidade", "text", 
-                                        value=usuario[8] or "",
-                                        placeholder="Cidade (opcional)"
+                                        "Cidade", 
+                                        Input(
+                                            name="cidade", 
+                                            type="text",
+                                            value=usuario[8] or "",
+                                            placeholder="Cidade (opcional)",
+                                            cls="form-control"
+                                        )
                                     ),
                                     width=8
                                 ),
                                 Col(
                                     form_group(
-                                        "UF", "uf", "text", 
-                                        value=usuario[9] or "",
-                                        placeholder="SP",
-                                        maxlength="2"
+                                        "UF", 
+                                        Input(
+                                            name="uf", 
+                                            type="text",
+                                            value=usuario[9] or "",
+                                            placeholder="SP",
+                                            maxlength="2",
+                                            cls="form-control"
+                                        )
                                     ),
                                     width=4
                                 )
@@ -1611,5 +1658,150 @@ def setup_admin_routes(app, db: Database):
         except Exception as e:
             logger.error(f"Erro ao reenviar email para usuário {usuario_id}: {e}")
             return RedirectResponse(f'/admin/usuarios/{usuario_id}?erro=erro_interno', status_code=302)
+    
+    # ===== RESET DE SENHA =====
+    
+    @app.get("/admin/usuarios/{usuario_id}/reset-senha")
+    @admin_required
+    def reset_senha_form(request):
+        """Formulário para resetar senha do usuário"""
+        user = request.state.usuario
+        usuario_id = request.path_params['usuario_id']
+        
+        try:
+            # Buscar usuário
+            usuario = db.execute(
+                "SELECT id, email, nome, tipo_usuario FROM usuarios WHERE id = ?",
+                (usuario_id,)
+            ).fetchone()
+            
+            if not usuario:
+                return RedirectResponse('/admin/usuarios?erro=nao_encontrado', status_code=302)
+            
+            # Não permitir reset de senha de administradores por outros admins
+            if usuario[3] == 'administrador' and user['usuario_id'] != int(usuario_id):
+                return RedirectResponse('/admin/usuarios?erro=nao_pode_alterar_admin', status_code=302)
+            
+            # Formulário de reset de senha
+            form = Form(
+                Div(
+                    Label("Nova Senha:", **{"for": "nova_senha"}),
+                    Input(
+                        type="password",
+                        name="nova_senha",
+                        id="nova_senha",
+                        cls="form-control",
+                        required=True,
+                        minlength="6"
+                    ),
+                    cls="mb-3"
+                ),
+                Div(
+                    Label("Confirmar Nova Senha:", **{"for": "confirmar_senha"}),
+                    Input(
+                        type="password",
+                        name="confirmar_senha",
+                        id="confirmar_senha",
+                        cls="form-control",
+                        required=True,
+                        minlength="6"
+                    ),
+                    cls="mb-3"
+                ),
+                Div(
+                    Button("Resetar Senha", type="submit", cls="btn btn-danger me-2"),
+                    A("Cancelar", href=f"/admin/usuarios/{usuario_id}", cls="btn btn-secondary"),
+                    cls="d-flex gap-2"
+                ),
+                method="post",
+                action=f"/admin/usuarios/{usuario_id}/reset-senha"
+            )
+            
+            content = Container(
+                Row(
+                    Col(
+                        Div(
+                            A(
+                                "← Voltar para Usuário",
+                                href=f"/admin/usuarios/{usuario_id}",
+                                cls="btn btn-outline-secondary mb-3"
+                            ),
+                            H2(f"Resetar Senha - {usuario[2] or usuario[1]}", cls="mb-4")
+                        )
+                    )
+                ),
+                Row(
+                    Col(
+                        card_component(
+                            "Nova Senha",
+                            form
+                        ),
+                        width=6,
+                        offset=3
+                    )
+                )
+            )
+            
+            return base_layout("Resetar Senha", content, user)
+            
+        except Exception as e:
+            logger.error(f"Erro ao carregar formulário de reset de senha para usuário {usuario_id}: {e}")
+            return RedirectResponse('/admin/usuarios?erro=interno', status_code=302)
+    
+    @app.post("/admin/usuarios/{usuario_id}/reset-senha")
+    @admin_required
+    async def reset_senha_submit(request):
+        """Processa reset de senha do usuário"""
+        user = request.state.usuario
+        usuario_id = request.path_params['usuario_id']
+        
+        try:
+            # Buscar usuário
+            usuario = db.execute(
+                "SELECT id, email, nome, tipo_usuario FROM usuarios WHERE id = ?",
+                (usuario_id,)
+            ).fetchone()
+            
+            if not usuario:
+                return RedirectResponse('/admin/usuarios?erro=nao_encontrado', status_code=302)
+            
+            # Não permitir reset de senha de administradores por outros admins
+            if usuario[3] == 'administrador' and user['usuario_id'] != int(usuario_id):
+                return RedirectResponse('/admin/usuarios?erro=nao_pode_alterar_admin', status_code=302)
+            
+            # Processar dados do formulário
+            form_data = await request.form()
+            nova_senha = form_data.get('nova_senha', '').strip()
+            confirmar_senha = form_data.get('confirmar_senha', '').strip()
+            
+            # Validações
+            if not nova_senha or not confirmar_senha:
+                return RedirectResponse(f'/admin/usuarios/{usuario_id}/reset-senha?erro=campos_obrigatorios', status_code=302)
+            
+            if len(nova_senha) < 6:
+                return RedirectResponse(f'/admin/usuarios/{usuario_id}/reset-senha?erro=senha_muito_curta', status_code=302)
+            
+            if nova_senha != confirmar_senha:
+                return RedirectResponse(f'/admin/usuarios/{usuario_id}/reset-senha?erro=senhas_diferentes', status_code=302)
+            
+            # Importar função de hash de senha
+            from app.auth import hash_password
+            
+            # Gerar hash da nova senha
+            senha_hash = hash_password(nova_senha)
+            
+            # Atualizar senha no banco
+            db.execute(
+                "UPDATE usuarios SET senha = ? WHERE id = ?",
+                (senha_hash, usuario_id)
+            )
+            
+            logger.info(f"Senha resetada para usuário {usuario[1]} (ID: {usuario_id}) pelo admin {user['email']}")
+            
+            return RedirectResponse(f'/admin/usuarios/{usuario_id}?sucesso=senha_resetada', status_code=302)
+            
+        except Exception as e:
+            logger.error(f"Erro ao resetar senha do usuário {usuario_id}: {e}")
+            return RedirectResponse(f'/admin/usuarios/{usuario_id}/reset-senha?erro=interno', status_code=302)
     
     logger.info("Rotas administrativas configuradas com sucesso")

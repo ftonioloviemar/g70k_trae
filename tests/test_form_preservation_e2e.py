@@ -5,16 +5,15 @@ Testes E2E para preservação de dados em formulários após erros de validaçã
 
 import pytest
 from playwright.sync_api import Page, expect
-from tests.conftest import TestClient
 
 
 class TestFormPreservationE2E:
     """Testes E2E para preservação de dados em formulários"""
     
-    def test_cadastro_form_preserves_data_on_validation_error(self, page: Page, test_client: TestClient):
+    def test_cadastro_form_preserves_data_on_validation_error(self, page: Page, client):
         """Testa se o formulário de cadastro preserva dados quando há erro de validação"""
         # Navegar para a página de cadastro
-        page.goto(f"{test_client.base_url}/cadastro")
+        page.goto("http://localhost:8000/cadastro")
         
         # Preencher o formulário com dados válidos, exceto senhas que não conferem
         page.fill('input[name="nome"]', 'João Silva')
@@ -57,10 +56,10 @@ class TestFormPreservationE2E:
         expect(page.locator('input[name="senha"]')).to_have_value('')
         expect(page.locator('input[name="confirmar_senha"]')).to_have_value('')
     
-    def test_login_form_preserves_email_on_error(self, page: Page, test_client: TestClient):
+    def test_login_form_preserves_email_on_error(self, page: Page, client):
         """Testa se o formulário de login preserva o email quando há erro de autenticação"""
         # Navegar para a página de login
-        page.goto(f"{test_client.base_url}/login")
+        page.goto("http://localhost:8000/login")
         
         # Preencher com email válido e senha inválida
         page.fill('input[name="email"]', 'usuario@teste.com')
@@ -81,10 +80,10 @@ class TestFormPreservationE2E:
         # A senha deve estar vazia por segurança
         expect(page.locator('input[name="senha"]')).to_have_value('')
     
-    def test_cadastro_form_multiple_errors_preserve_data(self, page: Page, test_client: TestClient):
+    def test_cadastro_form_multiple_errors_preserve_data(self, page: Page, client):
         """Testa preservação de dados com múltiplos erros de validação"""
         # Navegar para a página de cadastro
-        page.goto(f"{test_client.base_url}/cadastro")
+        page.goto("http://localhost:8000/cadastro")
         
         # Preencher apenas alguns campos (deixar campos obrigatórios vazios)
         page.fill('input[name="nome"]', 'Maria Santos')
@@ -119,10 +118,10 @@ class TestFormPreservationE2E:
         expect(page.locator('input[name="senha"]')).to_have_value('')
         expect(page.locator('input[name="confirmar_senha"]')).to_have_value('')
     
-    def test_successful_form_submission_clears_data(self, page: Page, test_client: TestClient):
+    def test_successful_form_submission_clears_data(self, page: Page, client):
         """Testa que após submissão bem-sucedida, o usuário é redirecionado (não fica no formulário)"""
         # Navegar para a página de cadastro
-        page.goto(f"{test_client.base_url}/cadastro")
+        page.goto("http://localhost:8000/cadastro")
         
         # Preencher o formulário com dados válidos
         unique_email = f'usuario_teste_{page.evaluate("Date.now()")}@teste.com'

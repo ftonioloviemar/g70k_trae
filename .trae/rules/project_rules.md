@@ -1,4 +1,8 @@
-o banco deve ser sqlite.
+## Estrutura do Projeto
+- O banco de dados deve ser SQLite e deve estar localizado em `/data/viemar_garantia.db`
+- Os testes devem ficar somente na pasta `/tests`
+- Os arquivos temporários de testes devem ficar na pasta `/tmp`
+- Não criar arquivos soltos na raiz sem permissão explícita
 
 ## Email Service
 O sistema usa vieutil.send_email para envio de emails em produção.

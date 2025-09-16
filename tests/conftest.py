@@ -27,6 +27,8 @@ def temp_db():
     # Usar fastlite Database que já retorna dicionários
     from fastlite import Database
     db = Database(db_path)
+    # Adicionar o atributo db para compatibilidade
+    db.db = db_path
     init_database(db)
     
     yield db

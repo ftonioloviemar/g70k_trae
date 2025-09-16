@@ -159,6 +159,12 @@ def setup_routes(app, db: Database):
         auth_manager = get_auth_manager()
         usuario = auth_manager.autenticar_usuario(email, senha)
         
+        # Verificar se é erro de email não confirmado
+        if isinstance(usuario, dict) and usuario.get('erro') == 'email_nao_confirmado':
+            # Preservar email no redirecionamento
+            from urllib.parse import quote
+            return RedirectResponse(f'/login?erro=email_nao_confirmado&email={quote(email)}', status_code=302)
+        
         if not usuario:
             # Preservar email no redirecionamento
             from urllib.parse import quote

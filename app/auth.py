@@ -77,7 +77,13 @@ class AuthManager:
         return False
     
     def autenticar_usuario(self, email: str, senha: str) -> Optional[Dict[str, Any]]:
-        """Autentica usuário com email e senha"""
+        """Autentica usuário com email e senha
+        
+        Returns:
+            Dict com dados do usuário se autenticado com sucesso
+            Dict com {'erro': 'email_nao_confirmado'} se email não confirmado
+            None se credenciais inválidas
+        """
         
         try:
             # Buscar usuário no banco
@@ -92,16 +98,16 @@ class AuthManager:
             
             usuario_id, usuario_email, senha_hash, nome, tipo_usuario, confirmado = result
             
-            # Verificar se o email foi confirmado (exceto para administradores)
-            if tipo_usuario not in ['admin', 'administrador'] and not confirmado:
-                logger.warning(f"Tentativa de login com email não confirmado: {email}")
-                return None
-            
-            # Verificar senha usando bcrypt
+            # Verificar senha primeiro
             import bcrypt
             if not bcrypt.checkpw(senha.encode('utf-8'), senha_hash.encode('utf-8')):
                 logger.warning(f"Tentativa de login com senha incorreta: {email}")
                 return None
+            
+            # Verificar se o email foi confirmado (exceto para administradores)
+            if tipo_usuario not in ['admin', 'administrador'] and not confirmado:
+                logger.warning(f"Tentativa de login com email não confirmado: {email}")
+                return {'erro': 'email_nao_confirmado'}
             
             logger.info(f"Login bem-sucedido: {email} ({tipo_usuario})")
             

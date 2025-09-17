@@ -25,6 +25,7 @@ def base_layout(title: str, content, user: Optional[Dict[str, Any]] = None, show
                 A("Dashboard", href="/admin"),
                 A("Usuários", href="/admin/usuarios"),
                 A("Produtos", href="/admin/produtos"),
+                A("Sincronizar ERP", href="/admin/produtos/sync"),
                 A("Garantias", href="/admin/garantias"),
                 A("Relatórios", href="/admin/relatorios"),
                 A("Regulamento", href="/regulamento"),

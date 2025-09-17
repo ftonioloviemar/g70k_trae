@@ -213,8 +213,9 @@ def setup_admin_routes(app, db: Database):
                                     placeholder="Nome completo",
                                     required=True
                                 ),
-                                required=True,
-                                error=error if error == 'campos_obrigatorios' else None
+                                None,
+                                True,
+                                error if error == 'campos_obrigatorios' else None
                             ),
                             form_group(
                                 "Email",
@@ -225,8 +226,9 @@ def setup_admin_routes(app, db: Database):
                                     placeholder="email@exemplo.com",
                                     required=True
                                 ),
-                                required=True,
-                                error=error if error in ['campos_obrigatorios', 'email_existente'] else None
+                                None,
+                                True,
+                                error if error in ['campos_obrigatorios', 'email_existente'] else None
                             ),
                             form_group(
                                 "Senha",
@@ -237,8 +239,9 @@ def setup_admin_routes(app, db: Database):
                                     placeholder="Mínimo 6 caracteres",
                                     required=True
                                 ),
-                                required=True,
-                                error=error if error in ['campos_obrigatorios', 'senha_fraca'] else None
+                                None,
+                                True,
+                                error if error in ['campos_obrigatorios', 'senha_fraca'] else None
                             ),
                             Div(
                                 Label("Tipo de Usuário", for_="tipo_usuario", cls="form-label"),
@@ -1835,5 +1838,226 @@ def setup_admin_routes(app, db: Database):
         except Exception as e:
             logger.error(f"Erro ao resetar senha do usuário {usuario_id}: {e}")
             return RedirectResponse(f'/admin/usuarios/{usuario_id}/reset-senha?erro=interno', status_code=302)
+    
+    # ===== SINCRONIZAÇÃO COM ERP FIREBIRD =====
+    
+    @app.get("/admin/produtos/sync")
+    @admin_required
+    def sync_produtos_page(request):
+        """Página de sincronização de produtos com ERP"""
+        user = request.state.usuario
+        
+        # Verificar mensagens na query string
+        sucesso = request.query_params.get('sucesso')
+        erro = request.query_params.get('erro')
+        
+        alert_message = None
+        alert_type = None
+        
+        if sucesso == 'sync_concluida':
+            # Recuperar estatísticas da sincronização
+            total = request.query_params.get('total', '0')
+            inseridos = request.query_params.get('inseridos', '0')
+            atualizados = request.query_params.get('atualizados', '0')
+            inalterados = request.query_params.get('inalterados', '0')
+            erros = request.query_params.get('erros', '0')
+            
+            alert_message = f"Sincronização concluída! Total ERP: {total}, Inseridos: {inseridos}, Atualizados: {atualizados}, Inalterados: {inalterados}, Erros: {erros}"
+            alert_type = "success"
+        elif erro == 'conexao_firebird':
+            alert_message = "Erro ao conectar com o Firebird ERP. Verifique as configurações."
+            alert_type = "danger"
+        elif erro == 'sync_falhou':
+            # Capturar erro detalhado dos logs se disponível
+            erro_detalhe = request.query_params.get('erro_detalhe', '')
+            if erro_detalhe:
+                alert_message = f"Falha durante a sincronização: {erro_detalhe}"
+            else:
+                alert_message = "Falha durante a sincronização. Verifique os logs para mais detalhes."
+            alert_type = "danger"
+        elif erro == 'teste_conexao_falhou':
+            # Capturar erro detalhado dos logs se disponível
+            erro_detalhe = request.query_params.get('erro_detalhe', '')
+            if erro_detalhe:
+                alert_message = f"Teste de conexão com Firebird falhou: {erro_detalhe}"
+            else:
+                alert_message = "Teste de conexão com Firebird falhou. Verifique as configurações."
+            alert_type = "danger"
+        elif sucesso == 'teste_conexao_ok':
+            alert_message = "Conexão com Firebird testada com sucesso!"
+            alert_type = "success"
+        
+        return Container(
+            Row(
+                Col(
+                    H1("Sincronização de Produtos ERP", cls="mb-4"),
+                    
+                    # Alert de feedback
+                    Alert(
+                        alert_message,
+                        variant=alert_type,
+                        cls="mb-4"
+                    ) if alert_message else None,
+                    
+                    Card(
+                        CardHeader(
+                            H4("Sincronização com Firebird ERP", cls="mb-0")
+                        ),
+                        CardBody(
+                            P("Esta funcionalidade sincroniza os produtos do ERP Firebird com o sistema de garantias."),
+                            P("A sincronização irá:"),
+                            Ul(
+                                Li("Buscar produtos ativos do grupo 48 e subgrupos específicos"),
+                                Li("Inserir novos produtos que não existem no sistema"),
+                                Li("Atualizar produtos existentes com descrições diferentes"),
+                                Li("Manter produtos inalterados quando não há diferenças")
+                            ),
+                            Hr(),
+                            Div(
+                                Button(
+                                    "Testar Conexão",
+                                    type="button",
+                                    cls="btn btn-outline-primary me-3",
+                                    onclick="testarConexaoFirebird()"
+                                ),
+                                Button(
+                                    "Atualizar Produtos do ERP",
+                                    type="button",
+                                    cls="btn btn-primary",
+                                    onclick="sincronizarProdutos()",
+                                    id="btnSincronizar"
+                                ),
+                                cls="d-flex gap-2"
+                            )
+                        )
+                    ),
+                    
+                    # Área de status
+                    Div(
+                        id="statusSincronizacao",
+                        cls="mt-4"
+                    ),
+                    
+                    # Script JavaScript
+                    Script("""
+                        function testarConexaoFirebird() {
+                            const statusDiv = document.getElementById('statusSincronizacao');
+                            statusDiv.innerHTML = '<div class="alert alert-info">Testando conexão com Firebird...</div>';
+                            
+                            fetch('/admin/produtos/test-firebird', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    window.location.href = '/admin/produtos/sync?sucesso=teste_conexao_ok';
+                                } else {
+                                    const errorDetail = encodeURIComponent(data.error || 'Erro desconhecido');
+                                    window.location.href = '/admin/produtos/sync?erro=teste_conexao_falhou&erro_detalhe=' + errorDetail;
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erro:', error);
+                                const errorDetail = encodeURIComponent(error.message || 'Erro de conexão');
+                                window.location.href = '/admin/produtos/sync?erro=teste_conexao_falhou&erro_detalhe=' + errorDetail;
+                            });
+                        }
+                        
+                        function sincronizarProdutos() {
+                            const btnSincronizar = document.getElementById('btnSincronizar');
+                            const statusDiv = document.getElementById('statusSincronizacao');
+                            
+                            btnSincronizar.disabled = true;
+                            btnSincronizar.innerHTML = 'Sincronizando...';
+                            statusDiv.innerHTML = '<div class="alert alert-info">Sincronizando produtos com ERP Firebird...</div>';
+                            
+                            fetch('/admin/produtos/sync-execute', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    const stats = data.stats;
+                                    const params = new URLSearchParams({
+                                        sucesso: 'sync_concluida',
+                                        total: stats.total_erp,
+                                        inseridos: stats.inseridos,
+                                        atualizados: stats.atualizados,
+                                        inalterados: stats.inalterados,
+                                        erros: stats.erros
+                                    });
+                                    window.location.href = '/admin/produtos/sync?' + params.toString();
+                                } else {
+                                    const errorDetail = encodeURIComponent(data.error || 'Erro desconhecido');
+                                    window.location.href = '/admin/produtos/sync?erro=sync_falhou&erro_detalhe=' + errorDetail;
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erro:', error);
+                                const errorDetail = encodeURIComponent(error.message || 'Erro de conexão');
+                                window.location.href = '/admin/produtos/sync?erro=sync_falhou&erro_detalhe=' + errorDetail;
+                            })
+                            .finally(() => {
+                                btnSincronizar.disabled = false;
+                                btnSincronizar.innerHTML = 'Atualizar Produtos do ERP';
+                            });
+                        }
+                    """)
+                )
+            )
+        )
+    
+    @app.post("/admin/produtos/test-firebird")
+    @admin_required
+    def test_firebird_connection(request):
+        """Testa conexão com Firebird ERP"""
+        try:
+            from app.services import get_firebird_service
+            from app.config import Config
+            
+            config = Config()
+            firebird_service = get_firebird_service(config)
+            
+            success = firebird_service.test_connection()
+            
+            return {"success": success}
+            
+        except Exception as e:
+            logger.error(f"Erro ao testar conexão Firebird: {e}")
+            return {"success": False, "error": str(e)}
+    
+    @app.post("/admin/produtos/sync-execute")
+    @admin_required
+    def execute_produtos_sync(request):
+        """Executa sincronização de produtos com ERP"""
+        try:
+            from app.services import get_firebird_service
+            from app.config import Config
+            
+            config = Config()
+            firebird_service = get_firebird_service(config)
+            
+            # Executar sincronização
+            stats = firebird_service.sync_produtos(db)
+            
+            logger.info(f"Sincronização de produtos concluída: {stats}")
+            
+            return {
+                "success": True,
+                "stats": stats
+            }
+            
+        except Exception as e:
+            logger.error(f"Erro durante sincronização de produtos: {e}")
+            return {
+                "success": False,
+                "error": str(e)
+            }
     
     logger.info("Rotas administrativas configuradas com sucesso")

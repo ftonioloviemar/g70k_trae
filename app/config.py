@@ -57,6 +57,14 @@ class Config:
         if not self.ADMIN_EMAIL or not self.ADMIN_PASSWORD:
             raise ValueError("ADMIN_EMAIL e ADMIN_PASSWORD devem ser definidas como variáveis de ambiente")
         
+        # Configurações do Firebird ERP
+        self.FIREBIRD_HOST = os.getenv('FIREBIRD_HOST', 'discovery')
+        self.FIREBIRD_USER = os.getenv('FIREBIRD_USER', 'VIEMAR')
+        self.FIREBIRD_PASSWORD = os.getenv('FIREBIRD_PASSWORD', '@Tec#Viemar!')
+        self.FIREBIRD_DATABASE = os.getenv('FIREBIRD_DATABASE', '/ssd/tecnicon/dados/emp17.fdb')
+        self.FIREBIRD_ROLE = os.getenv('FIREBIRD_ROLE', 'TECNICONE')
+        self.FIREBIRD_CHARSET = os.getenv('FIREBIRD_CHARSET', 'ISO8859_1')
+        
         # Configurações de upload
         self.UPLOAD_DIR = self.BASE_DIR / 'uploads'
         self.MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB

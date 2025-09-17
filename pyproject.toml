@@ -8,6 +8,7 @@ dependencies = [
     "bcrypt>=4.3.0",
     "beautifulsoup4>=4.13.5",
     "email-validator>=2.3.0",
+    "firebird-driver>=2.0.2",
     "httpx>=0.28.1",
     "monsterui>=1.0.26",
     "playwright>=1.55.0",

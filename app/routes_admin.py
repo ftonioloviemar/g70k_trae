@@ -1839,7 +1839,7 @@ def setup_admin_routes(app, db: Database):
             logger.error(f"Erro ao resetar senha do usuário {usuario_id}: {e}")
             return RedirectResponse(f'/admin/usuarios/{usuario_id}/reset-senha?erro=interno', status_code=302)
     
-    # ===== SINCRONIZAÇÃO COM ERP FIREBIRD =====
+    # ===== SINCRONIZAÇÃO COM ERP TECNICON =====
     
     @app.get("/admin/produtos/sync")
     @admin_required
@@ -1865,7 +1865,7 @@ def setup_admin_routes(app, db: Database):
             alert_message = f"Sincronização concluída! Total ERP: {total}, Inseridos: {inseridos}, Atualizados: {atualizados}, Inalterados: {inalterados}, Erros: {erros}"
             alert_type = "success"
         elif erro == 'conexao_firebird':
-            alert_message = "Erro ao conectar com o Firebird ERP. Verifique as configurações."
+            alert_message = "Erro ao conectar com o ERP Tecnicon. Verifique as configurações."
             alert_type = "danger"
         elif erro == 'sync_falhou':
             # Capturar erro detalhado dos logs se disponível
@@ -1887,10 +1887,10 @@ def setup_admin_routes(app, db: Database):
             alert_message = "Conexão com Firebird testada com sucesso!"
             alert_type = "success"
         
-        return Container(
+        content = Container(
             Row(
                 Col(
-                    H1("Sincronização de Produtos ERP", cls="mb-4"),
+                    H1("Sincronização de Produtos ERP Tecnicon", cls="mb-4"),
                     
                     # Alert de feedback
                     Alert(
@@ -1901,10 +1901,10 @@ def setup_admin_routes(app, db: Database):
                     
                     Card(
                         CardHeader(
-                            H4("Sincronização com Firebird ERP", cls="mb-0")
+                            H4("Sincronização com ERP Tecnicon", cls="mb-0")
                         ),
                         CardBody(
-                            P("Esta funcionalidade sincroniza os produtos do ERP Firebird com o sistema de garantias."),
+                            P("Esta funcionalidade sincroniza os produtos do ERP Tecnicon com o sistema de garantias."),
                             P("A sincronização irá:"),
                             Ul(
                                 Li("Buscar produtos ativos do grupo 48 e subgrupos específicos"),
@@ -1942,7 +1942,7 @@ def setup_admin_routes(app, db: Database):
                     Script("""
                         function testarConexaoFirebird() {
                             const statusDiv = document.getElementById('statusSincronizacao');
-                            statusDiv.innerHTML = '<div class="alert alert-info">Testando conexão com Firebird...</div>';
+                            statusDiv.innerHTML = '<div class="alert alert-info">Testando conexão com ERP Tecnicon...</div>';
                             
                             fetch('/admin/produtos/test-firebird', {
                                 method: 'POST',
@@ -1972,7 +1972,7 @@ def setup_admin_routes(app, db: Database):
                             
                             btnSincronizar.disabled = true;
                             btnSincronizar.innerHTML = 'Sincronizando...';
-                            statusDiv.innerHTML = '<div class="alert alert-info">Sincronizando produtos com ERP Firebird...</div>';
+                            statusDiv.innerHTML = '<div class="alert alert-info">Sincronizando produtos com ERP Tecnicon...</div>';
                             
                             fetch('/admin/produtos/sync-execute', {
                                 method: 'POST',
@@ -2012,11 +2012,13 @@ def setup_admin_routes(app, db: Database):
                 )
             )
         )
+        
+        return base_layout("Sincronização de Produtos ERP Tecnicon", content, user)
     
     @app.post("/admin/produtos/test-firebird")
     @admin_required
     def test_firebird_connection(request):
-        """Testa conexão com Firebird ERP"""
+        """Testa conexão com ERP Tecnicon"""
         try:
             from app.services import get_firebird_service
             from app.config import Config

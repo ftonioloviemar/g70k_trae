@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Serviço de integração com Firebird ERP
+Serviço de integração com ERP Tecnicon
 """
 
 import logging
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 class FirebirdService:
     """
-    Serviço para conectar e sincronizar dados com o Firebird ERP
+    Serviço para conectar e sincronizar dados com o ERP Tecnicon
     """
     
     def __init__(self, config: Config):
@@ -56,7 +56,7 @@ class FirebirdService:
         """
         connection = None
         try:
-            logger.info("Conectando ao Firebird ERP...")
+            logger.info("Conectando ao ERP Tecnicon...")
             # Usar string de conexão completa ou configurar servidor
             dsn = f"{self.config.FIREBIRD_HOST}:{self.config.FIREBIRD_DATABASE}"
             
@@ -103,7 +103,7 @@ class FirebirdService:
     
     def get_produtos_erp(self) -> List[Dict[str, Any]]:
         """
-        Busca produtos do ERP Firebird
+        Busca produtos do ERP Tecnicon
         
         Returns:
             Lista de dicionários com os dados dos produtos

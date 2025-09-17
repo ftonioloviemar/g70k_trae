@@ -57,7 +57,7 @@ class Config:
         if not self.ADMIN_EMAIL or not self.ADMIN_PASSWORD:
             raise ValueError("ADMIN_EMAIL e ADMIN_PASSWORD devem ser definidas como variáveis de ambiente")
         
-        # Configurações do Firebird ERP
+        # Configurações do ERP Tecnicon
         self.FIREBIRD_HOST = os.getenv('FIREBIRD_HOST', 'discovery')
         self.FIREBIRD_USER = os.getenv('FIREBIRD_USER', 'VIEMAR')
         self.FIREBIRD_PASSWORD = os.getenv('FIREBIRD_PASSWORD', '@Tec#Viemar!')

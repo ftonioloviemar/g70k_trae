@@ -5,6 +5,7 @@ description = "Sistema de Garantia Viemar - Gestão de garantias de veículos"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "api-brasil>=2.0.0",
     "bcrypt>=4.3.0",
     "beautifulsoup4>=4.13.5",
     "email-validator>=2.3.0",

@@ -1,0 +1,230 @@
+{
+  "CLIENTE": {
+    "name": "CLIENTE",
+    "row_count": 2633,
+    "columns": [
+      "DATA_NASCIMENTO",
+      "DATA_CADASTRO",
+      "EMAIL_CONFIRMADO",
+      "UF",
+      "ID_CLIENTE",
+      "CPF_CNPJ",
+      "CIDADE",
+      "EMAIL",
+      "NOME",
+      "TELEFONE",
+      "SENHA",
+      "BAIRRO",
+      "CEP",
+      "ENDERECO"
+    ],
+    "sample_data": [
+      {
+        "ID_CLIENTE": "52",
+        "NOME": "Elton Baseggio",
+        "EMAIL": "eng.eltonbaseggio@brturbo.com.br",
+        "CEP": "95185000",
+        "ENDERECO": "Rua Assis Brasil",
+        "BAIRRO": "Centro",
+        "CIDADE": "Carlos Barbosa",
+        "UF": "RS",
+        "CPF_CNPJ": "40197433049",
+        "DATA_NASCIMENTO": "4/14/1962",
+        "SENHA": {
+          "raw": "0x7B22616C676F726974686D223A226362416C6731222C2268...",
+          "decoded": {
+            "algorithm": "cbAlg1",
+            "hash": "hbV8fIynP2ZSUdMjux9OY1SUh+hlM10Q8ZuBH8bkrO4og29xSQ8mMo6nCr6vQwej1qbXOa/vD0qiXdByCUc78b/rMo7hnA=="
+          }
+        },
+        "DATA_CADASTRO": "11/9/2017 2:26:09 PM",
+        "EMAIL_CONFIRMADO": "False",
+        "TELEFONE": "(54) 34611094"
+      },
+      {
+        "ID_CLIENTE": "53",
+        "NOME": "Gilmar",
+        "EMAIL": "gil.almeida.correia@hotmail.com",
+        "CEP": "38402228",
+        "ENDERECO": "Comendador alexandrino Garcia 1300",
+        "BAIRRO": "Marta Helena",
+        "CIDADE": "Uberlândia",
+        "UF": "MG",
+        "CPF_CNPJ": "5074503612",
+        "DATA_NASCIMENTO": "4/15/1981",
+        "SENHA": {
+          "raw": "0x7B22616C676F726974686D223A226362416C6731222C2268...",
+          "decoded": {
+            "algorithm": "cbAlg1",
+            "hash": "i8DPAkT4OFRwsqY7y9LBpkAT7qJuWgzKV538CzpgM2dyvycxUgVCBZSxptD8BYO/YXLbvrRFklgFDCxBMXlG2CiNtfxuSg=="
+          }
+        },
+        "DATA_CADASTRO": "11/10/2017 9:23:29 AM",
+        "EMAIL_CONFIRMADO": "False",
+        "TELEFONE": "34 991646433"
+      },
+      {
+        "ID_CLIENTE": "54",
+        "NOME": "sanvel santos veiculos ltda",
+        "EMAIL": "pecas@sanvel.net.br",
+        "CEP": "36500-000",
+        "ENDERECO": "av.ex-combatentes ,1300",
+        "BAIRRO": "laurindo de castro",
+        "CIDADE": "uba",
+        "UF": "MG",
+        "CPF_CNPJ": "17759689000135",
+        "DATA_NASCIMENTO": null,
+        "SENHA": {
+          "raw": "0x7B22616C676F726974686D223A226362416C6731222C2268...",
+          "decoded": {
+            "algorithm": "cbAlg1",
+            "hash": "4Ph6FFz4+wZscTvS+GLoSsmb2WCQQCtgW6k2qEZDDrPjqM4G3x7WmQAnFljiwnZJnUgViVNITITgvGgc8bbPsX8nF8JRdg=="
+          }
+        },
+        "DATA_CADASTRO": "11/14/2017 3:22:09 PM",
+        "EMAIL_CONFIRMADO": "False",
+        "TELEFONE": "3235312066"
+      }
+    ]
+  },
+  "VEICULO": {
+    "name": "VEICULO",
+    "row_count": 3663,
+    "columns": [
+      "MARCA",
+      "ID_VEICULO",
+      "MODELO",
+      "ID_CLIENTE",
+      "ANO_MODELO",
+      "PLACA"
+    ],
+    "sample_data": [
+      {
+        "ID_CLIENTE": "1787",
+        "ID_VEICULO": "2318",
+        "MARCA": "Mitsubishi",
+        "MODELO": "L200 Triton 3.2",
+        "ANO_MODELO": "2012/2013",
+        "PLACA": "OBC5D92"
+      },
+      {
+        "ID_CLIENTE": "1819",
+        "ID_VEICULO": "2319",
+        "MARCA": "TOYOTA",
+        "MODELO": "COROLLA",
+        "ANO_MODELO": "2012/2012",
+        "PLACA": "NZP4986"
+      },
+      {
+        "ID_CLIENTE": "1787",
+        "ID_VEICULO": "2320",
+        "MARCA": "Mitsubishi",
+        "MODELO": "Pajero TR4 2.0",
+        "ANO_MODELO": "2004/2004",
+        "PLACA": "DIS4B21"
+      }
+    ]
+  },
+  "PRODUTO_APLICADO": {
+    "name": "PRODUTO_APLICADO",
+    "row_count": 5174,
+    "columns": [
+      "DATA_CADASTRO",
+      "ID_PRODUTO",
+      "DATA_APLICACAO",
+      "REFERENCIA",
+      "ID_VEICULO",
+      "NOME_OFICINA",
+      "ID_CLIENTE",
+      "NF_OFICINA",
+      "KM_APLICACAO",
+      "LOTE",
+      "LOTE_ANTIGO"
+    ],
+    "sample_data": [
+      {
+        "ID_PRODUTO": "1651",
+        "REFERENCIA": "680116",
+        "LOTE": "7720",
+        "DATA_APLICACAO": "8/4/2020",
+        "NF_OFICINA": "347",
+        "NOME_OFICINA": "francislene dos santos peres",
+        "KM_APLICACAO": "117813",
+        "DATA_CADASTRO": "8/24/2020 6:09:31 PM",
+        "ID_VEICULO": "1211",
+        "ID_CLIENTE": "172",
+        "LOTE_ANTIGO": null
+      },
+      {
+        "ID_PRODUTO": "1652",
+        "REFERENCIA": "335019",
+        "LOTE": "4",
+        "DATA_APLICACAO": "7/25/2020",
+        "NF_OFICINA": "271409",
+        "NOME_OFICINA": "O VAREJÃO",
+        "KM_APLICACAO": "96166",
+        "DATA_CADASTRO": "8/25/2020 12:09:42 PM",
+        "ID_VEICULO": "1213",
+        "ID_CLIENTE": "942",
+        "LOTE_ANTIGO": null
+      },
+      {
+        "ID_PRODUTO": "1653",
+        "REFERENCIA": "503405",
+        "LOTE": "24819",
+        "DATA_APLICACAO": "7/29/2020",
+        "NF_OFICINA": "155450",
+        "NOME_OFICINA": "DMB PECAS E ACESSORIOS",
+        "KM_APLICACAO": "238765",
+        "DATA_CADASTRO": "8/26/2020 4:19:36 PM",
+        "ID_VEICULO": "1215",
+        "ID_CLIENTE": "945",
+        "LOTE_ANTIGO": null
+      }
+    ]
+  },
+  "PRODUTO_VALIDO": {
+    "name": "PRODUTO_VALIDO",
+    "row_count": 1978,
+    "columns": [
+      "REFERENCIA"
+    ],
+    "sample_data": [
+      {
+        "REFERENCIA": "250011"
+      },
+      {
+        "REFERENCIA": "250012"
+      },
+      {
+        "REFERENCIA": "250027"
+      }
+    ]
+  },
+  "MARCA_MODELO": {
+    "name": "MARCA_MODELO",
+    "row_count": 1088,
+    "columns": [
+      "MODELO",
+      "MARCA",
+      "ID_MARCA_MODELO"
+    ],
+    "sample_data": [
+      {
+        "ID_MARCA_MODELO": "1",
+        "MARCA": "Acura",
+        "MODELO": "CL"
+      },
+      {
+        "ID_MARCA_MODELO": "2",
+        "MARCA": "Acura",
+        "MODELO": "CSX"
+      },
+      {
+        "ID_MARCA_MODELO": "3",
+        "MARCA": "Acura",
+        "MODELO": "EL"
+      }
+    ]
+  }
+}

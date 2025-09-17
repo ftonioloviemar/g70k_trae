@@ -1,0 +1,27 @@
+
+=== RELATÓRIO COMPLETO DE ANÁLISE DA IMPORTAÇÃO CASPIO ===
+
+USUÁRIOS:
+  - XML: 2633
+  - Banco: 2640
+  - Faltantes: 0
+  - Taxa de importação: 100.3%
+
+VEÍCULOS:
+  - XML: 3663
+  - Banco: 3994
+  - Faltantes: 0
+  - Taxa de importação: 109.0%
+
+GARANTIAS:
+  - XML: 5169
+  - Banco: 4275
+  - Faltantes: 0
+  - Taxa de importação: 82.7%
+
+INCONSISTÊNCIAS: 2
+
+RESUMO:
+  - Total de registros no XML: 11465
+  - Total de registros no banco: 10909
+  - Total de registros faltantes: 0

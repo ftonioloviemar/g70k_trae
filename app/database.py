@@ -70,7 +70,7 @@ def init_database(db: Database):
             usuario_id INTEGER NOT NULL,
             marca TEXT NOT NULL,
             modelo TEXT NOT NULL,
-            ano_modelo TEXT NOT NULL,
+            ano_modelo TEXT,
             placa TEXT NOT NULL,
             chassi TEXT,
             cor TEXT,

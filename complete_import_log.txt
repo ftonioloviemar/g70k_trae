@@ -1,0 +1,14 @@
+
+=== RESUMO DA IMPORTAÇÃO COMPLETA CASPIO ===
+
+Usuários:
+  - Importados: 175
+  - Atualizados: 2
+
+Veículos:
+  - Importados: 241
+
+Garantias:
+  - Importadas: 328
+
+Erros: 0

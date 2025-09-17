@@ -26,3 +26,14 @@ https://raw.githubusercontent.com/AnswerDotAI/MonsterUI/refs/heads/main/docs/llm
 https://raw.githubusercontent.com/AnswerDotAI/MonsterUI/refs/heads/main/docs/llms-ctx.txt
 https://raw.githubusercontent.com/AnswerDotAI/MonsterUI/refs/heads/main/docs/apilist.txt
 https://raw.githubusercontent.com/AnswerDotAI/MonsterUI/refs/heads/main/docs/llms-ctx-full.txt
+
+faça testes completos com pytest usando melhores práticas.
+garanta que tudo esteja 85% testado.
+se encontrar erros, corrija até ficar correto.
+faça testes cobertos.
+faça testes unitários.
+faça testes integrados.
+faça testes de integração.
+faça testes simulando todas as funcionalidades como se fosse um usuário real.
+se a aplicação for web, faça testes com pytest-playwright.
+faça testes de end-to-end.

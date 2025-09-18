@@ -46,7 +46,9 @@ def create_app():
         debug=config.DEBUG,
         live=config.LIVE_RELOAD,
         hdrs=Theme.blue.headers(mode="light") + [
-            Link(rel="stylesheet", href="/static/style.css")
+            Link(rel="stylesheet", href="/static/style.css"),
+            Link(rel="icon", type="image/x-icon", href="/static/favicon.ico"),
+            Link(rel="shortcut icon", type="image/x-icon", href="/static/favicon.ico")
         ]
     )
     

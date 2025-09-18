@@ -715,16 +715,16 @@ def setup_admin_routes(app, db: Database):
                                 )
                             ),
                             Div(
-                                Div(
+                                Label(
+                                    Span("Email confirmado", cls="label-text mr-3"),
                                     Input(
                                         type="checkbox",
                                         id="confirmado",
                                         name="confirmado",
                                         checked=usuario[4],
-                                        cls="form-check-input"
+                                        cls="toggle toggle-primary"
                                     ),
-                                    Label("Email confirmado", for_="confirmado", cls="form-check-label"),
-                                    cls="form-check"
+                                    cls="label cursor-pointer justify-start gap-3"
                                 ),
                                 cls="mb-3"
                             ),

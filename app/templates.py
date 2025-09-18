@@ -219,10 +219,13 @@ def page_layout(title: str, content, user: Optional[Dict[str, Any]] = None):
     return base_layout(title, content, user)
 
 
-def form_group(label: str, input_element, error: Optional[str] = None, help_text: Optional[str] = None):
+def form_group(label: str, input_element, error: Optional[str] = None, help_text: Optional[str] = None, required: bool = False):
     """Componente para grupo de formulário com label, input e erro"""
+    # Se required=True, adicionar asterisco ao label
+    label_text = f"{label} *" if required else label
+    
     elements = [
-        Label(label, cls="form-label"),
+        Label(label_text, cls="form-label"),
         input_element
     ]
     
@@ -256,6 +259,36 @@ def card_component(title: str, content, footer=None):
     # Filtrar elementos None
     card_content = [item for item in card_content if item is not None]
     return Card(*card_content)
+
+
+def table_component(headers: List[str], rows: List[List[str]], table_id: str = None):
+    """Componente de tabela responsiva usando MonsterUI"""
+    if not headers or not rows:
+        return Div("Nenhum dado disponível", cls="text-muted text-center p-3")
+    
+    # Criar cabeçalho da tabela
+    thead = Thead(
+        Tr(*[Th(header, scope="col") for header in headers])
+    )
+    
+    # Criar corpo da tabela
+    tbody_rows = []
+    for row in rows:
+        tbody_rows.append(
+            Tr(*[Td(str(cell) if cell is not None else '') for cell in row])
+        )
+    
+    tbody = Tbody(*tbody_rows)
+    
+    # Criar tabela completa
+    table_attrs = {"cls": "table table-striped table-hover"}
+    if table_id:
+        table_attrs["id"] = table_id
+    
+    return Div(
+        Table(thead, tbody, **table_attrs),
+        cls="table-responsive"
+    )
 
 def login_form(error_message: Optional[str] = None, email_value: str = ""):
     """Formulário de login"""

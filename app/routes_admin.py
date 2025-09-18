@@ -859,20 +859,38 @@ def setup_admin_routes(app, db: Database):
     @app.get("/admin/produtos")
     @admin_required
     def listar_produtos(request):
-        """Lista todos os produtos"""
+        """Lista todos os produtos com paginação"""
         user = request.state.usuario
         
+        # Parâmetros de paginação
+        page = int(request.query_params.get('page', 1))
+        page_size = int(request.query_params.get('size', 50))
+        
+        # Validar parâmetros
+        if page < 1:
+            page = 1
+        if page_size not in [25, 50, 100, 200]:
+            page_size = 50
+        
+        # Calcular offset
+        offset = (page - 1) * page_size
+        
         try:
-            # Buscar produtos
+            # Contar total de produtos
+            total_produtos = db.execute("SELECT COUNT(*) FROM produtos").fetchone()[0]
+            
+            # Buscar produtos com paginação
             produtos = db.execute("""
                 SELECT id, sku, descricao, ativo, data_cadastro
                 FROM produtos 
                 ORDER BY sku
-            """).fetchall()
+                LIMIT ? OFFSET ?
+            """, (page_size, offset)).fetchall()
             
         except Exception as e:
             logger.error(f"Erro ao buscar produtos: {e}")
             produtos = []
+            total_produtos = 0
         
         # Preparar dados para a tabela
         dados_tabela = []
@@ -881,6 +899,7 @@ def setup_admin_routes(app, db: Database):
             status_class = "success" if p[3] else "secondary"
             
             acoes = Div(
+                A("Visualizar", href=f"/admin/produtos/{p[0]}", cls="btn btn-sm btn-outline-info me-1"),
                 A("Editar", href=f"/admin/produtos/{p[0]}/editar", cls="btn btn-sm btn-outline-primary me-1"),
                 A("Desativar" if p[3] else "Ativar", 
                   href=f"/admin/produtos/{p[0]}/toggle", 
@@ -895,6 +914,9 @@ def setup_admin_routes(app, db: Database):
                 datetime.fromisoformat(p[4]).strftime('%d/%m/%Y') if p[4] else "N/A",  # Data cadastro
                 acoes
             ])
+        
+        # Calcular total de páginas
+        total_pages = math.ceil(total_produtos / page_size) if total_produtos > 0 else 1
         
         content = Container(
             Row(
@@ -914,10 +936,19 @@ def setup_admin_routes(app, db: Database):
                 Col(
                     card_component(
                         "Produtos Cadastrados",
-                        table_component(
-                            ["SKU", "Descrição", "Status", "Cadastro", "Ações"],
-                            dados_tabela
-                        ) if produtos else P("Nenhum produto cadastrado ainda.", cls="text-muted text-center py-4")
+                        Div(
+                            table_component(
+                                ["SKU", "Descrição", "Status", "Cadastro", "Ações"],
+                                dados_tabela
+                            ) if produtos else P("Nenhum produto cadastrado ainda.", cls="text-muted text-center py-4"),
+                            pagination_component(
+                                current_page=page,
+                                total_pages=total_pages,
+                                base_url="/admin/produtos",
+                                page_size=page_size,
+                                total_records=total_produtos
+                            ) if total_produtos > 0 else None
+                        )
                     ),
                     width=12
                 )
@@ -925,6 +956,95 @@ def setup_admin_routes(app, db: Database):
         )
         
         return base_layout("Gerenciar Produtos", content, user)
+    
+    @app.get("/admin/produtos/{produto_id}")
+    @admin_required
+    def visualizar_produto_admin(request):
+        """Visualizar detalhes de um produto específico (visão administrativa)"""
+        user = request.state.usuario
+        produto_id = request.path_params['produto_id']
+        
+        try:
+            # Buscar produto
+            produto = db.execute("""
+                SELECT id, sku, descricao, ativo, data_cadastro
+                FROM produtos
+                WHERE id = ?
+            """, (produto_id,)).fetchone()
+            
+            if not produto:
+                return RedirectResponse('/admin/produtos?erro=nao_encontrado', status_code=302)
+            
+            # Buscar estatísticas do produto
+            total_garantias = db.execute("""
+                SELECT COUNT(*) FROM garantias WHERE produto_id = ?
+            """, (produto_id,)).fetchone()[0]
+            
+            garantias_ativas = db.execute("""
+                SELECT COUNT(*) FROM garantias 
+                WHERE produto_id = ? AND ativo = 1 
+                AND (data_vencimento IS NULL OR data_vencimento > date('now'))
+            """, (produto_id,)).fetchone()[0]
+            
+        except Exception as e:
+            logger.error(f"Erro ao buscar produto {produto_id}: {e}")
+            return RedirectResponse('/admin/produtos?erro=interno', status_code=302)
+        
+        status = "Ativo" if produto[3] else "Inativo"
+        status_class = "success" if produto[3] else "secondary"
+        
+        content = Container(
+            Row(
+                Col(
+                    Div(
+                        A(
+                            "← Voltar para Produtos",
+                            href="/admin/produtos",
+                            cls="btn btn-outline-secondary mb-3"
+                        ),
+                        H2(f"Produto: {produto[1]}", cls="mb-4")
+                    )
+                )
+            ),
+            Row(
+                Col(
+                    card_component(
+                        "Informações do Produto",
+                        Div(
+                            Div(
+                                Span(status, cls=f"badge bg-{status_class} fs-6 mb-3")
+                            ),
+                            Div(
+                                H5("SKU"),
+                                P(produto[1], cls="mb-3"),
+                                
+                                H5("Descrição"),
+                                P(produto[2], cls="mb-3"),
+                                
+                                H5("Data de Cadastro"),
+                                P(datetime.fromisoformat(produto[4]).strftime('%d/%m/%Y %H:%M') if produto[4] else "Não informada", cls="mb-3"),
+                                
+                                H5("Estatísticas"),
+                                P(f"Total de garantias: {total_garantias}", cls="mb-1"),
+                                P(f"Garantias ativas: {garantias_ativas}", cls="mb-3"),
+                                
+                                Div(
+                                    A("Editar Produto", href=f"/admin/produtos/{produto[0]}/editar", cls="btn btn-primary me-2"),
+                                    A("Desativar" if produto[3] else "Ativar", 
+                                      href=f"/admin/produtos/{produto[0]}/toggle", 
+                                      cls=f"btn btn-outline-{'danger' if produto[3] else 'success'}"),
+                                    cls="mt-3"
+                                )
+                            )
+                        )
+                    ),
+                    width=8,
+                    offset=2
+                )
+            )
+        )
+        
+        return base_layout(f"Produto: {produto[1]}", content, user)
     
     @app.get("/admin/produtos/novo")
     @admin_required
@@ -1277,7 +1397,7 @@ def setup_admin_routes(app, db: Database):
         
         # Parâmetros de paginação
         page = int(request.query_params.get('page', 1))
-        page_size = int(request.query_params.get('size', 50))  # Mudando de 'page_size' para 'size'
+        page_size = int(request.query_params.get('size', 50))
         
         # Validar parâmetros
         if page < 1:
@@ -1328,6 +1448,11 @@ def setup_admin_routes(app, db: Database):
                 status = "Ativa"
                 status_class = "success"
             
+            acoes = Div(
+                A("Visualizar", href=f"/admin/garantias/{g[0]}", cls="btn btn-sm btn-outline-info"),
+                cls="btn-group"
+            )
+            
             dados_tabela.append([
                 f"#{g[0]}",  # ID
                 g[1] or g[2],  # Nome ou email
@@ -1335,7 +1460,8 @@ def setup_admin_routes(app, db: Database):
                 f"{g[5]} {g[6]} ({g[7]})",  # Marca Modelo (Placa)
                 datetime.fromisoformat(g[9]).strftime('%d/%m/%Y') if g[9] else "N/A",  # Data instalação
                 datetime.fromisoformat(g[11]).strftime('%d/%m/%Y') if g[11] else "N/A",  # Data vencimento
-                Span(status, cls=f"badge bg-{status_class}")
+                Span(status, cls=f"badge bg-{status_class}"),
+                acoes
             ])
         
         # Calcular total de páginas
@@ -1353,7 +1479,7 @@ def setup_admin_routes(app, db: Database):
                         "Garantias Cadastradas",
                         Div(
                             table_component(
-                                ["ID", "Cliente", "Produto", "Veículo", "Instalação", "Vencimento", "Status"],
+                                ["ID", "Cliente", "Produto", "Veículo", "Instalação", "Vencimento", "Status", "Ações"],
                                 dados_tabela
                             ) if garantias else P("Nenhuma garantia cadastrada ainda.", cls="text-muted text-center py-4"),
                             pagination_component(
@@ -1482,6 +1608,256 @@ def setup_admin_routes(app, db: Database):
         )
         
         return base_layout(f"Garantia #{garantia[0]}", content, user)
+    
+    # ==================== ROTAS DE VEÍCULOS ====================
+    
+    @app.get("/admin/veiculos")
+    @admin_required
+    def listar_veiculos_admin(request):
+        """Lista todos os veículos (visão administrativa) com paginação"""
+        user = request.state.usuario
+        
+        # Parâmetros de paginação
+        page = int(request.query_params.get('page', 1))
+        page_size = int(request.query_params.get('size', 50))
+        
+        # Validar parâmetros
+        if page < 1:
+            page = 1
+        if page_size not in [25, 50, 100, 200]:
+            page_size = 50
+        
+        # Calcular offset
+        offset = (page - 1) * page_size
+        
+        try:
+            # Contar total de veículos
+            total_veiculos = db.execute("SELECT COUNT(*) FROM veiculos").fetchone()[0]
+            
+            # Buscar veículos com dados relacionados (com paginação)
+            veiculos = db.execute("""
+                SELECT v.id, v.marca, v.modelo, v.ano_modelo, v.placa, v.chassi, v.cor,
+                       v.data_cadastro, v.ativo,
+                       u.nome as proprietario_nome, u.email as proprietario_email,
+                       COUNT(g.id) as total_garantias
+                FROM veiculos v
+                LEFT JOIN usuarios u ON v.usuario_id = u.id
+                LEFT JOIN garantias g ON v.id = g.veiculo_id
+                GROUP BY v.id
+                ORDER BY v.data_cadastro DESC
+                LIMIT ? OFFSET ?
+            """, (page_size, offset)).fetchall()
+            
+        except Exception as e:
+            logger.error(f"Erro ao buscar veículos: {e}")
+            veiculos = []
+            total_veiculos = 0
+        
+        # Preparar dados para a tabela
+        dados_tabela = []
+        for v in veiculos:
+            status = "Ativo" if v[8] else "Inativo"
+            status_class = "success" if v[8] else "secondary"
+            
+            acoes = Div(
+                A("Visualizar", href=f"/admin/veiculos/{v[0]}", cls="btn btn-sm btn-outline-info"),
+                A("Editar", href=f"/admin/veiculos/{v[0]}/editar", cls="btn btn-sm btn-outline-warning"),
+                A("Ativar" if not v[8] else "Desativar", 
+                  href=f"/admin/veiculos/{v[0]}/toggle", 
+                  cls=f"btn btn-sm btn-outline-{'success' if not v[8] else 'danger'}"),
+                cls="btn-group"
+            )
+            
+            dados_tabela.append([
+                f"#{v[0]}",  # ID
+                f"{v[1]} {v[2]}",  # Marca Modelo
+                v[3] or "N/A",  # Ano
+                v[4] or "N/A",  # Placa
+                v[9] or "Sem proprietário",  # Proprietário
+                v[11] or 0,  # Total garantias
+                datetime.fromisoformat(v[7]).strftime('%d/%m/%Y') if v[7] else "N/A",  # Data cadastro
+                Span(status, cls=f"badge bg-{status_class}"),
+                acoes
+            ])
+        
+        # Calcular total de páginas
+        total_pages = math.ceil(total_veiculos / page_size) if total_veiculos > 0 else 1
+        
+        content = Container(
+            Row(
+                Col(
+                    H2("Todos os Veículos", cls="mb-4"),
+                    Div(
+                        A("Novo Veículo", href="/admin/veiculos/novo", cls="btn btn-primary mb-3"),
+                        cls="d-flex justify-content-end"
+                    )
+                )
+            ),
+            Row(
+                Col(
+                    card_component(
+                        "Veículos Cadastrados",
+                        Div(
+                            table_component(
+                                ["ID", "Veículo", "Ano", "Placa", "Proprietário", "Garantias", "Cadastro", "Status", "Ações"],
+                                dados_tabela
+                            ) if veiculos else P("Nenhum veículo cadastrado ainda.", cls="text-muted text-center py-4"),
+                            pagination_component(
+                                current_page=page,
+                                total_pages=total_pages,
+                                base_url="/admin/veiculos",
+                                page_size=page_size,
+                                total_records=total_veiculos
+                            ) if total_veiculos > 0 else None
+                        )
+                    ),
+                    width=12
+                )
+            )
+        )
+        
+        return base_layout("Todos os Veículos", content, user)
+    
+    @app.get("/admin/veiculos/{veiculo_id}")
+    @admin_required
+    def visualizar_veiculo_admin(request):
+        """Visualizar detalhes de um veículo específico (visão administrativa)"""
+        user = request.state.usuario
+        veiculo_id = request.path_params['veiculo_id']
+        
+        try:
+            # Buscar veículo com dados relacionados
+            veiculo = db.execute("""
+                SELECT v.id, v.marca, v.modelo, v.ano_modelo, v.placa, v.chassi, v.cor,
+                       v.data_cadastro, v.ativo, v.observacoes,
+                       u.nome as proprietario_nome, u.email as proprietario_email
+                FROM veiculos v
+                LEFT JOIN usuarios u ON v.usuario_id = u.id
+                WHERE v.id = ?
+            """, (veiculo_id,)).fetchone()
+            
+            if not veiculo:
+                return RedirectResponse('/admin/veiculos?erro=nao_encontrado', status_code=302)
+            
+            # Buscar garantias do veículo
+            garantias = db.execute("""
+                SELECT g.id, g.lote_fabricacao, g.data_instalacao, g.data_vencimento, g.ativo,
+                       p.sku, p.descricao as produto_descricao
+                FROM garantias g
+                JOIN produtos p ON g.produto_id = p.id
+                WHERE g.veiculo_id = ?
+                ORDER BY g.data_cadastro DESC
+            """, (veiculo_id,)).fetchall()
+            
+        except Exception as e:
+            logger.error(f"Erro ao buscar veículo {veiculo_id}: {e}")
+            return RedirectResponse('/admin/veiculos?erro=interno', status_code=302)
+        
+        # Estatísticas das garantias
+        total_garantias = len(garantias)
+        garantias_ativas = sum(1 for g in garantias if g[4])
+        garantias_vencidas = 0
+        
+        for g in garantias:
+            if g[3]:  # Se tem data de vencimento
+                try:
+                    if datetime.fromisoformat(g[3]).date() < datetime.now().date():
+                        garantias_vencidas += 1
+                except (ValueError, TypeError):
+                    pass
+        
+        content = Container(
+            Row(
+                Col(
+                    Div(
+                        A("← Voltar", href="/admin/veiculos", cls="btn btn-outline-secondary mb-3"),
+                        H2(f"Veículo #{veiculo[0]}", cls="mb-4")
+                    )
+                )
+            ),
+            Row(
+                Col(
+                    card_component(
+                        "Informações do Veículo",
+                        Div(
+                            Row(
+                                Col(P(Strong("Marca: "), veiculo[1] or "N/A"), width=6),
+                                Col(P(Strong("Modelo: "), veiculo[2] or "N/A"), width=6)
+                            ),
+                            Row(
+                                Col(P(Strong("Ano: "), veiculo[3] or "N/A"), width=6),
+                                Col(P(Strong("Placa: "), veiculo[4] or "N/A"), width=6)
+                            ),
+                            Row(
+                                Col(P(Strong("Chassi: "), veiculo[5] or "N/A"), width=6),
+                                Col(P(Strong("Cor: "), veiculo[6] or "N/A"), width=6)
+                            ),
+                            Row(
+                                Col(P(Strong("Proprietário: "), veiculo[10] or "Sem proprietário"), width=6),
+                                Col(P(Strong("Email: "), veiculo[11] or "N/A"), width=6)
+                            ),
+                            Row(
+                                Col(P(Strong("Data Cadastro: "), 
+                                    datetime.fromisoformat(veiculo[7]).strftime('%d/%m/%Y %H:%M') if veiculo[7] else "N/A"), width=6),
+                                Col(P(Strong("Status: "), 
+                                    Span("Ativo" if veiculo[8] else "Inativo", 
+                                         cls=f"badge bg-{'success' if veiculo[8] else 'secondary'}")), width=6)
+                            ),
+                            Hr(),
+                            Row(
+                                Col(
+                                    Div(
+                                        A("Editar", href=f"/admin/veiculos/{veiculo[0]}/editar", cls="btn btn-warning me-2"),
+                                        A("Ativar" if not veiculo[8] else "Desativar", 
+                                          href=f"/admin/veiculos/{veiculo[0]}/toggle", 
+                                          cls=f"btn btn-{'success' if not veiculo[8] else 'danger'}"),
+                                        cls="d-flex gap-2"
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    width=8
+                ),
+                Col(
+                    card_component(
+                        "Estatísticas de Garantias",
+                        Div(
+                            P(Strong("Total de Garantias: "), total_garantias),
+                            P(Strong("Garantias Ativas: "), garantias_ativas),
+                            P(Strong("Garantias Vencidas: "), garantias_vencidas),
+                            Hr(),
+                            A("Ver Todas as Garantias", href=f"/admin/garantias?veiculo={veiculo[0]}", cls="btn btn-outline-primary btn-sm")
+                        )
+                    ),
+                    width=4
+                )
+            ),
+            Row(
+                Col(
+                    card_component(
+                        "Garantias do Veículo",
+                        Div(
+                            table_component(
+                                ["ID", "Produto", "Lote", "Instalação", "Vencimento", "Status"],
+                                [[
+                                    f"#{g[0]}",
+                                    f"{g[5]} - {g[6]}",
+                                    g[1] or "N/A",
+                                    datetime.fromisoformat(g[2]).strftime('%d/%m/%Y') if g[2] else "N/A",
+                                    datetime.fromisoformat(g[3]).strftime('%d/%m/%Y') if g[3] else "N/A",
+                                    Span("Ativa" if g[4] else "Inativa", 
+                                         cls=f"badge bg-{'success' if g[4] else 'secondary'}")
+                                ] for g in garantias]
+                            ) if garantias else P("Nenhuma garantia cadastrada para este veículo.", cls="text-muted text-center py-4")
+                        )
+                    ),
+                    width=12
+                )
+            )
+        )
+        
+        return base_layout("Detalhes do Veículo", content, user)
     
     # ===== RELATÓRIOS =====
     

@@ -4,6 +4,7 @@ Rotas para gerenciamento de veículos
 """
 
 import logging
+import math
 from datetime import datetime
 from fasthtml.common import *
 from monsterui.all import *
@@ -22,24 +23,44 @@ def setup_veiculo_routes(app, db: Database):
     """Configura rotas de veículos"""
     
     def listar_veiculos(request):
-        """Lista veículos do cliente"""
+        """Lista veículos do cliente com paginação"""
         user = request.state.usuario
         
         if user['tipo_usuario'] != 'cliente':
             return RedirectResponse('/admin', status_code=302)
         
+        # Parâmetros de paginação
+        page = int(request.query_params.get('page', 1))
+        page_size = int(request.query_params.get('page_size', 50))
+        
+        # Validar parâmetros
+        if page < 1:
+            page = 1
+        if page_size not in [25, 50, 100, 200]:
+            page_size = 50
+        
+        # Calcular offset
+        offset = (page - 1) * page_size
+        
         try:
-            # Buscar veículos do usuário
+            # Contar total de veículos do usuário
+            total_veiculos = db.execute("""
+                SELECT COUNT(*) FROM veiculos WHERE usuario_id = ?
+            """, (user['usuario_id'],)).fetchone()[0]
+            
+            # Buscar veículos do usuário (com paginação)
             veiculos = db.execute("""
                 SELECT id, marca, modelo, ano_modelo, placa, cor, chassi, data_cadastro, ativo
                 FROM veiculos 
                 WHERE usuario_id = ? 
                 ORDER BY data_cadastro DESC
-            """, (user['usuario_id'],)).fetchall()
+                LIMIT ? OFFSET ?
+            """, (user['usuario_id'], page_size, offset)).fetchall()
             
         except Exception as e:
             logger.error(f"Erro ao buscar veículos do usuário {user['usuario_id']}: {e}")
             veiculos = []
+            total_veiculos = 0
         
         # Preparar dados para a tabela
         dados_tabela = []
@@ -65,6 +86,9 @@ def setup_veiculo_routes(app, db: Database):
                 acoes
             ])
         
+        # Calcular total de páginas
+        total_pages = math.ceil(total_veiculos / page_size) if total_veiculos > 0 else 1
+        
         content = Container(
             Row(
                 Col(
@@ -82,10 +106,19 @@ def setup_veiculo_routes(app, db: Database):
                 Col(
                     card_component(
                         None,  # Remove título redundante
-                        table_component(
-                            ["Veículo", "Ano", "Placa", "Cor", "Status", "Ações"],
-                            dados_tabela
-                        ) if veiculos else P("Nenhum veículo cadastrado ainda.", cls="text-muted text-center py-4")
+                        Div(
+                            table_component(
+                                ["Veículo", "Ano", "Placa", "Cor", "Status", "Ações"],
+                                dados_tabela
+                            ) if veiculos else P("Nenhum veículo cadastrado ainda.", cls="text-muted text-center py-4"),
+                            pagination_component(
+                                current_page=page,
+                                total_pages=total_pages,
+                                base_url="/cliente/veiculos",
+                                page_size=page_size,
+                                total_records=total_veiculos
+                            ) if total_veiculos > 0 else None
+                        )
                     ),
                     width=12
                 )

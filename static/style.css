@@ -143,6 +143,39 @@ body {
     margin-bottom: 0.5rem;
 }
 
+/* Paginação sempre horizontal */
+.pagination-container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+}
+
+.pagination-container .row {
+    margin-bottom: 0 !important;
+    width: 100% !important;
+}
+
+.pagination-container .col {
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Garantir que a paginação seja responsiva mas sempre horizontal */
+@media (max-width: 576px) {
+    .pagination-container {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    
+    .pagination-container .col {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     .container {

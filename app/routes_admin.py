@@ -4,6 +4,7 @@ Rotas administrativas
 """
 
 import logging
+import math
 from datetime import datetime
 from fasthtml.common import *
 from monsterui.all import *
@@ -26,8 +27,25 @@ def setup_admin_routes(app, db: Database):
     @app.get("/admin/usuarios")
     @admin_required
     def listar_usuarios(request):
-        """Lista todos os usuários"""
+        """Lista todos os usuários com paginação"""
         user = request.state.usuario
+        
+        # Parâmetros de paginação
+        try:
+            page = int(request.query_params.get('page', 1))
+            page_size = int(request.query_params.get('size', 50))
+        except ValueError:
+            page = 1
+            page_size = 50
+        
+        # Validar parâmetros
+        if page < 1:
+            page = 1
+        if page_size not in [25, 50, 100, 200]:
+            page_size = 50
+        
+        # Calcular offset
+        offset = (page - 1) * page_size
         
         # Verificar mensagens na query string
         sucesso = request.query_params.get('sucesso')
@@ -59,16 +77,21 @@ def setup_admin_routes(app, db: Database):
             alert_type = "info"
         
         try:
-            # Buscar usuários
+            # Contar total de usuários
+            total_usuarios = db.execute("SELECT COUNT(*) FROM usuarios").fetchone()[0]
+            
+            # Buscar usuários com paginação
             usuarios = db.execute("""
                 SELECT id, email, nome, tipo_usuario, confirmado, email_enviado, data_cadastro
                 FROM usuarios 
                 ORDER BY data_cadastro DESC
-            """).fetchall()
+                LIMIT ? OFFSET ?
+            """, (page_size, offset)).fetchall()
             
         except Exception as e:
             logger.error(f"Erro ao buscar usuários: {e}")
             usuarios = []
+            total_usuarios = 0
         
         # Preparar dados para a tabela
         dados_tabela = []
@@ -153,10 +176,20 @@ def setup_admin_routes(app, db: Database):
                 Col(
                     card_component(
                         "Usuários Cadastrados",
-                        table_component(
-                            ["Nome", "Email", "Tipo", "Confirmação", "Email Enviado", "Cadastro", "Ações"],
-                            dados_tabela
-                        ) if usuarios else P("Nenhum usuário cadastrado ainda.", cls="text-muted text-center py-4")
+                        Div(
+                            table_component(
+                                ["Nome", "Email", "Tipo", "Confirmação", "Email Enviado", "Cadastro", "Ações"],
+                                dados_tabela
+                            ) if usuarios else P("Nenhum usuário cadastrado ainda.", cls="text-muted text-center py-4"),
+                            # Adicionar paginação
+                            pagination_component(
+                                current_page=page,
+                                total_pages=math.ceil(total_usuarios / page_size) if total_usuarios > 0 else 1,
+                                base_url="/admin/usuarios",
+                                page_size=page_size,
+                                total_records=total_usuarios
+                            ) if total_usuarios > 0 else None
+                        )
                     ),
                     width=12
                 )
@@ -1239,11 +1272,27 @@ def setup_admin_routes(app, db: Database):
     @app.get("/admin/garantias")
     @admin_required
     def listar_garantias_admin(request):
-        """Lista todas as garantias (visão administrativa)"""
+        """Lista todas as garantias (visão administrativa) com paginação"""
         user = request.state.usuario
         
+        # Parâmetros de paginação
+        page = int(request.query_params.get('page', 1))
+        page_size = int(request.query_params.get('size', 50))  # Mudando de 'page_size' para 'size'
+        
+        # Validar parâmetros
+        if page < 1:
+            page = 1
+        if page_size not in [25, 50, 100, 200]:
+            page_size = 50
+        
+        # Calcular offset
+        offset = (page - 1) * page_size
+        
         try:
-            # Buscar garantias com dados relacionados
+            # Contar total de garantias
+            total_garantias = db.execute("SELECT COUNT(*) FROM garantias").fetchone()[0]
+            
+            # Buscar garantias com dados relacionados (com paginação)
             garantias = db.execute("""
                 SELECT g.id, u.nome, u.email, p.sku, p.descricao, v.marca, v.modelo, v.placa,
                        g.lote_fabricacao, g.data_instalacao, g.data_cadastro, g.data_vencimento, g.ativo
@@ -1252,11 +1301,13 @@ def setup_admin_routes(app, db: Database):
                 JOIN produtos p ON g.produto_id = p.id
                 JOIN veiculos v ON g.veiculo_id = v.id
                 ORDER BY g.data_cadastro DESC
-            """).fetchall()
+                LIMIT ? OFFSET ?
+            """, (page_size, offset)).fetchall()
             
         except Exception as e:
             logger.error(f"Erro ao buscar garantias: {e}")
             garantias = []
+            total_garantias = 0
         
         # Preparar dados para a tabela
         dados_tabela = []
@@ -1287,6 +1338,9 @@ def setup_admin_routes(app, db: Database):
                 Span(status, cls=f"badge bg-{status_class}")
             ])
         
+        # Calcular total de páginas
+        total_pages = math.ceil(total_garantias / page_size) if total_garantias > 0 else 1
+        
         content = Container(
             Row(
                 Col(
@@ -1297,10 +1351,19 @@ def setup_admin_routes(app, db: Database):
                 Col(
                     card_component(
                         "Garantias Cadastradas",
-                        table_component(
-                            ["ID", "Cliente", "Produto", "Veículo", "Instalação", "Vencimento", "Status"],
-                            dados_tabela
-                        ) if garantias else P("Nenhuma garantia cadastrada ainda.", cls="text-muted text-center py-4")
+                        Div(
+                            table_component(
+                                ["ID", "Cliente", "Produto", "Veículo", "Instalação", "Vencimento", "Status"],
+                                dados_tabela
+                            ) if garantias else P("Nenhuma garantia cadastrada ainda.", cls="text-muted text-center py-4"),
+                            pagination_component(
+                                current_page=page,
+                                total_pages=total_pages,
+                                base_url="/admin/garantias",
+                                page_size=page_size,
+                                total_records=total_garantias
+                            ) if total_garantias > 0 else None
+                        )
                     ),
                     width=12
                 )

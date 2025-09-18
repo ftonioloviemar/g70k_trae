@@ -185,6 +185,16 @@ def base_layout(title: str, content, user: Optional[Dict[str, Any]] = None, show
                     input.value = valor;
                 }
                 
+                // Função para mudança de página com tamanho personalizado
+                function changePage(page, size) {
+                    const currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.set('page', page);
+                    if (size) {
+                        currentUrl.searchParams.set('size', size);
+                    }
+                    window.location.href = currentUrl.toString();
+                }
+                
                 // Adicionar evento de formatação ao campo CEP
                 document.addEventListener('DOMContentLoaded', function() {
                     const cepInput = document.getElementById('cep');
@@ -288,6 +298,147 @@ def table_component(headers: List[str], rows: List[List[str]], table_id: str = N
     return Div(
         Table(thead, tbody, **table_attrs),
         cls="table-responsive"
+    )
+
+
+def pagination_component(
+    current_page: int,
+    total_pages: int,
+    base_url: str,
+    page_size: int = 50,
+    total_records: int = 0,
+    page_size_options: List[int] = None
+):
+    """
+    Componente de paginação horizontal estilo Google
+    
+    Args:
+        current_page: Página atual (1-indexed)
+        total_pages: Total de páginas
+        base_url: URL base para navegação (sem parâmetros de página)
+        page_size: Tamanho atual da página
+        total_records: Total de registros
+        page_size_options: Opções de tamanho de página (padrão: [25, 50, 100, 200])
+    """
+    if page_size_options is None:
+        page_size_options = [25, 50, 100, 200]
+    
+    if total_pages <= 1:
+        # Se há apenas uma página, mostrar apenas informações básicas
+        if total_records <= min(page_size_options):
+            return Div(
+                Small(
+                    f"Mostrando {total_records} registro{'s' if total_records != 1 else ''}",
+                    cls="text-muted"
+                ),
+                cls="mt-3 text-center"
+            )
+    
+    # Construir URL com parâmetros existentes
+    def build_url(page: int, size: int = None):
+        if size is None:
+            size = page_size
+        separator = '&' if '?' in base_url else '?'
+        return f"{base_url}{separator}page={page}&size={size}"
+    
+    # Calcular range de páginas para mostrar (estilo Google)
+    start_page = max(1, current_page - 5)
+    end_page = min(total_pages, current_page + 4)
+    
+    # Ajustar para sempre mostrar até 10 páginas quando possível
+    if end_page - start_page < 9:
+        if start_page == 1:
+            end_page = min(total_pages, start_page + 9)
+        elif end_page == total_pages:
+            start_page = max(1, end_page - 9)
+    
+    # Elementos da paginação horizontal
+    pagination_elements = []
+    
+    # Botão "Anterior" (estilo Google)
+    if current_page > 1:
+        pagination_elements.append(
+            A(
+                "< Anterior",
+                href=build_url(current_page - 1),
+                cls="btn btn-outline-primary btn-sm me-2",
+                title="Página anterior"
+            )
+        )
+    
+    # Páginas numeradas (estilo Google)
+    page_links = []
+    for page in range(start_page, end_page + 1):
+        if page == current_page:
+            page_links.append(
+                Span(
+                    str(page),
+                    cls="btn btn-primary btn-sm mx-1",
+                    style="min-width: 40px;"
+                )
+            )
+        else:
+            page_links.append(
+                A(
+                    str(page),
+                    href=build_url(page),
+                    cls="btn btn-outline-secondary btn-sm mx-1",
+                    style="min-width: 40px;"
+                )
+            )
+    
+    pagination_elements.extend(page_links)
+    
+    # Botão "Próxima" (estilo Google)
+    if current_page < total_pages:
+        pagination_elements.append(
+            A(
+                "Próxima >",
+                href=build_url(current_page + 1),
+                cls="btn btn-outline-primary btn-sm ms-2",
+                title="Próxima página"
+            )
+        )
+    
+    # Informações de paginação
+    start_record = (current_page - 1) * page_size + 1
+    end_record = min(current_page * page_size, total_records)
+    
+    # Layout horizontal simples estilo Google
+    return Div(
+        # Linha superior: informações de registros e seletor de tamanho
+        Div(
+            Div(
+                Small(
+                    f"Mostrando {start_record} a {end_record} de {total_records} registros",
+                    cls="text-muted"
+                ),
+                cls="d-flex align-items-center"
+            ),
+            Div(
+                Label("Registros por página:", cls="form-label me-2 mb-0"),
+                Div(
+                    *[
+                        Button(
+                            str(size),
+                            cls=f"btn btn-sm me-1 {'btn-primary' if size == page_size else 'btn-outline-secondary'}",
+                            onclick=f"changePage(1, {size})",
+                            type="button"
+                        ) for size in page_size_options
+                    ],
+                    cls="btn-group",
+                    role="group"
+                ),
+                cls="d-flex align-items-center"
+            ),
+            cls="d-flex justify-content-between align-items-center mb-3"
+        ),
+        # Linha inferior: navegação horizontal estilo Google
+        Div(
+            *pagination_elements,
+            cls="d-flex justify-content-center align-items-center flex-wrap"
+        ),
+        cls="mt-3 pagination-container"
     )
 
 def login_form(error_message: Optional[str] = None, email_value: str = ""):

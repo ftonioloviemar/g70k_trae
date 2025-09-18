@@ -36,6 +36,54 @@ tmp/
 *.tmp
 *.temp
 
+# Arquivos temporários e debug na raiz (PROIBIDOS)
+/*_debug.py
+/*_analysis.py
+/*_test.py
+/*_check.py
+/*_fix.py
+/*_import.py
+/*_verify.py
+/*_find.py
+/*_migrate.py
+/*_complete.py
+/*_comprehensive.py
+/*.txt
+/*.png
+/*.jpg
+/*.jpeg
+/*.gif
+/*.bmp
+/*.svg
+/*.pdf
+/*.doc
+/*.docx
+/*.xls
+/*.xlsx
+/*.zip
+/*.tar
+/*.gz
+/*.rar
+/*.7z
+/*_report.*
+/*_log.*
+/*_output.*
+/*_result.*
+/*_data.*
+/*_backup.*
+
+# Exceções permitidas na raiz
+!main.py
+!pyproject.toml
+!requirements.txt
+!README.md
+!README_*.md
+!.env.example
+!.env.test
+!.gitignore
+!.python-version
+!uv.lock
+
 # Test coverage and reports
 htmlcov/
 .coverage

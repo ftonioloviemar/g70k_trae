@@ -2,7 +2,17 @@
 - O banco de dados deve ser SQLite e deve estar localizado em `/data/viemar_garantia.db`
 - Os testes devem ficar somente na pasta `/tests`
 - Os arquivos temporários de testes devem ficar na pasta `/tmp`
-- Não criar arquivos soltos na raiz sem permissão explícita
+- **NUNCA criar arquivos soltos na raiz sem permissão explícita**
+
+## Organização de Arquivos
+- **Scripts de análise e debug**: devem ficar em `/scripts/analysis/`
+- **Scripts de desenvolvimento**: devem ficar em `/scripts/dev/`
+- **Scripts utilitários**: devem ficar em `/scripts/utils/`
+- **Arquivos temporários e logs**: devem ficar em `/tmp/`
+- **Relatórios e outputs**: devem ficar em `/tmp/` ou pasta específica
+- **Imagens de debug**: devem ficar em `/tmp/`
+- **PROIBIDO**: deixar arquivos .py, .txt, .png, .log soltos na raiz
+- **Exceções permitidas na raiz**: main.py, pyproject.toml, requirements.txt, README.md, .env.example, .gitignore, uv.lock
 
 ## Formatação de Datas
 - Para exibição nas telas: usar formato brasileiro dd/MM/yyyy

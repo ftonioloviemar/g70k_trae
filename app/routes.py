@@ -15,6 +15,7 @@ from models.usuario import Usuario
 from models.produto import Produto
 from models.veiculo import Veiculo
 from models.garantia import Garantia
+from app.cep_service import consultar_cep_sync
 
 # Definir Row como um Div com classe Bootstrap
 Row = lambda *args, **kwargs: Div(*args, cls=f"row {kwargs.get('cls', '')}".strip(), **{k: v for k, v in kwargs.items() if k != 'cls'})
@@ -286,8 +287,15 @@ def setup_routes(app, db: Database):
             errors['confirmar_senha'] = 'Senhas não conferem'
         
         # Validação do CEP (opcional, mas se preenchido deve ser válido)
-        if cep and not re.match(r'^\d{5}-?\d{3}$', cep):
-            errors['cep'] = 'CEP deve ter o formato 00000-000'
+        # Conforme API ViaCEP: deve ter exatamente 8 dígitos numéricos
+        if cep:
+            # Remove caracteres não numéricos
+            cep_clean = re.sub(r'[^\d]', '', cep)
+            if not re.match(r'^\d{8}$', cep_clean):
+                errors['cep'] = 'CEP deve ter exatamente 8 dígitos numéricos'
+            else:
+                # Atualiza o CEP para usar apenas números
+                cep = cep_clean
         
         # Validação do telefone (opcional, mas se preenchido deve ser válido)
         if telefone and not re.match(r'^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$', telefone):
@@ -1012,4 +1020,34 @@ def setup_routes(app, db: Database):
             )
             return base_layout("Erro na Confirmação", content, show_nav=False)
     
+    # Endpoint para consulta de CEP via API ViaCEP
+    @app.get("/api/cep/{cep}")
+    def consultar_cep_api(cep: str):
+        """
+        Endpoint para consultar CEP via API ViaCEP.
+        
+        Args:
+            cep: CEP com 8 dígitos numéricos
+            
+        Returns:
+            JSON com dados do endereço ou erro
+        """
+        try:
+            # Limpar CEP (remover caracteres não numéricos)
+            cep_limpo = ''.join(filter(str.isdigit, cep))
+            
+            # Consultar CEP
+            dados, erro = consultar_cep_sync(cep_limpo)
+            
+            if erro:
+                logger.warning(f"Erro na consulta de CEP {cep}: {erro}")
+                return {"success": False, "error": erro}
+            
+            logger.info(f"CEP {cep} consultado com sucesso via API")
+            return {"success": True, "data": dados}
+            
+        except Exception as e:
+            logger.error(f"Erro inesperado na consulta de CEP {cep}: {e}")
+            return {"success": False, "error": "Erro interno do servidor"}
+
     logger.info("Rotas configuradas com sucesso")

@@ -52,3 +52,6 @@ def setup_logging():
 def get_logger(name: str) -> logging.Logger:
     """Retorna um logger configurado para o módulo especificado"""
     return logging.getLogger(name)
+
+# Instância padrão do logger para uso direto
+logger = get_logger(__name__)

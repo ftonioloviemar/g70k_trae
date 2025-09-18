@@ -42,6 +42,9 @@ def setup_admin_routes(app, db: Database):
         elif sucesso == 'cadastrado':
             alert_message = "Usuário cadastrado com sucesso!"
             alert_type = "success"
+        elif sucesso == 'editado':
+            alert_message = "Usuário editado com sucesso!"
+            alert_type = "success"
         elif erro == 'usuario_nao_encontrado':
             alert_message = "Usuário não encontrado."
             alert_type = "danger"

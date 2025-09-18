@@ -2283,6 +2283,42 @@ def setup_admin_routes(app, db: Database):
     
     # ===== SINCRONIZAÇÃO COM ERP TECNICON =====
     
+    @app.get("/admin/sync")
+    @admin_required
+    def sync_erp_page(request):
+        """Página principal de sincronização com ERP Tecnicon"""
+        user = request.state.usuario
+        
+        content = Container(
+            Row(
+                Col(
+                    H1("Sincronização ERP Tecnicon", cls="mb-4"),
+                    
+                    Card(
+                        CardHeader(
+                            H4("Sincronização com ERP Tecnicon", cls="mb-0")
+                        ),
+                        CardBody(
+                            P("Esta seção permite sincronizar dados do ERP Tecnicon com o sistema de garantias."),
+                            P("Selecione o tipo de sincronização que deseja realizar:"),
+                            Hr(),
+                            Div(
+                                A(
+                                    "Sincronizar Produtos",
+                                    href="/admin/produtos/sync",
+                                    cls="btn btn-primary btn-lg me-3 mb-3"
+                                ),
+                                P("Sincroniza produtos ativos do grupo 48 e subgrupos específicos do ERP.", cls="text-muted mb-4"),
+                                cls="d-flex flex-column"
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        
+        return base_layout("Sincronização ERP Tecnicon", content, user)
+    
     @app.get("/admin/produtos/sync")
     @admin_required
     def sync_produtos_page(request):

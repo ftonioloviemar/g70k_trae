@@ -49,18 +49,35 @@ def base_layout(title: str, content, user: Optional[Dict[str, Any]] = None, show
     
     # Criar navbar usando MonsterUI
     navbar = None
-    if show_nav and user:
-        # Brand com logo
-        brand = Div(
-            Img(src="/static/g70k.png", alt="G70K", cls="h-16 w-auto mr-2"),
-            cls="flex items-center"
-        )
-        
-        # Adicionar informações do usuário aos links
-        if user_info:
-            nav_links.insert(0, user_info)
-        
-        navbar = NavBar(*nav_links, brand=brand, sticky=True)
+    if show_nav:
+        if user:
+            # Brand com logo
+            brand = Div(
+                Img(src="/static/g70k.png", alt="G70K", cls="h-16 w-auto mr-2"),
+                cls="flex items-center"
+            )
+            
+            # Adicionar informações do usuário aos links
+            if user_info:
+                nav_links.insert(0, user_info)
+            
+            navbar = NavBar(*nav_links, brand=brand, sticky=True)
+        else:
+            # Navbar para usuários não autenticados (páginas públicas)
+            brand = Div(
+                Img(src="/static/g70k.png", alt="G70K", cls="h-16 w-auto mr-2"),
+                cls="flex items-center"
+            )
+            
+            public_nav_links = [
+                A("Início", href="/"),
+                A("Login", href="/login"),
+                A("Cadastro", href="/cadastro"),
+                A("Regulamento", href="/regulamento"),
+                A("Contato", href="/contato")
+            ]
+            
+            navbar = NavBar(*public_nav_links, brand=brand, sticky=True)
     
     return Titled(title,
         Div(
@@ -205,6 +222,189 @@ def base_layout(title: str, content, user: Optional[Dict[str, Any]] = None, show
                     }
                 });
             """)
+        )
+    )
+
+
+def regulamento_page(user: Optional[Dict[str, Any]] = None):
+    """Página de regulamento da garantia"""
+    return Div(
+        H1("Garantia Viemar 70 mil Km ou 2 anos", cls="mb-4 text-center"),
+        Row(
+            Col(
+                Card(
+                    CardBody(
+                        # Introdução
+                        P("A Viemar oferece ao mercado de reposição uma garantia de até 70 mil Km ou 2 anos para articulações axiais, terminais de direção, pivôs de suspensão e pinças de freios.", cls="lead mb-4"),
+                        
+                        Alert(
+                            Strong("IMPORTANTE: "),
+                            "Para ter direito à Garantia 70 mil Km ou 2 anos, o consumidor é obrigado a preencher o Termo de Garantia Contratual, disponível no website da Viemar, obedecendo ao prazo de até 30 (trinta) dias após a emissão da Nota Fiscal e/ou do Cupom Fiscal.",
+                            cls="alert-warning mb-4"
+                        ),
+                        
+                        Alert(
+                            "Em desrespeitando esse prazo, o consumidor perde o direito à Garantia de 70 mil Km ou 2 anos, mantendo-se apenas a Garantia Legal.",
+                            cls="alert-danger mb-4"
+                        ),
+                        
+                        P("É somente ao se cadastrar no site que o cliente recebe o direito de requerer a análise da peça depois de passados os 90 dias da garantia prevista em Lei (artigo 26 do Código de Defesa do Consumidor – Lei nº 8.078/1990).", cls="mb-4"),
+                        
+                        H3("Confira tudo o que você precisa saber:", cls="mb-4 text-primary"),
+                        
+                        # FAQ
+                        Div(
+                            # Pergunta 1
+                            Card(
+                                CardBody(
+                                    H5("A garantia 70 mil Km ou 2 anos vale para todos os produtos fabricados pela Viemar?", cls="card-title text-primary"),
+                                    P("Não. É válida para articulações axiais, terminais de direção, pivôs de suspensão e pinças de freios.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 2
+                            Card(
+                                CardBody(
+                                    H5("Qual é o prazo que eu tenho para me inscrever para ter direito à garantia 70 mil Km ou 2 anos?", cls="card-title text-primary"),
+                                    P("O consumidor tem o prazo de até 30 dias a partir da emissão da nota ou do cupom fiscal para se cadastrar no site e ter o direito a solicitar a garantia.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 3
+                            Card(
+                                CardBody(
+                                    H5("O que é preciso fazer para se cadastrar no site?", cls="card-title text-primary"),
+                                    P("Basta acessar este site, criar uma conta de usuário, cadastrar pelo menos um veículo e, por fim, cadastrar as suas peças para ativar a garantia.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 4
+                            Card(
+                                CardBody(
+                                    H5("Que documentos precisa?", cls="card-title text-primary"),
+                                    P("Você precisa ter em mãos a nota ou cupom fiscal, seus dados de identificação, do veículo e os dados da peça (referência/código do produto e lote).", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 5
+                            Card(
+                                CardBody(
+                                    H5("A garantia 70 mil Km ou 2 anos vale para os produtos fabricados a partir de quando?", cls="card-title text-primary"),
+                                    P("A garantia 70 mil Km ou 2 anos vale para articulações axiais, terminais de direção, pivôs de suspensão e pinças de freios fabricados a partir de janeiro de 2015.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 6 - Com imagens
+                            Card(
+                                CardBody(
+                                    H5("Como eu sei que a peça foi fabricada a partir de janeiro de 2015? E como eu identifico a referência/código e o lote?", cls="card-title text-primary"),
+                                    P("As peças Viemar são identificadas por lote de fabricação e os dois últimos números do lote referem-se ao ano da fabricação.", cls="card-text"),
+                                    P("Então, se os dois últimos números forem 15, 16, 17, 18 e assim por diante, significa que estão cobertas pela garantia 70 mil Km ou dois anos.", cls="card-text"),
+                                    P("Essas identificações estão presentes tanto na embalagem como na peça.", cls="card-text mb-3"),
+                                    P(Strong("Veja exemplos:"), cls="mb-3"),
+                                    
+                                    Row(
+                                        Col(
+                                            Div(
+                                                Img(src="/static/produto-etiqueta-335377.png", alt="Exemplo real de etiqueta do produto 335377", cls="img-fluid rounded shadow-sm mb-2"),
+                                                P("Exemplo real de etiqueta do produto 335377", cls="text-center text-muted small"),
+                                                cls="text-center"
+                                            ),
+                                            md=6
+                                        ),
+                                        Col(
+                                            Div(
+                                                Img(src="/static/produto-peca-vmr3112.jpg", alt="Exemplo real da peça VMR3112", cls="img-fluid rounded shadow-sm mb-2"),
+                                                P("Exemplo real da peça VMR3112", cls="text-center text-muted small"),
+                                                cls="text-center"
+                                            ),
+                                            md=6
+                                        )
+                                    )
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 7
+                            Card(
+                                CardBody(
+                                    H5("Como eu sei que o meu cadastro deu certo?", cls="card-title text-primary"),
+                                    P("Ao se cadastrar, você cria login e senha e o sistema envia um e-mail de confirmação para o endereço eletrônico informado.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 8
+                            Card(
+                                CardBody(
+                                    H5("Posso cadastrar mais de uma peça por vez? E mais de um veículo?", cls="card-title text-primary"),
+                                    P("Sim. No seu login (perfil), você pode cadastrar quantas peças e veículos forem precisos.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 9
+                            Card(
+                                CardBody(
+                                    H5("E se eu não me cadastrar no site, mas mesmo assim tiver a Nota Fiscal do produto, posso solicitar a garantia 70 mil Km ou 2 anos depois de passado o prazo legal de 90 dias?", cls="card-title text-primary"),
+                                    P("Não. A garantia 70 mil Km ou 2 anos é só para quem fez o registro no site. Ela é um diferencial da Viemar para quem se cadastrar, e que vai além do cumprimento da legislação.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 10
+                            Card(
+                                CardBody(
+                                    H5("Como eu faço para requerer a garantia 70 mil Km ou 2 anos?", cls="card-title text-primary"),
+                                    P("A solicitação de garantia 70 mil Km ou 2 anos obedece aos mesmos padrões da garantia legal. Basta entrar em contato com a Viemar, através do Serviço de Atendimento ao Cliente (SAC) ou encaminhar junto ao seu distribuidor, que fará o contato com a Viemar.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 11
+                            Card(
+                                CardBody(
+                                    H5("Mesmo já tendo cadastrado a nota ou cupom fiscal, eu preciso apresentá-la para requerer a garantia?", cls="card-title text-primary"),
+                                    P("Sim. A nota ou cupom fiscal é o comprovante que garante a análise da peça, com o Termo de Garantia.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 12
+                            Card(
+                                CardBody(
+                                    H5("Onde encontro o Termo de Garantia?", cls="card-title text-primary"),
+                                    P("O Termo de Garantia acompanha a peça Viemar. Nele, você encontra um campo específico para registrar a reclamação – DESCRIÇÃO DA RECLAMAÇÃO. É com base nessa informação que a peça será analisada. Esse Termo de Garantia deve acompanhar a peça para análise na fábrica.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            ),
+                            
+                            # Pergunta 13
+                            Card(
+                                CardBody(
+                                    H5("Por que as outras linhas de produtos Viemar não têm garantia 70 mil Km ou 2 anos?", cls="card-title text-primary"),
+                                    P("A VIEMAR é a primeira empresa brasileira a fornecer 70 mil Km ou 2 anos nos componentes de suspensão, direção e freios. E por ser pioneira, iniciou com as linhas de Articulações Axiais, Terminais de Direção e Pivôs de Suspensão, que formam o COMBO VIEMAR, consagrado pelo mercado.", cls="card-text")
+                                ),
+                                cls="mb-3"
+                            )
+                        ),
+                        
+                        # Seção de Perda de Garantia
+                        Alert(
+                            H4("Perda de Garantia", cls="alert-heading text-danger"),
+                            P("Fique atento! Se houver qualquer irregularidade na instalação, uso inadequado do produto ou descumprimento das condições estabelecidas neste regulamento, a garantia será automaticamente perdida.", cls="mb-0"),
+                            cls="alert-danger mt-4"
+                        )
+                    )
+                ),
+                width=10,
+                offset=1
+            )
         )
     )
 
@@ -885,133 +1085,47 @@ def relatorios_page():
 
 
 def contato_page(user: Optional[Dict[str, Any]] = None):
-    """Página de contato"""
-    content = Container(
-        Row(
-            Col(
-                H1("Contato", cls="mb-4"),
-                width=12
-            )
+    """Página de contato da Viemar com SAC."""
+    return Div(
+        # Header da página
+        Div(
+            H1("Está com dúvidas?", cls="text-center mb-3", style="color: #1a365d; font-weight: 700;"),
+            H2("Consulte o SAC Viemar!", cls="text-center mb-4", style="color: #2d3748; font-weight: 600;"),
+            cls="mb-5"
         ),
+        
+        # Seção principal de contato
         Row(
             Col(
                 Card(
                     CardBody(
-                        H5("Informações de Contato", cls="card-title"),
-                        P("Entre em contato conosco através dos canais abaixo:", cls="card-text"),
-                        Hr(),
-                        P(Strong("Telefone: "), "(11) 1234-5678"),
-                        P(Strong("Email: "), "contato@viemar.com.br"),
-                        P(Strong("Endereço: "), "Rua Exemplo, 123 - São Paulo/SP")
-                    )
-                ),
-                width=6
-            ),
-            Col(
-                Card(
-                    CardBody(
-                        H5("Envie uma Mensagem", cls="card-title"),
-                        Form(
-                            form_group("Nome", Input(type="text", name="nome", cls="form-control", required=True)),
-                            form_group("Email", Input(type="email", name="email", cls="form-control", required=True)),
-                            form_group("Assunto", Input(type="text", name="assunto", cls="form-control", required=True)),
-                            form_group("Mensagem", Textarea(name="mensagem", cls="form-control", rows="5", required=True)),
-                            Button("Enviar", type="submit", cls="btn btn-primary"),
-                            method="post",
-                            action="/contato"
+                        # Telefone
+                        Div(
+                            H4("📞 Telefone:", cls="mb-3", style="color: #2d3748; font-weight: 600;"),
+                            P(
+                                A("0800 608 0188", href="tel:08006080188", cls="text-decoration-none fs-2 fw-bold", style="color: #1a365d; text-decoration: underline !important;"),
+                                cls="text-center mb-4"
+                            ),
+                            cls="text-center mb-5"
+                        ),
+                        
+                        # Email
+                        Div(
+                            H4("📧 E-mail:", cls="mb-3", style="color: #2d3748; font-weight: 600;"),
+                            P(
+                                A("sac@viemar.com.br", href="mailto:sac@viemar.com.br", cls="text-decoration-none fs-4 fw-bold", style="color: #1a365d; text-decoration: underline !important;"),
+                                cls="text-center mb-4"
+                            ),
+                            cls="text-center mb-4"
                         )
-                    )
+                    ),
+                    cls="shadow-sm", style="background-color: #f8f9fa; border: 1px solid #e9ecef;"
                 ),
-                width=6
+                width=12
             )
         )
     )
-    return base_layout("Contato", content, user)
 
-
-def regulamento_page(user: Optional[Dict[str, Any]] = None):
-    """Página de regulamento da garantia"""
-    content = Container(
-        Row(
-            Col(
-                H1("Regulamento da Garantia", cls="mb-4"),
-                width=12
-            )
-        ),
-        Row(
-            Col(
-                Card(
-                    CardBody(
-                        H3("Termos e Condições da Garantia Viemar", cls="card-title mb-4"),
-                        
-                        H5("1. Cobertura da Garantia", cls="mt-4 mb-3"),
-                        P("A garantia Viemar oferece cobertura de 70.000 km ou 2 anos (o que ocorrer primeiro) para produtos automotivos instalados em veículos cadastrados no sistema."),
-                        
-                        H5("2. Produtos Cobertos", cls="mt-4 mb-3"),
-                        Ul(
-                            Li("Sistemas de injeção eletrônica"),
-                            Li("Componentes de ignição"),
-                            Li("Sensores automotivos"),
-                            Li("Módulos eletrônicos"),
-                            Li("Outros produtos especificados no certificado de garantia")
-                        ),
-                        
-                        H5("3. Condições para Ativação", cls="mt-4 mb-3"),
-                        Ul(
-                            Li("Cadastro do veículo no sistema"),
-                            Li("Instalação realizada por profissional qualificado"),
-                            Li("Ativação da garantia em até 30 dias após a instalação"),
-                            Li("Preenchimento completo dos dados do produto e veículo")
-                        ),
-                        
-                        H5("4. Exclusões da Garantia", cls="mt-4 mb-3"),
-                        P("A garantia não cobre:"),
-                        Ul(
-                            Li("Danos causados por mau uso ou negligência"),
-                            Li("Instalação inadequada ou por pessoa não qualificada"),
-                            Li("Danos causados por acidentes ou colisões"),
-                            Li("Desgaste natural das peças"),
-                            Li("Danos causados por combustível adulterado"),
-                            Li("Modificações não autorizadas no produto")
-                        ),
-                        
-                        H5("5. Procedimento para Acionamento", cls="mt-4 mb-3"),
-                        Ol(
-                            Li("Entre em contato através dos canais oficiais"),
-                            Li("Apresente o certificado de garantia"),
-                            Li("Forneça os dados do veículo e do produto"),
-                            Li("Aguarde a análise técnica"),
-                            Li("Siga as orientações para reparo ou substituição")
-                        ),
-                        
-                        H5("6. Responsabilidades do Cliente", cls="mt-4 mb-3"),
-                        Ul(
-                            Li("Manter os dados atualizados no sistema"),
-                            Li("Realizar manutenções preventivas conforme recomendado"),
-                            Li("Utilizar combustível de qualidade"),
-                            Li("Comunicar problemas dentro do prazo de garantia"),
-                            Li("Permitir inspeção técnica quando solicitada")
-                        ),
-                        
-                        H5("7. Vigência", cls="mt-4 mb-3"),
-                        P("Este regulamento entra em vigor na data de sua publicação e se aplica a todas as garantias ativadas a partir desta data."),
-                        
-                        Hr(cls="my-4"),
-                        P(
-                            Small(
-                                "Última atualização: Janeiro de 2024. A Viemar reserva-se o direito de alterar este regulamento a qualquer momento, "
-                                "com comunicação prévia aos clientes através dos canais oficiais.",
-                                cls="text-muted"
-                            )
-                        )
-                    )
-                ),
-                width=10,
-                offset=1
-            )
-        )
-    )
-    return base_layout("Regulamento da Garantia", content, user)
 
 
 def form_usuario(form_data: Dict = None, errors: Dict = None):

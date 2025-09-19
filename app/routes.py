@@ -734,13 +734,15 @@ def setup_routes(app, db: Database):
     def regulamento_route(request):
         """Página de regulamento da garantia"""
         user = get_current_user(request)
-        return regulamento_page(user)
+        content = regulamento_page(user)
+        return base_layout("Regulamento", content, user)
     
     @app.get("/contato")
     def contato_route(request):
         """Página de contato"""
         user = get_current_user(request)
-        return contato_page(user)
+        content = contato_page(user)
+        return base_layout("Contato", content, user)
     
     @app.post("/contato")
     async def contato_submit(request):

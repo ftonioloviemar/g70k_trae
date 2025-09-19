@@ -884,10 +884,15 @@ def relatorios_page():
     )
 
 
-def contato_page():
+def contato_page(user: Optional[Dict[str, Any]] = None):
     """Página de contato"""
-    return Div(
-        H1("Contato", cls="mb-4"),
+    content = Container(
+        Row(
+            Col(
+                H1("Contato", cls="mb-4"),
+                width=12
+            )
+        ),
         Row(
             Col(
                 Card(
@@ -921,6 +926,92 @@ def contato_page():
             )
         )
     )
+    return base_layout("Contato", content, user)
+
+
+def regulamento_page(user: Optional[Dict[str, Any]] = None):
+    """Página de regulamento da garantia"""
+    content = Container(
+        Row(
+            Col(
+                H1("Regulamento da Garantia", cls="mb-4"),
+                width=12
+            )
+        ),
+        Row(
+            Col(
+                Card(
+                    CardBody(
+                        H3("Termos e Condições da Garantia Viemar", cls="card-title mb-4"),
+                        
+                        H5("1. Cobertura da Garantia", cls="mt-4 mb-3"),
+                        P("A garantia Viemar oferece cobertura de 70.000 km ou 2 anos (o que ocorrer primeiro) para produtos automotivos instalados em veículos cadastrados no sistema."),
+                        
+                        H5("2. Produtos Cobertos", cls="mt-4 mb-3"),
+                        Ul(
+                            Li("Sistemas de injeção eletrônica"),
+                            Li("Componentes de ignição"),
+                            Li("Sensores automotivos"),
+                            Li("Módulos eletrônicos"),
+                            Li("Outros produtos especificados no certificado de garantia")
+                        ),
+                        
+                        H5("3. Condições para Ativação", cls="mt-4 mb-3"),
+                        Ul(
+                            Li("Cadastro do veículo no sistema"),
+                            Li("Instalação realizada por profissional qualificado"),
+                            Li("Ativação da garantia em até 30 dias após a instalação"),
+                            Li("Preenchimento completo dos dados do produto e veículo")
+                        ),
+                        
+                        H5("4. Exclusões da Garantia", cls="mt-4 mb-3"),
+                        P("A garantia não cobre:"),
+                        Ul(
+                            Li("Danos causados por mau uso ou negligência"),
+                            Li("Instalação inadequada ou por pessoa não qualificada"),
+                            Li("Danos causados por acidentes ou colisões"),
+                            Li("Desgaste natural das peças"),
+                            Li("Danos causados por combustível adulterado"),
+                            Li("Modificações não autorizadas no produto")
+                        ),
+                        
+                        H5("5. Procedimento para Acionamento", cls="mt-4 mb-3"),
+                        Ol(
+                            Li("Entre em contato através dos canais oficiais"),
+                            Li("Apresente o certificado de garantia"),
+                            Li("Forneça os dados do veículo e do produto"),
+                            Li("Aguarde a análise técnica"),
+                            Li("Siga as orientações para reparo ou substituição")
+                        ),
+                        
+                        H5("6. Responsabilidades do Cliente", cls="mt-4 mb-3"),
+                        Ul(
+                            Li("Manter os dados atualizados no sistema"),
+                            Li("Realizar manutenções preventivas conforme recomendado"),
+                            Li("Utilizar combustível de qualidade"),
+                            Li("Comunicar problemas dentro do prazo de garantia"),
+                            Li("Permitir inspeção técnica quando solicitada")
+                        ),
+                        
+                        H5("7. Vigência", cls="mt-4 mb-3"),
+                        P("Este regulamento entra em vigor na data de sua publicação e se aplica a todas as garantias ativadas a partir desta data."),
+                        
+                        Hr(cls="my-4"),
+                        P(
+                            Small(
+                                "Última atualização: Janeiro de 2024. A Viemar reserva-se o direito de alterar este regulamento a qualquer momento, "
+                                "com comunicação prévia aos clientes através dos canais oficiais.",
+                                cls="text-muted"
+                            )
+                        )
+                    )
+                ),
+                width=10,
+                offset=1
+            )
+        )
+    )
+    return base_layout("Regulamento da Garantia", content, user)
 
 
 def form_usuario(form_data: Dict = None, errors: Dict = None):

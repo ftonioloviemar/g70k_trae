@@ -194,7 +194,7 @@ def setup_admin_routes(app, db: Database):
                 u[3].title(),  # Tipo
                 Span(status_confirmacao, cls=f"badge bg-{status_conf_class}"),
                 Span(status_email, cls=f"badge bg-{status_email_class}"),
-                u[6] if isinstance(u[6], str) else (format_date_br(u[6]) if u[6] else "N/A"),  # Data cadastro
+                format_datetime_br(u[6]) if u[6] else "N/A",  # Data cadastro
                 acoes
             ])
         

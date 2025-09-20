@@ -29,14 +29,43 @@ def format_date_br(date_value: Union[str, datetime, None]) -> str:
     
     try:
         if isinstance(date_value, str):
-            # Tenta diferentes formatos de entrada
-            for fmt in ['%Y-%m-%d', '%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M']:
+            # Tenta diferentes formatos de entrada, incluindo ISO com microsegundos
+            formats = [
+                '%Y-%m-%dT%H:%M:%S.%f',      # ISO com microsegundos: 2025-09-14T17:47:26.925777
+                '%Y-%m-%dT%H:%M:%S',         # ISO sem microsegundos: 2025-09-14T17:47:26
+                '%Y-%m-%d %H:%M:%S.%f',      # Com espaço e microsegundos
+                '%Y-%m-%d %H:%M:%S',         # Com espaço sem microsegundos
+                '%Y-%m-%d %H:%M',            # Com espaço só hora:minuto
+                '%Y-%m-%d',                  # Só data
+            ]
+            
+            for fmt in formats:
                 try:
                     date_obj = datetime.strptime(date_value, fmt).date()
                     return date_obj.strftime('%d/%m/%Y')
                 except ValueError:
                     continue
-            return date_value  # Retorna original se não conseguir converter
+            
+            # Se não conseguir converter com os formatos padrão, tenta fromisoformat
+            try:
+                # Tenta usar fromisoformat (Python 3.7+)
+                if hasattr(datetime, 'fromisoformat'):
+                    date_obj = datetime.fromisoformat(date_value).date()
+                    return date_obj.strftime('%d/%m/%Y')
+            except:
+                pass
+            
+            # Tenta parsing manual separando data e hora
+            try:
+                if 'T' in date_value:
+                    date_part = date_value.split('T')[0]
+                    date_obj = datetime.strptime(date_part, '%Y-%m-%d').date()
+                    return date_obj.strftime('%d/%m/%Y')
+            except:
+                pass
+            
+            # Se ainda não conseguir, retorna N/A
+            return 'N/A'
         else:
             # Assume que é um objeto datetime ou date
             if hasattr(date_value, 'date'):
@@ -92,8 +121,17 @@ def format_datetime_br(datetime_value: Union[str, datetime, None]) -> str:
     
     try:
         if isinstance(datetime_value, str):
-            # Tenta diferentes formatos de entrada
-            for fmt in ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M', '%Y-%m-%d']:
+            # Tenta diferentes formatos de entrada, incluindo com microsegundos
+            formats = [
+                '%Y-%m-%d %H:%M:%S.%f',  # Com microsegundos
+                '%Y-%m-%dT%H:%M:%S.%f',  # ISO com T e microsegundos
+                '%Y-%m-%d %H:%M:%S',     # Sem microsegundos
+                '%Y-%m-%dT%H:%M:%S',     # ISO com T sem microsegundos
+                '%Y-%m-%d %H:%M',        # Só até minutos
+                '%Y-%m-%d'               # Só data
+            ]
+            
+            for fmt in formats:
                 try:
                     dt_obj = datetime.strptime(datetime_value, fmt)
                     return dt_obj.strftime('%d/%m/%Y %H:%M:%S')

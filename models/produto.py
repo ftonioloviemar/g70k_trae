@@ -6,6 +6,7 @@ Modelo de dados para produtos elegíveis para garantia
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
+from app.date_utils import parse_iso_date
 
 @dataclass
 class Produto:
@@ -42,7 +43,7 @@ class Produto:
             if hasattr(produto, key):
                 if key in ['data_cadastro', 'data_atualizacao'] and value:
                     if isinstance(value, str):
-                        setattr(produto, key, datetime.fromisoformat(value))
+                        setattr(produto, key, parse_iso_date(value))
                     else:
                         setattr(produto, key, value)
                 else:

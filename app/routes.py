@@ -15,6 +15,7 @@ from models.usuario import Usuario
 from models.produto import Produto
 from models.veiculo import Veiculo
 from models.garantia import Garantia
+from app.date_utils import format_date_br, format_datetime_br_short, format_date_iso, format_datetime_iso
 from app.cep_service import consultar_cep_sync
 
 # Definir Row como um Div com classe Bootstrap
@@ -411,8 +412,8 @@ def setup_routes(app, db: Database):
                 usuario.email, usuario.senha_hash, usuario.nome, usuario.tipo_usuario,
                 usuario.confirmado, usuario.cep, usuario.endereco, usuario.bairro,
                 usuario.cidade, usuario.uf, usuario.telefone, usuario.cpf_cnpj,
-                usuario.data_nascimento.strftime('%Y-%m-%d') if usuario.data_nascimento else None,
-                usuario.data_cadastro.strftime('%Y-%m-%d %H:%M:%S'), usuario.token_confirmacao
+                format_date_iso(usuario.data_nascimento) if usuario.data_nascimento else None,
+                format_datetime_iso(usuario.data_cadastro), usuario.token_confirmacao
             ))
             
             # Obter o ID do usuário inserido
@@ -573,8 +574,8 @@ def setup_routes(app, db: Database):
                                 [
                                     f"{g[1]} - {g[2]}",
                                     f"{g[3]} {g[4]} ({g[5]})",
-                                    datetime.fromisoformat(g[6]).strftime('%d/%m/%Y') if g[6] else 'N/A',
-                                    datetime.fromisoformat(g[7]).strftime('%d/%m/%Y') if g[7] else 'N/A'
+                                    format_date_br(g[6]) if g[6] else 'N/A',
+                                    format_date_br(g[7]) if g[7] else 'N/A'
                                 ] for g in ultimas_garantias
                             ]
                         ) if ultimas_garantias else P("Nenhuma garantia ativada ainda.", cls="text-muted"),
@@ -685,7 +686,7 @@ def setup_routes(app, db: Database):
                                     a[0],
                                     a[1],
                                     f"{a[2]} - {a[3]}",
-                                    datetime.fromisoformat(a[4]).strftime('%d/%m/%Y %H:%M') if a[4] else 'N/A'
+                                    format_datetime_br_short(a[4]) if a[4] else 'N/A'
                                 ] for a in ultimas_ativacoes
                             ]
                         ) if ultimas_ativacoes else P("Nenhuma ativação recente.", cls="text-muted")
@@ -870,7 +871,7 @@ def setup_routes(app, db: Database):
                     card_component(
                         "Informações da Conta",
                         Div(
-                            P(f"Membro desde: {datetime.fromisoformat(usuario_completo[4]).strftime('%d/%m/%Y') if usuario_completo[4] else 'N/A'}"),
+                            P(f"Membro desde: {format_date_br(usuario_completo[4]) if usuario_completo[4] else 'N/A'}"),
                             P(f"ID da conta: {usuario_completo[0]}"),
                             Hr(),
                             A("Alterar Senha", href="/cliente/alterar-senha", cls="btn btn-outline-warning btn-sm")

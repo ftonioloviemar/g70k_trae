@@ -10,6 +10,7 @@ from monsterui.all import *
 from fastlite import Database
 from app.auth import login_required, get_current_user
 from app.templates import *
+from app.filter_component import filter_component
 from app.email_service import send_warranty_activation_email
 from models.garantia import Garantia
 
@@ -18,53 +19,75 @@ Row = lambda *args, **kwargs: Div(*args, cls=f"row {kwargs.get('cls', '')}".stri
 
 logger = logging.getLogger(__name__)
 
+from app.date_utils import format_date_br, format_datetime_br_short, format_date_iso, format_datetime_iso
+
 def _format_date(date_value):
     """Formata uma data para exibição"""
-    if not date_value:
-        return 'N/A'
-    
-    if isinstance(date_value, str):
-        try:
-            date_obj = datetime.strptime(date_value, '%Y-%m-%d').date()
-            return date_obj.strftime('%d/%m/%Y')
-        except ValueError:
-            return date_value
-    else:
-        return date_value.strftime('%d/%m/%Y')
+    return format_date_br(date_value)
 
 def _format_datetime(datetime_value):
     """Formata um datetime para exibição"""
-    if not datetime_value:
-        return 'N/A'
-    
-    if isinstance(datetime_value, str):
-        try:
-            # Tenta diferentes formatos de datetime
-            for fmt in ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M', '%Y-%m-%d']:
-                try:
-                    dt_obj = datetime.strptime(datetime_value, fmt)
-                    return dt_obj.strftime('%d/%m/%Y %H:%M')
-                except ValueError:
-                    continue
-            return datetime_value
-        except:
-            return datetime_value
-    else:
-        return datetime_value.strftime('%d/%m/%Y %H:%M')
+    return format_datetime_br_short(datetime_value)
 
 def setup_garantia_routes(app, db: Database):
     """Configura rotas de garantias"""
     
     def listar_garantias(request):
-        """Lista garantias do cliente"""
+        """Lista garantias do cliente com filtros"""
         user = request.state.usuario
         
         if user['tipo_usuario'] != 'cliente':
             return RedirectResponse('/admin', status_code=302)
         
+        # Obter parâmetros de filtro
+        filtros = {
+            'produto_sku': request.query_params.get('produto_sku', '').strip(),
+            'produto_descricao': request.query_params.get('produto_descricao', '').strip(),
+            'veiculo_marca': request.query_params.get('veiculo_marca', '').strip(),
+            'veiculo_modelo': request.query_params.get('veiculo_modelo', '').strip(),
+            'veiculo_placa': request.query_params.get('veiculo_placa', '').strip(),
+            'lote_fabricacao': request.query_params.get('lote_fabricacao', '').strip(),
+            'ativo': request.query_params.get('ativo', '').strip()
+        }
+        
+        # Construir query com filtros
+        where_conditions = ["g.usuario_id = ?"]
+        params = [user['usuario_id']]
+        
+        if filtros['produto_sku']:
+            where_conditions.append("p.sku LIKE ?")
+            params.append(f"%{filtros['produto_sku']}%")
+        
+        if filtros['produto_descricao']:
+            where_conditions.append("p.descricao LIKE ?")
+            params.append(f"%{filtros['produto_descricao']}%")
+        
+        if filtros['veiculo_marca']:
+            where_conditions.append("v.marca LIKE ?")
+            params.append(f"%{filtros['veiculo_marca']}%")
+        
+        if filtros['veiculo_modelo']:
+            where_conditions.append("v.modelo LIKE ?")
+            params.append(f"%{filtros['veiculo_modelo']}%")
+        
+        if filtros['veiculo_placa']:
+            where_conditions.append("v.placa LIKE ?")
+            params.append(f"%{filtros['veiculo_placa']}%")
+        
+        if filtros['lote_fabricacao']:
+            where_conditions.append("g.lote_fabricacao LIKE ?")
+            params.append(f"%{filtros['lote_fabricacao']}%")
+        
+        if filtros['ativo']:
+            ativo_bool = filtros['ativo'] == 'true'
+            where_conditions.append("g.ativo = ?")
+            params.append(ativo_bool)
+        
+        where_clause = " WHERE " + " AND ".join(where_conditions)
+        
         try:
-            # Buscar garantias do usuário
-            garantias = db.execute("""
+            # Buscar garantias do usuário com filtros
+            select_query = f"""
                 SELECT g.id, p.sku, p.descricao, v.marca, v.modelo, v.placa,
                        g.lote_fabricacao, g.data_instalacao, g.data_cadastro, 
                        g.data_vencimento, g.ativo, g.nota_fiscal, g.nome_estabelecimento,
@@ -72,9 +95,10 @@ def setup_garantia_routes(app, db: Database):
                 FROM garantias g
                 JOIN produtos p ON g.produto_id = p.id
                 JOIN veiculos v ON g.veiculo_id = v.id
-                WHERE g.usuario_id = ? 
+                {where_clause}
                 ORDER BY g.data_cadastro DESC
-            """, (user['usuario_id'],)).fetchall()
+            """
+            garantias = db.execute(select_query, params).fetchall()
             
         except Exception as e:
             logger.error(f"Erro ao buscar garantias do usuário {user['usuario_id']}: {e}")
@@ -85,8 +109,14 @@ def setup_garantia_routes(app, db: Database):
         for g in garantias:
             # Verificar se está vencida
             try:
-                data_vencimento = datetime.fromisoformat(g[9]).date() if g[9] else None
-                vencida = data_vencimento and data_vencimento < datetime.now().date() if data_vencimento else False
+                if g[9]:
+                    if isinstance(g[9], str):
+                        data_vencimento = datetime.strptime(g[9], '%Y-%m-%d').date()
+                    else:
+                        data_vencimento = g[9]
+                    vencida = data_vencimento < datetime.now().date()
+                else:
+                    vencida = False
             except:
                 vencida = False
             
@@ -110,12 +140,12 @@ def setup_garantia_routes(app, db: Database):
             
             # Formatar datas
             try:
-                data_instalacao_str = datetime.fromisoformat(g[7]).strftime('%d/%m/%Y') if g[7] else "N/A"
+                data_instalacao_str = format_date_br(g[7])
             except:
                 data_instalacao_str = "N/A"
             
             try:
-                data_vencimento_str = datetime.fromisoformat(g[9]).strftime('%d/%m/%Y') if g[9] else "N/A"
+                data_vencimento_str = format_date_br(g[9])
             except:
                 data_vencimento_str = "N/A"
             
@@ -129,6 +159,20 @@ def setup_garantia_routes(app, db: Database):
                 acoes
             ])
         
+        # Definir campos de filtro para garantias do cliente
+        filter_fields = [
+            {'name': 'produto_sku', 'label': 'SKU do Produto', 'type': 'text'},
+            {'name': 'produto_descricao', 'label': 'Descrição do Produto', 'type': 'text'},
+            {'name': 'veiculo_marca', 'label': 'Marca do Veículo', 'type': 'text'},
+            {'name': 'veiculo_modelo', 'label': 'Modelo do Veículo', 'type': 'text'},
+            {'name': 'veiculo_placa', 'label': 'Placa do Veículo', 'type': 'text'},
+            {'name': 'lote_fabricacao', 'label': 'Lote de Fabricação', 'type': 'text'},
+            {'name': 'ativo', 'label': 'Status', 'type': 'select', 'options': [
+                {'value': 'true', 'label': 'Ativa'},
+                {'value': 'false', 'label': 'Inativa'}
+            ]}
+        ]
+        
         content = Container(
             Row(
                 Col(
@@ -141,6 +185,12 @@ def setup_garantia_routes(app, db: Database):
                         cls="d-flex justify-content-between align-items-center"
                     )
                 )
+            ),
+            # Componente de filtro
+            filter_component(
+                fields=filter_fields,
+                current_filters=filtros,
+                action_url="/cliente/garantias"
             ),
             Row(
                 Col(
@@ -465,9 +515,9 @@ def setup_garantia_routes(app, db: Database):
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 garantia.usuario_id, garantia.produto_id, garantia.veiculo_id,
-                garantia.lote_fabricacao, garantia.data_instalacao.strftime('%Y-%m-%d'),
+                garantia.lote_fabricacao, format_date_iso(garantia.data_instalacao),
                 garantia.nota_fiscal, garantia.nome_estabelecimento, garantia.quilometragem,
-                garantia.data_cadastro.strftime('%Y-%m-%d %H:%M:%S'), garantia.data_vencimento.strftime('%Y-%m-%d'),
+                format_datetime_iso(garantia.data_cadastro), format_date_iso(garantia.data_vencimento),
                 garantia.ativo, garantia.observacoes
             ))
             

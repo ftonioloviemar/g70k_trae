@@ -6,6 +6,7 @@ Templates e componentes visuais da aplicação
 from fasthtml.common import *
 from monsterui.all import *
 from typing import Optional, List, Dict, Any
+from .filter_component import filter_component
 
 # Definir Row como um Div com classe Bootstrap
 Row = lambda *args, **kwargs: Div(*args, cls=f"row {kwargs.get('cls', '')}".strip(), **{k: v for k, v in kwargs.items() if k != 'cls'})
@@ -471,15 +472,68 @@ def card_component(title: str, content, footer=None):
     return Card(*card_content)
 
 
-def table_component(headers: List[str], rows: List[List[str]], table_id: str = None):
-    """Componente de tabela responsiva usando MonsterUI"""
+def table_component(
+    headers: List[str], 
+    rows: List[List[str]], 
+    table_id: str = None,
+    sortable_columns: List[str] = None,
+    current_sort: str = None,
+    sort_direction: str = "asc",
+    base_url: str = ""
+):
+    """
+    Componente de tabela responsiva usando MonsterUI com ordenação
+    
+    Args:
+        headers: Lista de cabeçalhos da tabela
+        rows: Lista de linhas de dados
+        table_id: ID da tabela (opcional)
+        sortable_columns: Lista de colunas que podem ser ordenadas (nomes dos campos)
+        current_sort: Campo atualmente ordenado
+        sort_direction: Direção da ordenação atual ('asc' ou 'desc')
+        base_url: URL base para links de ordenação
+    """
     if not headers or not rows:
         return Div("Nenhum dado disponível", cls="text-muted text-center p-3")
     
-    # Criar cabeçalho da tabela
-    thead = Thead(
-        Tr(*[Th(header, scope="col") for header in headers])
-    )
+    # Mapear headers para campos ordenáveis (assumindo que o índice corresponde)
+    if sortable_columns is None:
+        sortable_columns = []
+    
+    # Criar cabeçalho da tabela com ordenação
+    header_cells = []
+    for i, header in enumerate(headers):
+        # Verificar se esta coluna é ordenável
+        field_name = sortable_columns[i] if i < len(sortable_columns) else None
+        
+        if field_name and base_url:
+            # Determinar a direção da próxima ordenação
+            if current_sort == field_name:
+                next_direction = "desc" if sort_direction == "asc" else "asc"
+                # Ícone baseado na direção atual
+                if sort_direction == "asc":
+                    icon = I(cls="fas fa-sort-up text-primary")
+                else:
+                    icon = I(cls="fas fa-sort-down text-primary")
+            else:
+                next_direction = "asc"
+                icon = I(cls="fas fa-sort text-muted")
+            
+            # Criar link clicável para ordenação
+            header_link = A(
+                header,
+                " ",
+                icon,
+                href=f"{base_url}?sort={field_name}&direction={next_direction}",
+                cls="text-decoration-none d-flex align-items-center justify-content-between",
+                style="color: inherit;"
+            )
+            header_cells.append(Th(header_link, scope="col", cls="user-select-none", style="cursor: pointer;"))
+        else:
+            # Coluna não ordenável
+            header_cells.append(Th(header, scope="col"))
+    
+    thead = Thead(Tr(*header_cells))
     
     # Criar corpo da tabela
     tbody_rows = []

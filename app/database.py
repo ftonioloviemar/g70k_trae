@@ -10,6 +10,7 @@ from models.usuario import Usuario
 from models.produto import Produto
 from models.veiculo import Veiculo
 from models.garantia import Garantia
+from app.date_utils import format_datetime_iso
 
 logger = logging.getLogger(__name__)
 
@@ -149,7 +150,7 @@ def criar_admin_padrao(db: Database):
             admin.nome,
             admin.tipo_usuario,
             admin.confirmado,
-            admin.data_cadastro.strftime('%Y-%m-%d %H:%M:%S') if admin.data_cadastro else None
+            format_datetime_iso(admin.data_cadastro) if admin.data_cadastro else None
         ))
         
         logger.info(f"Usuário administrador criado: {admin_email}")

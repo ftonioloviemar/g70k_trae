@@ -6,6 +6,7 @@ Modelo de dados para garantias ativadas
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Optional
+from app.date_utils import parse_iso_date, format_date_br
 
 @dataclass
 class Garantia:
@@ -32,7 +33,7 @@ class Garantia:
         
         # Converter string de data para datetime se necessário
         if isinstance(self.data_instalacao, str):
-            self.data_instalacao = datetime.fromisoformat(self.data_instalacao)
+            self.data_instalacao = parse_iso_date(self.data_instalacao)
         
         # Calcular data de vencimento (2 anos a partir da instalação)
         if self.data_instalacao and not self.data_vencimento:
@@ -64,7 +65,7 @@ class Garantia:
             if hasattr(garantia, key):
                 if key in ['data_instalacao', 'data_cadastro', 'data_vencimento'] and value:
                     if isinstance(value, str):
-                        setattr(garantia, key, datetime.fromisoformat(value))
+                        setattr(garantia, key, parse_iso_date(value))
                     else:
                         setattr(garantia, key, value)
                 else:
@@ -127,13 +128,13 @@ class Garantia:
         """Desativa a garantia"""
         self.ativo = False
         if motivo:
-            self.observacoes += f"\nDesativada em {datetime.now().strftime('%d/%m/%Y')}: {motivo}"
+            self.observacoes += f"\nDesativada em {format_date_br(datetime.now())}: {motivo}"
     
     def reativar(self, motivo: str = ''):
         """Reativa a garantia"""
         self.ativo = True
         if motivo:
-            self.observacoes += f"\nReativada em {datetime.now().strftime('%d/%m/%Y')}: {motivo}"
+            self.observacoes += f"\nReativada em {format_date_br(datetime.now())}: {motivo}"
     
     def __str__(self) -> str:
         """Representação em string da garantia"""

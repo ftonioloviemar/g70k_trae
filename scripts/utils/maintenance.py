@@ -16,6 +16,7 @@ from fastlite import Database
 from app.config import Config
 from app.logger import setup_logging, get_logger
 from app.email_service import send_warranty_expiry_notification, send_admin_notification
+from app.date_utils import format_date_iso, format_date_br
 
 # Configurar logging
 setup_logging()
@@ -34,7 +35,7 @@ def check_warranty_expiry():
         
         for days in notification_days:
             target_date = datetime.now() + timedelta(days=days)
-            target_date_str = target_date.strftime('%Y-%m-%d')
+            target_date_str = format_date_iso(target_date)
             
             # Query para buscar garantias que vencem na data alvo
             query = """
@@ -75,7 +76,7 @@ def check_warranty_expiry():
         # Enviar relatório para administrador
         if total_notifications > 0:
             send_admin_notification(
-                subject=f"Relatório de Notificações - {datetime.now().strftime('%d/%m/%Y')}",
+                subject=f"Relatório de Notificações - {format_date_br(datetime.now())}",
                 message=f"Foram enviadas {total_notifications} notificações de vencimento de garantias hoje."
             )
         
@@ -123,7 +124,7 @@ def generate_daily_report():
         db = Database(Config.DATABASE_PATH)
         
         # Estatísticas do dia
-        today = datetime.now().strftime('%Y-%m-%d')
+        today = format_date_iso(datetime.now())
         
         # Novas garantias ativadas hoje
         new_warranties = db.execute(
@@ -154,7 +155,7 @@ def generate_daily_report():
         
         report = f"""
 Relatório Diário - Sistema de Garantias Viemar
-Data: {datetime.now().strftime('%d/%m/%Y')}
+Data: {format_date_br(datetime.now())}
 
 === ATIVIDADE DO DIA ===
 - Novas garantias ativadas: {new_warranties}
@@ -176,7 +177,7 @@ Data: {datetime.now().strftime('%d/%m/%Y')}
         
         # Enviar relatório para administrador
         send_admin_notification(
-            subject=f"Relatório Diário - {datetime.now().strftime('%d/%m/%Y')}",
+            subject=f"Relatório Diário - {format_date_br(datetime.now())}",
             message=report
         )
         

@@ -6,6 +6,7 @@ Modelo de dados para veículos dos clientes
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
+from app.date_utils import parse_iso_date
 
 @dataclass
 class Veiculo:
@@ -50,7 +51,7 @@ class Veiculo:
             if hasattr(veiculo, key):
                 if key in ['data_cadastro', 'data_atualizacao'] and value:
                     if isinstance(value, str):
-                        setattr(veiculo, key, datetime.fromisoformat(value))
+                        setattr(veiculo, key, parse_iso_date(value))
                     else:
                         setattr(veiculo, key, value)
                 else:

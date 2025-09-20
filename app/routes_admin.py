@@ -11,8 +11,10 @@ from monsterui.all import *
 from fastlite import Database
 from app.auth import admin_required, get_current_user
 from app.templates import *
+from app.filter_component import filter_component
 from models.usuario import Usuario
 from models.produto import Produto
+from app.date_utils import format_date_br, format_datetime_br_short, format_datetime_br, format_datetime_iso, parse_iso_date
 
 # Definir Row como um Div com classe Bootstrap
 Row = lambda *args, **kwargs: Div(*args, cls=f"row {kwargs.get('cls', '')}".strip(), **{k: v for k, v in kwargs.items() if k != 'cls'})
@@ -27,7 +29,7 @@ def setup_admin_routes(app, db: Database):
     @app.get("/admin/usuarios")
     @admin_required
     def listar_usuarios(request):
-        """Lista todos os usuários com paginação"""
+        """Lista todos os usuários com paginação, filtros e ordenação"""
         user = request.state.usuario
         
         # Parâmetros de paginação
@@ -46,6 +48,56 @@ def setup_admin_routes(app, db: Database):
         
         # Calcular offset
         offset = (page - 1) * page_size
+        
+        # Parâmetros de ordenação
+        sort_field = request.query_params.get('sort', 'data_cadastro')
+        sort_direction = request.query_params.get('direction', 'desc')
+        
+        # Validar campo de ordenação
+        valid_sort_fields = {
+            'nome': 'nome',
+            'email': 'email', 
+            'tipo_usuario': 'tipo_usuario',
+            'confirmado': 'confirmado',
+            'data_cadastro': 'data_cadastro'
+        }
+        
+        if sort_field not in valid_sort_fields:
+            sort_field = 'data_cadastro'
+        
+        if sort_direction not in ['asc', 'desc']:
+            sort_direction = 'desc'
+        
+        # Parâmetros de filtro
+        filtros = {
+            'nome': request.query_params.get('nome', '').strip(),
+            'email': request.query_params.get('email', '').strip(),
+            'tipo_usuario': request.query_params.get('tipo_usuario', '').strip(),
+            'confirmado': request.query_params.get('confirmado', '').strip()
+        }
+        
+        # Construir query com filtros
+        where_conditions = []
+        params = []
+        
+        if filtros['nome']:
+            where_conditions.append("nome LIKE ?")
+            params.append(f"%{filtros['nome']}%")
+        
+        if filtros['email']:
+            where_conditions.append("email LIKE ?")
+            params.append(f"%{filtros['email']}%")
+        
+        if filtros['tipo_usuario']:
+            where_conditions.append("tipo_usuario = ?")
+            params.append(filtros['tipo_usuario'])
+        
+        if filtros['confirmado']:
+            confirmado_bool = filtros['confirmado'] == 'true'
+            where_conditions.append("confirmado = ?")
+            params.append(confirmado_bool)
+        
+        where_clause = " WHERE " + " AND ".join(where_conditions) if where_conditions else ""
         
         # Verificar mensagens na query string
         sucesso = request.query_params.get('sucesso')
@@ -77,16 +129,19 @@ def setup_admin_routes(app, db: Database):
             alert_type = "info"
         
         try:
-            # Contar total de usuários
-            total_usuarios = db.execute("SELECT COUNT(*) FROM usuarios").fetchone()[0]
+            # Contar total de usuários com filtros
+            count_query = f"SELECT COUNT(*) FROM usuarios{where_clause}"
+            total_usuarios = db.execute(count_query, params).fetchone()[0]
             
-            # Buscar usuários com paginação
-            usuarios = db.execute("""
+            # Buscar usuários com paginação, filtros e ordenação
+            select_query = f"""
                 SELECT id, email, nome, tipo_usuario, confirmado, email_enviado, data_cadastro
                 FROM usuarios 
-                ORDER BY data_cadastro DESC
+                {where_clause}
+                ORDER BY {sort_field} {sort_direction.upper()}
                 LIMIT ? OFFSET ?
-            """, (page_size, offset)).fetchall()
+            """
+            usuarios = db.execute(select_query, params + [page_size, offset]).fetchall()
             
         except Exception as e:
             logger.error(f"Erro ao buscar usuários: {e}")
@@ -139,9 +194,23 @@ def setup_admin_routes(app, db: Database):
                 u[3].title(),  # Tipo
                 Span(status_confirmacao, cls=f"badge bg-{status_conf_class}"),
                 Span(status_email, cls=f"badge bg-{status_email_class}"),
-                u[6] if isinstance(u[6], str) else (u[6].strftime('%d/%m/%Y') if u[6] else "N/A"),  # Data cadastro
+                u[6] if isinstance(u[6], str) else (format_date_br(u[6]) if u[6] else "N/A"),  # Data cadastro
                 acoes
             ])
+        
+        # Definir campos de filtro para usuários
+        filter_fields = [
+            {'name': 'nome', 'label': 'Nome', 'type': 'text'},
+            {'name': 'email', 'label': 'Email', 'type': 'text'},
+            {'name': 'tipo_usuario', 'label': 'Tipo', 'type': 'select', 'options': [
+                {'value': 'cliente', 'label': 'Cliente'},
+                {'value': 'admin', 'label': 'Admin'}
+            ]},
+            {'name': 'confirmado', 'label': 'Confirmação', 'type': 'select', 'options': [
+                {'value': 'true', 'label': 'Confirmado'},
+                {'value': 'false', 'label': 'Pendente'}
+            ]}
+        ]
         
         content = Container(
             Row(
@@ -172,6 +241,12 @@ def setup_admin_routes(app, db: Database):
                     width=12
                 )
             ) if alert_message else None,
+            # Componente de filtro
+            filter_component(
+                fields=filter_fields,
+                current_filters=filtros,
+                action_url="/admin/usuarios"
+            ),
             Row(
                 Col(
                     card_component(
@@ -179,7 +254,11 @@ def setup_admin_routes(app, db: Database):
                         Div(
                             table_component(
                                 ["Nome", "Email", "Tipo", "Confirmação", "Email Enviado", "Cadastro", "Ações"],
-                                dados_tabela
+                                dados_tabela,
+                                sortable_columns=["nome", "email", "tipo_usuario", "confirmado", "", "data_cadastro", ""],
+                                current_sort=sort_field,
+                                sort_direction=sort_direction,
+                                base_url="/admin/usuarios"
                             ) if usuarios else P("Nenhum usuário cadastrado ainda.", cls="text-muted text-center py-4"),
                             # Adicionar paginação
                             pagination_component(
@@ -407,7 +486,7 @@ def setup_admin_routes(app, db: Database):
             """, (
                 usuario.email, usuario.senha_hash, usuario.nome, usuario.tipo_usuario,
                 usuario.confirmado, usuario.cpf_cnpj, usuario.telefone,
-                usuario.data_cadastro.strftime('%Y-%m-%d %H:%M:%S'), usuario.token_confirmacao
+                format_datetime_iso(usuario.data_cadastro), usuario.token_confirmacao
             ))
             
             # Obter o ID do usuário inserido
@@ -518,8 +597,8 @@ def setup_admin_routes(app, db: Database):
                             P(f"Email Confirmado: {'Sim' if usuario[4] else 'Não'}"),
                             P(f"CPF/CNPJ: {usuario[11] or 'N/A'}"),
                             P(f"Telefone: {usuario[10] or 'N/A'}"),
-                            P(f"Data de Nascimento: {datetime.fromisoformat(usuario[12]).strftime('%d/%m/%Y') if usuario[12] else 'N/A'}"),
-                            P(f"Data de Cadastro: {datetime.fromisoformat(usuario[13]).strftime('%d/%m/%Y %H:%M') if usuario[13] else 'N/A'}")
+                            P(f"Data de Nascimento: {format_date_br(usuario[12]) if usuario[12] else 'N/A'}"),
+                P(f"Data de Cadastro: {format_datetime_br_short(usuario[13]) if usuario[13] else 'N/A'}")
                         )
                     ),
                     width=6
@@ -859,7 +938,7 @@ def setup_admin_routes(app, db: Database):
     @app.get("/admin/produtos")
     @admin_required
     def listar_produtos(request):
-        """Lista todos os produtos com paginação"""
+        """Lista todos os produtos com paginação, filtros e ordenação"""
         user = request.state.usuario
         
         # Parâmetros de paginação
@@ -875,17 +954,68 @@ def setup_admin_routes(app, db: Database):
         # Calcular offset
         offset = (page - 1) * page_size
         
+        # Parâmetros de ordenação
+        sort_field = request.query_params.get('sort', 'sku')
+        sort_direction = request.query_params.get('direction', 'asc')
+        
+        # Validar campo de ordenação
+        valid_sort_fields = {
+            'sku': 'sku',
+            'descricao': 'descricao',
+            'ativo': 'ativo',
+            'data_cadastro': 'data_cadastro'
+        }
+        
+        if sort_field not in valid_sort_fields:
+            sort_field = 'sku'
+        
+        if sort_direction not in ['asc', 'desc']:
+            sort_direction = 'asc'
+            page_size = 50
+        
+        # Calcular offset
+        offset = (page - 1) * page_size
+        
+        # Parâmetros de filtro
+        filtros = {
+            'sku': request.query_params.get('sku', '').strip(),
+            'descricao': request.query_params.get('descricao', '').strip(),
+            'ativo': request.query_params.get('ativo', '').strip()
+        }
+        
+        # Construir query com filtros
+        where_conditions = []
+        params = []
+        
+        if filtros['sku']:
+            where_conditions.append("sku LIKE ?")
+            params.append(f"%{filtros['sku']}%")
+        
+        if filtros['descricao']:
+            where_conditions.append("descricao LIKE ?")
+            params.append(f"%{filtros['descricao']}%")
+        
+        if filtros['ativo']:
+            ativo_bool = filtros['ativo'] == 'true'
+            where_conditions.append("ativo = ?")
+            params.append(ativo_bool)
+        
+        where_clause = " WHERE " + " AND ".join(where_conditions) if where_conditions else ""
+        
         try:
-            # Contar total de produtos
-            total_produtos = db.execute("SELECT COUNT(*) FROM produtos").fetchone()[0]
+            # Contar total de produtos com filtros
+            count_query = f"SELECT COUNT(*) FROM produtos{where_clause}"
+            total_produtos = db.execute(count_query, params).fetchone()[0]
             
-            # Buscar produtos com paginação
-            produtos = db.execute("""
+            # Buscar produtos com paginação, filtros e ordenação
+            select_query = f"""
                 SELECT id, sku, descricao, ativo, data_cadastro
                 FROM produtos 
-                ORDER BY sku
+                {where_clause}
+                ORDER BY {sort_field} {sort_direction.upper()}
                 LIMIT ? OFFSET ?
-            """, (page_size, offset)).fetchall()
+            """
+            produtos = db.execute(select_query, params + [page_size, offset]).fetchall()
             
         except Exception as e:
             logger.error(f"Erro ao buscar produtos: {e}")
@@ -911,12 +1041,22 @@ def setup_admin_routes(app, db: Database):
                 p[1],  # SKU
                 p[2],  # Descrição
                 Span(status, cls=f"badge bg-{status_class}"),
-                datetime.fromisoformat(p[4]).strftime('%d/%m/%Y') if p[4] else "N/A",  # Data cadastro
+                format_date_br(p[4]) if p[4] else "N/A",  # Data cadastro
                 acoes
             ])
         
         # Calcular total de páginas
         total_pages = math.ceil(total_produtos / page_size) if total_produtos > 0 else 1
+        
+        # Definir campos de filtro para produtos
+        filter_fields = [
+            {'name': 'sku', 'label': 'SKU', 'type': 'text'},
+            {'name': 'descricao', 'label': 'Descrição', 'type': 'text'},
+            {'name': 'ativo', 'label': 'Status', 'type': 'select', 'options': [
+                {'value': 'true', 'label': 'Ativo'},
+                {'value': 'false', 'label': 'Inativo'}
+            ]}
+        ]
         
         content = Container(
             Row(
@@ -932,6 +1072,12 @@ def setup_admin_routes(app, db: Database):
                     )
                 )
             ),
+            # Componente de filtro
+            filter_component(
+                fields=filter_fields,
+                current_filters=filtros,
+                action_url="/admin/produtos"
+            ),
             Row(
                 Col(
                     card_component(
@@ -939,7 +1085,11 @@ def setup_admin_routes(app, db: Database):
                         Div(
                             table_component(
                                 ["SKU", "Descrição", "Status", "Cadastro", "Ações"],
-                                dados_tabela
+                                dados_tabela,
+                                sortable_columns=["sku", "descricao", "ativo", "data_cadastro", ""],
+                                current_sort=sort_field,
+                                sort_direction=sort_direction,
+                                base_url="/admin/produtos"
                             ) if produtos else P("Nenhum produto cadastrado ainda.", cls="text-muted text-center py-4"),
                             pagination_component(
                                 current_page=page,
@@ -1249,7 +1399,7 @@ def setup_admin_routes(app, db: Database):
                                 P(produto[2], cls="mb-3"),
                                 
                                 H5("Data de Cadastro"),
-                                P(datetime.fromisoformat(produto[4]).strftime('%d/%m/%Y %H:%M') if produto[4] else "Não informada", cls="mb-3"),
+                                P(format_datetime_br_short(produto[4]) if produto[4] else "Não informada", cls="mb-3"),
                                 
                                 H5("Estatísticas"),
                                 P(f"Total de garantias: {total_garantias}", cls="mb-1"),
@@ -1393,7 +1543,7 @@ def setup_admin_routes(app, db: Database):
                 INSERT INTO produtos (sku, descricao, ativo, data_cadastro)
                 VALUES (?, ?, ?, ?)
             """, (
-                produto.sku, produto.descricao, produto.ativo, produto.data_cadastro.strftime('%Y-%m-%d %H:%M:%S')
+                produto.sku, produto.descricao, produto.ativo, format_datetime_iso(produto.data_cadastro)
             ))
             
             # Obter o ID do produto inserido
@@ -1619,7 +1769,7 @@ def setup_admin_routes(app, db: Database):
     @app.get("/admin/garantias")
     @admin_required
     def listar_garantias_admin(request):
-        """Lista todas as garantias (visão administrativa) com paginação"""
+        """Lista todas as garantias (visão administrativa) com paginação, filtros e ordenação"""
         user = request.state.usuario
         
         # Parâmetros de paginação
@@ -1635,21 +1785,108 @@ def setup_admin_routes(app, db: Database):
         # Calcular offset
         offset = (page - 1) * page_size
         
+        # Parâmetros de ordenação
+        sort_field = request.query_params.get('sort', 'data_cadastro')
+        sort_direction = request.query_params.get('direction', 'desc')
+        
+        # Validar campo de ordenação
+        valid_sort_fields = {
+            'id': 'g.id',
+            'cliente_nome': 'u.nome',
+            'produto_sku': 'p.sku',
+            'veiculo_marca': 'v.marca',
+            'data_instalacao': 'g.data_instalacao',
+            'data_vencimento': 'g.data_vencimento',
+            'ativo': 'g.ativo',
+            'data_cadastro': 'g.data_cadastro'
+        }
+        
+        if sort_field not in valid_sort_fields:
+            sort_field = 'data_cadastro'
+        
+        if sort_direction not in ['asc', 'desc']:
+            sort_direction = 'desc'
+        
+        # Parâmetros de filtro
+        filtros = {
+            'cliente_nome': request.query_params.get('cliente_nome', '').strip(),
+            'cliente_email': request.query_params.get('cliente_email', '').strip(),
+            'produto_sku': request.query_params.get('produto_sku', '').strip(),
+            'produto_descricao': request.query_params.get('produto_descricao', '').strip(),
+            'veiculo_marca': request.query_params.get('veiculo_marca', '').strip(),
+            'veiculo_modelo': request.query_params.get('veiculo_modelo', '').strip(),
+            'veiculo_placa': request.query_params.get('veiculo_placa', '').strip(),
+            'lote_fabricacao': request.query_params.get('lote_fabricacao', '').strip(),
+            'ativo': request.query_params.get('ativo', '').strip()
+        }
+        
+        # Construir query com filtros
+        where_conditions = []
+        params = []
+        
+        if filtros['cliente_nome']:
+            where_conditions.append("u.nome LIKE ?")
+            params.append(f"%{filtros['cliente_nome']}%")
+        
+        if filtros['cliente_email']:
+            where_conditions.append("u.email LIKE ?")
+            params.append(f"%{filtros['cliente_email']}%")
+        
+        if filtros['produto_sku']:
+            where_conditions.append("p.sku LIKE ?")
+            params.append(f"%{filtros['produto_sku']}%")
+        
+        if filtros['produto_descricao']:
+            where_conditions.append("p.descricao LIKE ?")
+            params.append(f"%{filtros['produto_descricao']}%")
+        
+        if filtros['veiculo_marca']:
+            where_conditions.append("v.marca LIKE ?")
+            params.append(f"%{filtros['veiculo_marca']}%")
+        
+        if filtros['veiculo_modelo']:
+            where_conditions.append("v.modelo LIKE ?")
+            params.append(f"%{filtros['veiculo_modelo']}%")
+        
+        if filtros['veiculo_placa']:
+            where_conditions.append("v.placa LIKE ?")
+            params.append(f"%{filtros['veiculo_placa']}%")
+        
+        if filtros['lote_fabricacao']:
+            where_conditions.append("g.lote_fabricacao LIKE ?")
+            params.append(f"%{filtros['lote_fabricacao']}%")
+        
+        if filtros['ativo']:
+            ativo_bool = filtros['ativo'] == 'true'
+            where_conditions.append("g.ativo = ?")
+            params.append(ativo_bool)
+        
+        where_clause = " WHERE " + " AND ".join(where_conditions) if where_conditions else ""
+        
         try:
-            # Contar total de garantias
-            total_garantias = db.execute("SELECT COUNT(*) FROM garantias").fetchone()[0]
+            # Contar total de garantias com filtros
+            count_query = f"""
+                SELECT COUNT(*) FROM garantias g
+                JOIN usuarios u ON g.usuario_id = u.id
+                JOIN produtos p ON g.produto_id = p.id
+                JOIN veiculos v ON g.veiculo_id = v.id
+                {where_clause}
+            """
+            total_garantias = db.execute(count_query, params).fetchone()[0]
             
-            # Buscar garantias com dados relacionados (com paginação)
-            garantias = db.execute("""
+            # Buscar garantias com dados relacionados (com paginação, filtros e ordenação)
+            select_query = f"""
                 SELECT g.id, u.nome, u.email, p.sku, p.descricao, v.marca, v.modelo, v.placa,
                        g.lote_fabricacao, g.data_instalacao, g.data_cadastro, g.data_vencimento, g.ativo
                 FROM garantias g
                 JOIN usuarios u ON g.usuario_id = u.id
                 JOIN produtos p ON g.produto_id = p.id
                 JOIN veiculos v ON g.veiculo_id = v.id
-                ORDER BY g.data_cadastro DESC
+                {where_clause}
+                ORDER BY {valid_sort_fields[sort_field]} {sort_direction.upper()}
                 LIMIT ? OFFSET ?
-            """, (page_size, offset)).fetchall()
+            """
+            garantias = db.execute(select_query, params + [page_size, offset]).fetchall()
             
         except Exception as e:
             logger.error(f"Erro ao buscar garantias: {e}")
@@ -1661,7 +1898,7 @@ def setup_admin_routes(app, db: Database):
         for g in garantias:
             # Verificar se está vencida
             try:
-                vencida = g[11] and datetime.fromisoformat(g[11]).date() < datetime.now().date() if g[11] else False
+                vencida = g[11] and parse_iso_date(g[11]).date() < datetime.now().date() if g[11] else False
             except (ValueError, TypeError):
                 vencida = False
             
@@ -1685,8 +1922,8 @@ def setup_admin_routes(app, db: Database):
                 g[1] or g[2],  # Nome ou email
                 f"{g[3]} - {g[4]}",  # SKU - Descrição
                 f"{g[5]} {g[6]} ({g[7]})",  # Marca Modelo (Placa)
-                datetime.fromisoformat(g[9]).strftime('%d/%m/%Y') if g[9] else "N/A",  # Data instalação
-                datetime.fromisoformat(g[11]).strftime('%d/%m/%Y') if g[11] else "N/A",  # Data vencimento
+                format_date_br(g[9]) if g[9] else "N/A",  # Data instalação
+                format_date_br(g[11]) if g[11] else "N/A",  # Data vencimento
                 Span(status, cls=f"badge bg-{status_class}"),
                 acoes
             ])
@@ -1694,11 +1931,33 @@ def setup_admin_routes(app, db: Database):
         # Calcular total de páginas
         total_pages = math.ceil(total_garantias / page_size) if total_garantias > 0 else 1
         
+        # Definir campos de filtro para garantias
+        filter_fields = [
+            {'name': 'cliente_nome', 'label': 'Nome do Cliente', 'type': 'text'},
+            {'name': 'cliente_email', 'label': 'Email do Cliente', 'type': 'text'},
+            {'name': 'produto_sku', 'label': 'SKU do Produto', 'type': 'text'},
+            {'name': 'produto_descricao', 'label': 'Descrição do Produto', 'type': 'text'},
+            {'name': 'veiculo_marca', 'label': 'Marca do Veículo', 'type': 'text'},
+            {'name': 'veiculo_modelo', 'label': 'Modelo do Veículo', 'type': 'text'},
+            {'name': 'veiculo_placa', 'label': 'Placa do Veículo', 'type': 'text'},
+            {'name': 'lote_fabricacao', 'label': 'Lote de Fabricação', 'type': 'text'},
+            {'name': 'ativo', 'label': 'Status', 'type': 'select', 'options': [
+                {'value': 'true', 'label': 'Ativa'},
+                {'value': 'false', 'label': 'Inativa'}
+            ]}
+        ]
+        
         content = Container(
             Row(
                 Col(
                     H2("Todas as Garantias", cls="mb-4")
                 )
+            ),
+            # Componente de filtro
+            filter_component(
+                fields=filter_fields,
+                current_filters=filtros,
+                action_url="/admin/garantias"
             ),
             Row(
                 Col(
@@ -1707,7 +1966,11 @@ def setup_admin_routes(app, db: Database):
                         Div(
                             table_component(
                                 ["ID", "Cliente", "Produto", "Veículo", "Instalação", "Vencimento", "Status", "Ações"],
-                                dados_tabela
+                                dados_tabela,
+                                sortable_columns=["id", "cliente_nome", "produto_sku", "veiculo_marca", "data_instalacao", "data_vencimento", "ativo", ""],
+                                current_sort=sort_field,
+                                sort_direction=sort_direction,
+                                base_url="/admin/garantias"
                             ) if garantias else P("Nenhuma garantia cadastrada ainda.", cls="text-muted text-center py-4"),
                             pagination_component(
                                 current_page=page,
@@ -1757,7 +2020,7 @@ def setup_admin_routes(app, db: Database):
         
         # Verificar status da garantia
         try:
-            vencida = garantia[7] and datetime.fromisoformat(garantia[7]).date() < datetime.now().date() if garantia[7] else False
+            vencida = garantia[7] and parse_iso_date(garantia[7]).date() < datetime.now().date() if garantia[7] else False
         except (ValueError, TypeError):
             vencida = False
         
@@ -1806,7 +2069,7 @@ def setup_admin_routes(app, db: Database):
                                 P(garantia[1] or "Não informado", cls="mb-3"),
                                 
                                 H5("Data de Instalação"),
-                                P(datetime.fromisoformat(garantia[2]).strftime('%d/%m/%Y') if garantia[2] else "Não informada", cls="mb-3"),
+                                P(format_date_br(garantia[2]) if garantia[2] else "Não informada", cls="mb-3"),
                                 
                                 H5("Quilometragem"),
                                 P(f"{garantia[5]:,} km" if garantia[5] else "Não informada", cls="mb-3"),
@@ -1818,10 +2081,10 @@ def setup_admin_routes(app, db: Database):
                                 P(garantia[4] or "Não informado", cls="mb-3"),
                                 
                                 H5("Data de Cadastro"),
-                                P(datetime.fromisoformat(garantia[6]).strftime('%d/%m/%Y %H:%M') if garantia[6] else "Não informada", cls="mb-3"),
+                                P(format_datetime_br_short(garantia[6]) if garantia[6] else "Não informada", cls="mb-3"),
                                 
                                 H5("Data de Vencimento"),
-                                P(datetime.fromisoformat(garantia[7]).strftime('%d/%m/%Y') if garantia[7] else "Não informada", cls="mb-3"),
+                                P(format_date_br(garantia[7]) if garantia[7] else "Não informada", cls="mb-3"),
                                 
                                 H5("Observações") if garantia[9] else None,
                                 P(garantia[9], cls="mb-3") if garantia[9] else None
@@ -1902,7 +2165,7 @@ def setup_admin_routes(app, db: Database):
                 v[4] or "N/A",  # Placa
                 v[9] or "Sem proprietário",  # Proprietário
                 v[11] or 0,  # Total garantias
-                datetime.fromisoformat(v[7]).strftime('%d/%m/%Y') if v[7] else "N/A",  # Data cadastro
+                format_date_br(v[7]) if v[7] else "N/A",  # Data cadastro
                 Span(status, cls=f"badge bg-{status_class}"),
                 acoes
             ])
@@ -1988,7 +2251,7 @@ def setup_admin_routes(app, db: Database):
         for g in garantias:
             if g[3]:  # Se tem data de vencimento
                 try:
-                    if datetime.fromisoformat(g[3]).date() < datetime.now().date():
+                    if parse_iso_date(g[3]).date() < datetime.now().date():
                         garantias_vencidas += 1
                 except (ValueError, TypeError):
                     pass
@@ -2025,7 +2288,7 @@ def setup_admin_routes(app, db: Database):
                             ),
                             Row(
                                 Col(P(Strong("Data Cadastro: "), 
-                                    datetime.fromisoformat(veiculo[7]).strftime('%d/%m/%Y %H:%M') if veiculo[7] else "N/A"), width=6),
+                                    format_datetime_br_short(veiculo[7]) if veiculo[7] else "N/A"), width=6),
                                 Col(P(Strong("Status: "), 
                                     Span("Ativo" if veiculo[8] else "Inativo", 
                                          cls=f"badge bg-{'success' if veiculo[8] else 'secondary'}")), width=6)
@@ -2071,8 +2334,8 @@ def setup_admin_routes(app, db: Database):
                                     f"#{g[0]}",
                                     f"{g[5]} - {g[6]}",
                                     g[1] or "N/A",
-                                    datetime.fromisoformat(g[2]).strftime('%d/%m/%Y') if g[2] else "N/A",
-                                    datetime.fromisoformat(g[3]).strftime('%d/%m/%Y') if g[3] else "N/A",
+                                    format_date_br(g[2]) if g[2] else "N/A",
+                                    format_date_br(g[3]) if g[3] else "N/A",
                                     Span("Ativa" if g[4] else "Inativa", 
                                          cls=f"badge bg-{'success' if g[4] else 'secondary'}")
                                 ] for g in garantias]

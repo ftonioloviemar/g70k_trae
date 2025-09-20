@@ -9,6 +9,7 @@ from typing import Optional
 import bcrypt
 import json
 import secrets
+from app.date_utils import parse_iso_date
 
 @dataclass
 class Usuario:
@@ -107,7 +108,7 @@ class Usuario:
             if hasattr(usuario, key):
                 if key in ['data_nascimento', 'data_cadastro'] and value:
                     if isinstance(value, str):
-                        setattr(usuario, key, datetime.fromisoformat(value))
+                        setattr(usuario, key, parse_iso_date(value))
                     else:
                         setattr(usuario, key, value)
                 else:

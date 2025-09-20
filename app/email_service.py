@@ -8,6 +8,7 @@ from typing import Optional, List, Dict
 from pathlib import Path
 
 from app.config import Config
+from app.date_utils import format_datetime_br
 from app.logger import get_logger
 
 # Importar vieutil para envio de emails em produção
@@ -214,7 +215,7 @@ Notificação do Sistema de Garantia Viemar
 Informações do Usuário:
 - Nome: {user_info.get('nome', 'N/A')}
 - Email: {user_info.get('email', 'N/A')}
-- Data: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
+- Data: {format_datetime_br(datetime.now())}
 """
         
         return self.send_email(admin_email, subject, body)

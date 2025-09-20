@@ -11,6 +11,7 @@ from monsterui.all import *
 from fastlite import Database
 from app.auth import login_required, get_current_user
 from app.templates import *
+from app.date_utils import format_datetime_iso
 from models.veiculo import Veiculo
 from models.usuario import Usuario
 
@@ -304,7 +305,7 @@ def setup_veiculo_routes(app, db: Database):
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 veiculo.usuario_id, veiculo.marca, veiculo.modelo, veiculo.ano_modelo,
-                veiculo.placa, veiculo.cor, veiculo.chassi, veiculo.data_cadastro.strftime('%Y-%m-%d %H:%M:%S'), veiculo.ativo
+                veiculo.placa, veiculo.cor, veiculo.chassi, format_datetime_iso(veiculo.data_cadastro), veiculo.ativo
             ))
             
             # Obter o ID do veículo inserido

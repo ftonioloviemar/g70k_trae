@@ -15,6 +15,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
+from app.date_utils import format_date_iso, format_datetime_iso
 
 # Configuração de logging
 logger = logging.getLogger(__name__)
@@ -117,7 +118,7 @@ class CaspioImportService:
             for fmt in formats:
                 try:
                     dt = datetime.strptime(date_str, fmt)
-                    return dt.strftime('%Y-%m-%d')
+                    return format_date_iso(dt)
                 except ValueError:
                     continue
                     
@@ -259,7 +260,7 @@ class CaspioImportService:
                             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """, (
                             email, senha_hash, nome, cpf_cnpj, data_nascimento,
-                            datetime.now().strftime('%Y-%m-%d %H:%M:%S'), True, caspio_id,
+                            format_datetime_iso(datetime.now()), True, caspio_id,
                             telefone, cep, endereco, bairro, cidade, uf
                         ))
                         
@@ -363,7 +364,7 @@ class CaspioImportService:
                             ) VALUES (?, ?, ?, ?, ?, ?)
                         """, (
                             user_id, marca, modelo, processed_ano_modelo, placa,
-                            datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                            format_datetime_iso(datetime.now())
                         ))
                         
                         self.stats.vehicles_imported += 1
@@ -472,14 +473,14 @@ class CaspioImportService:
                                 ) VALUES (?, ?, ?, ?, ?, ?, ?)
                             """, (
                                 user_id, 'Não informado', 'Não informado', 2020, 'SEM-PLACA',
-                                'Não informado', datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                'Não informado', format_datetime_iso(datetime.now())
                             ))
                             vehicle_id = cursor.lastrowid
                         
                         # Processa data de aplicação
                         data_instalacao = self._parse_caspio_date(data_aplicacao) if data_aplicacao else None
                         if not data_instalacao:
-                            data_instalacao = datetime.now().strftime('%Y-%m-%d')
+                            data_instalacao = format_date_iso(datetime.now())
                         
                         # Processa quilometragem
                         quilometragem = 0
@@ -529,7 +530,7 @@ class CaspioImportService:
                             data_instalacao, nf_oficina or '', nome_oficina or '',
                             quilometragem, referencia, lote, nome_oficina, nf_oficina,
                             data_aplicacao, quilometragem,
-                            self._parse_caspio_date(data_cadastro) or datetime.now().strftime('%Y-%m-%d'),
+                            self._parse_caspio_date(data_cadastro) or format_date_iso(datetime.now()),
                             True
                         ))
                         

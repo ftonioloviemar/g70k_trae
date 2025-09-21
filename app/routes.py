@@ -243,7 +243,6 @@ def setup_routes(app, db: Database):
         # Extrair dados do formulário
         nome = form_data.get('nome', '').strip()
         email = form_data.get('email', '').strip().lower()
-        confirmar_email = form_data.get('confirmar_email', '').strip().lower()
         senha = form_data.get('senha', '')
         confirmar_senha = form_data.get('confirmar_senha', '')
         cep = form_data.get('cep', '').strip()
@@ -262,55 +261,124 @@ def setup_routes(app, db: Database):
             errors['nome'] = 'Nome completo é obrigatório'
         elif len(nome) < 3:
             errors['nome'] = 'Nome deve ter pelo menos 3 caracteres'
+        elif len(nome) > 100:
+            errors['nome'] = 'Nome não pode ter mais de 100 caracteres'
+        elif not re.match(r'^[a-zA-ZÀ-ÿ\s]+$', nome):
+            errors['nome'] = 'Nome deve conter apenas letras e espaços'
         
         # Validação do email
         if not email:
             errors['email'] = 'Email é obrigatório'
-        elif '@' not in email or '.' not in email.split('@')[-1]:
-            errors['email'] = 'Email deve ter um formato válido'
-        
-        # Validação da confirmação de email
-        if not confirmar_email:
-            errors['confirmar_email'] = 'Confirmação de email é obrigatória'
-        elif email and confirmar_email and email != confirmar_email:
-            errors['confirmar_email'] = 'Emails não conferem'
+        elif len(email) > 100:
+            errors['email'] = 'Email não pode ter mais de 100 caracteres'
+        elif not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+            errors['email'] = 'Email deve ter um formato válido (exemplo: usuario@dominio.com)'
         
         # Validação da senha
         if not senha:
             errors['senha'] = 'Senha é obrigatória'
         elif len(senha) < 6:
             errors['senha'] = 'Senha deve ter pelo menos 6 caracteres'
+        elif len(senha) > 50:
+            errors['senha'] = 'Senha não pode ter mais de 50 caracteres'
+        elif not re.search(r'[A-Za-z]', senha):
+            errors['senha'] = 'Senha deve conter pelo menos uma letra'
+        elif not re.search(r'\d', senha):
+            errors['senha'] = 'Senha deve conter pelo menos um número'
         
         # Validação da confirmação de senha
         if not confirmar_senha:
             errors['confirmar_senha'] = 'Confirmação de senha é obrigatória'
         elif senha and confirmar_senha and senha != confirmar_senha:
-            errors['confirmar_senha'] = 'Senhas não conferem'
+            errors['confirmar_senha'] = 'As senhas informadas não são iguais'
         
-        # Validação do CEP (opcional, mas se preenchido deve ser válido)
-        # Conforme API ViaCEP: deve ter exatamente 8 dígitos numéricos
-        if cep:
+        # Validação do CEP (obrigatório)
+        if not cep:
+            errors['cep'] = 'CEP é obrigatório'
+        else:
             # Remove caracteres não numéricos
             cep_clean = re.sub(r'[^\d]', '', cep)
             if not re.match(r'^\d{8}$', cep_clean):
-                errors['cep'] = 'CEP deve ter exatamente 8 dígitos numéricos'
+                errors['cep'] = 'CEP deve ter exatamente 8 dígitos (exemplo: 01234-567)'
             else:
                 # Atualiza o CEP para usar apenas números
                 cep = cep_clean
         
-        # Validação do telefone (opcional, mas se preenchido deve ser válido)
-        if telefone and not re.match(r'^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$', telefone):
-            errors['telefone'] = 'Telefone deve ter um formato válido'
+        # Validação do endereço (obrigatório)
+        if not endereco:
+            errors['endereco'] = 'Logradouro é obrigatório'
+        elif len(endereco) < 5:
+            errors['endereco'] = 'Logradouro deve ter pelo menos 5 caracteres'
+        elif len(endereco) > 200:
+            errors['endereco'] = 'Logradouro não pode ter mais de 200 caracteres'
         
-        # Validação do CPF/CNPJ (opcional, mas se preenchido deve ser válido)
-        if cpf_cnpj:
+        # Validação do bairro (obrigatório)
+        if not bairro:
+            errors['bairro'] = 'Bairro é obrigatório'
+        elif len(bairro) < 2:
+            errors['bairro'] = 'Bairro deve ter pelo menos 2 caracteres'
+        elif len(bairro) > 100:
+            errors['bairro'] = 'Bairro não pode ter mais de 100 caracteres'
+        
+        # Validação da cidade (obrigatório)
+        if not cidade:
+            errors['cidade'] = 'Cidade é obrigatória'
+        elif len(cidade) < 2:
+            errors['cidade'] = 'Cidade deve ter pelo menos 2 caracteres'
+        elif len(cidade) > 100:
+            errors['cidade'] = 'Cidade não pode ter mais de 100 caracteres'
+        elif not re.match(r'^[a-zA-ZÀ-ÿ\s\-\']+$', cidade):
+            errors['cidade'] = 'Cidade deve conter apenas letras, espaços, hífens e apostrofes'
+        
+        # Validação da UF (obrigatório)
+        if not uf:
+            errors['uf'] = 'UF é obrigatória'
+        elif len(uf) != 2:
+            errors['uf'] = 'UF deve ter exatamente 2 caracteres'
+        elif not re.match(r'^[A-Z]{2}$', uf.upper()):
+            errors['uf'] = 'UF deve conter apenas letras maiúsculas (exemplo: SP)'
+        else:
+            # Normalizar UF para maiúsculo
+            uf = uf.upper()
+        
+        # Validação do telefone (obrigatório)
+        if not telefone:
+            errors['telefone'] = 'Telefone é obrigatório'
+        else:
+            # Remove caracteres não numéricos
+            telefone_clean = re.sub(r'[^\d]', '', telefone)
+            if len(telefone_clean) < 10:
+                errors['telefone'] = 'Telefone deve ter pelo menos 10 dígitos'
+            elif len(telefone_clean) > 11:
+                errors['telefone'] = 'Telefone deve ter no máximo 11 dígitos'
+            elif not re.match(r'^[1-9]\d{9,10}$', telefone_clean):
+                errors['telefone'] = 'Telefone deve ter um formato válido (exemplo: (11) 99999-9999)'
+        
+        # Validação do CPF/CNPJ (obrigatório)
+        if not cpf_cnpj:
+            errors['cpf_cnpj'] = 'CPF ou CNPJ é obrigatório'
+        else:
             # Remove caracteres especiais
             cpf_cnpj_clean = re.sub(r'[^\d]', '', cpf_cnpj)
-            if len(cpf_cnpj_clean) not in [11, 14]:
+            if len(cpf_cnpj_clean) == 11:
+                # Validação básica de CPF
+                if not re.match(r'^\d{11}$', cpf_cnpj_clean):
+                    errors['cpf_cnpj'] = 'CPF deve ter exatamente 11 dígitos'
+                elif cpf_cnpj_clean == cpf_cnpj_clean[0] * 11:
+                    errors['cpf_cnpj'] = 'CPF não pode ter todos os dígitos iguais'
+            elif len(cpf_cnpj_clean) == 14:
+                # Validação básica de CNPJ
+                if not re.match(r'^\d{14}$', cpf_cnpj_clean):
+                    errors['cpf_cnpj'] = 'CNPJ deve ter exatamente 14 dígitos'
+                elif cpf_cnpj_clean == cpf_cnpj_clean[0] * 14:
+                    errors['cpf_cnpj'] = 'CNPJ não pode ter todos os dígitos iguais'
+            else:
                 errors['cpf_cnpj'] = 'CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos'
         
-        # Validação da data de nascimento (opcional)
-        if data_nascimento_str:
+        # Validação da data de nascimento (obrigatório)
+        if not data_nascimento_str:
+            errors['data_nascimento'] = 'Data de nascimento é obrigatória'
+        else:
             try:
                 data_nasc = datetime.strptime(data_nascimento_str, '%Y-%m-%d')
                 # Verificar se a data não é futura
@@ -319,6 +387,9 @@ def setup_routes(app, db: Database):
                 # Verificar se a pessoa tem pelo menos 16 anos
                 elif (datetime.now() - data_nasc).days < 16 * 365:
                     errors['data_nascimento'] = 'Idade mínima é 16 anos'
+                # Verificar se a pessoa não tem mais de 120 anos
+                elif (datetime.now() - data_nasc).days > 120 * 365:
+                    errors['data_nascimento'] = 'Data de nascimento muito antiga'
             except ValueError:
                 errors['data_nascimento'] = 'Data de nascimento inválida'
         
@@ -330,14 +401,13 @@ def setup_routes(app, db: Database):
             ).fetchone()
             
             if existing_user:
-                errors['email'] = 'Este email já está cadastrado'
+                errors['email'] = 'Este email já está cadastrado. Tente fazer login ou use outro email'
         
         if errors:
             # Preparar dados do formulário para preservar valores preenchidos
             form_values = {
                 'nome': nome,
                 'email': email,
-                'confirmar_email': confirmar_email,
                 'cep': cep,
                 'endereco': endereco,
                 'bairro': bairro,
@@ -348,14 +418,20 @@ def setup_routes(app, db: Database):
                 'data_nascimento': data_nascimento_str
             }
             
+            # Criar mensagem de erro geral mais específica
+            error_count = len(errors)
+            if error_count == 1:
+                error_title = "Erro no Cadastro"
+                error_message = "Foi encontrado 1 erro no formulário. Por favor, corrija o campo destacado abaixo."
+            else:
+                error_title = "Erros no Cadastro"
+                error_message = f"Foram encontrados {error_count} erros no formulário. Por favor, corrija os campos destacados abaixo."
+            
             # Retornar formulário com erros e valores preservados
             content = Container(
                 Row(
                     Col(
-                        alert_component(
-                            "Corrija os erros abaixo:",
-                            "danger"
-                        ),
+                        error_alert(error_message, error_title),
                         card_component(
                             "Criar nova conta",
                             cadastro_form(errors, form_values)
@@ -440,16 +516,53 @@ def setup_routes(app, db: Database):
         except Exception as e:
             logger.error(f"Erro ao cadastrar usuário {email}: {e}")
             
+            # Preparar dados do formulário para preservar valores preenchidos
+            form_values = {
+                'nome': nome,
+                'email': email,
+                'cep': cep,
+                'endereco': endereco,
+                'bairro': bairro,
+                'cidade': cidade,
+                'uf': uf,
+                'telefone': telefone,
+                'cpf_cnpj': cpf_cnpj,
+                'data_nascimento': data_nascimento_str
+            }
+            
+            # Determinar mensagem de erro específica baseada no tipo de erro
+            error_title = "Erro no Cadastro"
+            
+            # Verificar se é erro de email duplicado (caso não tenha sido detectado antes)
+            if "UNIQUE constraint failed" in str(e) and "email" in str(e):
+                error_message = "Este email já está cadastrado. Tente fazer login ou use outro email."
+                errors = {'email': error_message}
+            # Verificar se é erro de CPF/CNPJ duplicado
+            elif "UNIQUE constraint failed" in str(e) and "cpf_cnpj" in str(e):
+                error_message = "Este CPF/CNPJ já está cadastrado no sistema."
+                errors = {'cpf_cnpj': error_message}
+            # Verificar se é erro de conexão com banco
+            elif "database" in str(e).lower() or "sqlite" in str(e).lower():
+                error_title = "Erro de Sistema"
+                error_message = "Problema temporário no banco de dados. Tente novamente em alguns minutos."
+                errors = {}
+            # Verificar se é erro de validação de dados
+            elif "constraint" in str(e).lower():
+                error_message = "Alguns dados informados não são válidos. Verifique os campos e tente novamente."
+                errors = {}
+            else:
+                # Erro genérico
+                error_title = "Erro Inesperado"
+                error_message = "Ocorreu um erro inesperado. Nossa equipe foi notificada. Tente novamente mais tarde."
+                errors = {}
+            
             content = Container(
                 Row(
                     Col(
-                        alert_component(
-                            "Erro interno. Tente novamente mais tarde.",
-                            "danger"
-                        ),
+                        error_alert(error_message, error_title),
                         card_component(
                             "Criar nova conta",
-                            cadastro_form()
+                            cadastro_form(errors, form_values)
                         ),
                         width=10,
                         offset=1
